@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from src.core.config import settings
 from src.api.dependencies import get_current_user
+from src.api.routers import integrations
 from src.models.user import User
 
 app = FastAPI(
@@ -19,6 +20,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(integrations.router, prefix=settings.API_V1_PREFIX)
 
 
 @app.get("/health")

@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from src.core.config import settings
+from src.api.dependencies import get_current_user
+from src.models.user import User
 
 app = FastAPI(
     title="Churn Risk API",
@@ -29,3 +31,15 @@ async def health_check():
 async def root():
     """API root endpoint."""
     return {"message": "Churn Risk API", "version": "0.1.0"}
+
+
+@app.get(f"{settings.API_V1_PREFIX}/me")
+async def get_me(current_user: User = Depends(get_current_user)):
+    """Get current authenticated user."""
+    return {
+        "id": str(current_user.id),
+        "email": current_user.email,
+        "name": current_user.name,
+        "role": current_user.role.value,
+        "tenant_id": str(current_user.tenant_id)
+    }

@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Skill(superpowers:subagent-driven-development)",
+      "Bash(poetry install:*)",
+      "Bash(npm install)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker info:*)",
+      "Bash(open -a Docker)",
+      "Bash(timeout 5 poetry run uvicorn:*)",
+      "Bash(curl:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

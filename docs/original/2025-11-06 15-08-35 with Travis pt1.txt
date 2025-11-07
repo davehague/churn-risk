@@ -1,0 +1,1013 @@
+[0:00:00 - 0:00:01] Hey, David, how are you, man?
+[0:00:01 - 0:00:02] Hey, good.
+[0:00:30 - 0:00:34] Hey, so I've been thinking more and like, you know, I was thinking about what I was
+[0:00:34 - 0:00:36] originally asking you about.
+[0:00:36 - 0:00:40] It was like, and I started thinking about what, you know, what were the details of that
+[0:00:40 - 0:00:43] and what does that really mean about like getting more into the integrations?
+[0:00:43 - 0:00:46] Then we talked about like the app thing.
+[0:00:46 - 0:00:49] And you know, the more I thought about it, I was like, you know, I guess this is kind
+[0:00:49 - 0:00:54] of, you know, I think going on the app path was kind of what I was thinking originally
+[0:00:54 - 0:00:59] to some extent, but like I never really thought about productizing it or whatever. But long
+[0:00:59 - 0:01:06] story short, I got really excited about this app. And to the point of it's been something
+[0:01:06 - 0:01:09] that you've kind of seen with that negative sentiment and what I've been trying to ask
+[0:01:09 - 0:01:15] for. And but it's like the I've kind of fallen in love with like this idea of packaging that
+[0:01:15 - 0:01:20] up. Yeah. Yeah. And so the reason I bring that up is I've never done this and I like,
+[0:01:20 - 0:01:24] I don't even believe in it. Like I'm not an NDA kind of guy or like, I don't believe in like,
+[0:01:24 - 0:01:32] steal my idea. And it's more about the execution and the idea. But I did just send you it. I just
+[0:01:32 - 0:01:36] I sent you like a just a blanket, like deterrent of like, just like, I love this idea, I'm going
+[0:01:36 - 0:01:41] to do it whether it's with you or not. Like I just been thinking about it. And if I'd love for you
+[0:01:41 - 0:01:44] just look over it's basically saying like hey what we talk about it's confidential
+[0:01:44 - 0:01:48] you're not gonna go start the exact same thing in the next two years it's it
+[0:01:48 - 0:01:54] should take like two seconds to read okay if you wanted you want to come back
+[0:01:54 - 0:02:04] we always can but it literally is like a two-minute read confidential includes
+[0:02:04 - 0:02:10] business plans designs prototypes source code okay recipient agrees to keep it
+[0:02:10 - 0:02:15] confidential only use it only to evaluate participation in the app.
+[0:02:17 - 0:02:26] Evaluate participation in the app. I literally just chat GBT it just to get it going and it's
+[0:02:26 - 0:02:33] more about like yeah it's basically that just before I like show it to you like I do anticipate
+[0:02:33 - 0:02:38] like there's probably whether we do it together or whatever we get we can figure that out but like
+[0:02:38 - 0:02:42] I'm about to go through a full PRD breakdown and everything of it. Ready to go.
+[0:02:43 - 0:02:49] Okay. One second. Yeah. Let me pop this into Claude here.
+[0:02:49 - 0:02:50] Cool. Perfect.
+[0:02:50 - 0:02:55] And just have a quick chat. Usually the things that I look for with these kinds of things
+[0:02:55 - 0:03:02] is broad statements that would prevent me from doing other kinds of work within the same field,
+[0:03:02 - 0:03:06] with the same types of companies or those kind of things.
+[0:03:06 - 0:03:08] So let me just-
+[0:03:08 - 0:03:10] Yeah, pop it in there.
+[0:03:10 - 0:03:14] And if there's some piece of language I can add into it,
+[0:03:14 - 0:03:16] then make it easier.
+[0:03:16 - 0:03:16] Yeah, let's see.
+[0:03:16 - 0:03:18] About the potential that's known as
+[0:03:18 - 0:03:22] the sole purpose of evaluating possible collaboration
+[0:03:22 - 0:03:24] or collaborating opportunities.
+[0:03:26 - 0:03:28] See allegations, keep all information in common,
+[0:03:28 - 0:03:31] but use it only to evaluate participation in the app.
+[0:03:32 - 0:03:33] Yeah.
+[0:03:33 - 0:03:34] Great.
+[0:03:34 - 0:03:35] Yeah, so, yeah, I don't know.
+[0:03:35 - 0:03:36] I feel pretty good about it, but let me know what it comes up with.
+[0:03:36 - 0:03:37] Yeah.
+[0:03:37 - 0:03:40] Hey, I wanted to ask you, while I'm asking this question, I was having a chat with Claude
+[0:03:40 - 0:03:41] earlier or yesterday about this idea.
+[0:03:41 - 0:03:42] And depending on what your idea was, if it was about detecting changes in the data, what
+[0:03:42 - 0:03:43] was the idea?
+[0:03:43 - 0:03:44] And I'm going to ask you this question.
+[0:03:44 - 0:03:45] So, I'm going to ask you this question.
+[0:03:45 - 0:03:46] So, I'm going to ask you this question.
+[0:03:46 - 0:03:47] So, I'm going to ask you this question.
+[0:03:47 - 0:03:48] So, I'm going to ask you this question.
+[0:03:48 - 0:03:49] So, I'm going to ask you this question.
+[0:03:49 - 0:03:50] So, I'm going to ask you this question.
+[0:03:50 - 0:03:51] So, I'm going to ask you this question.
+[0:03:51 - 0:03:52] So, I'm going to ask you this question.
+[0:03:52 - 0:03:59] I was having a chat with Claude earlier or yesterday about this idea and depending on
+[0:03:59 - 0:04:05] what your idea was, if it was about detecting churn, there are some products out there like
+[0:04:05 - 0:04:10] churn zero or Gainsight that kind of do that stuff.
+[0:04:10 - 0:04:13] And if that's your idea, I'm curious about the overlap.
+[0:04:13 - 0:04:22] If your idea is more about integration failure detection, there might be more meat on the
+[0:04:22 - 0:04:24] bone there, but I wanted to ask you that question.
+[0:04:25 - 0:04:29] Yeah, for sure. So churn zero and gainsight. I'm familiar with both of them.
+[0:04:29 - 0:04:33] They're both, I don't know for sure with churn zero, but I know for sure gainsight
+[0:04:33 - 0:04:37] is an enterprise, like a very high level enterprise app.
+[0:04:37 - 0:04:39] And I think churn zero is as well.
+[0:04:39 - 0:04:45] And so the best thing about like, I think zero to one companies is making
+[0:04:45 - 0:04:47] sure there's a competitor out there.
+[0:04:47 - 0:04:49] And if you've got multiple competitors, even better.
+[0:04:49 - 0:04:53] And so, I mean, my personal, if no one's doing it,
+[0:04:53 - 0:04:55] that's a concern, right?
+[0:04:55 - 0:04:58] I think it's all about how you carve out your go to market.
+[0:04:59 - 0:05:03] And so, you know, my thought is we build this thing
+[0:05:03 - 0:05:06] for the purpose of Flxpoint right now
+[0:05:06 - 0:05:09] to just really dog food it as much as possible.
+[0:05:09 - 0:05:13] And then there's a packaged up version
+[0:05:13 - 0:05:15] where I think we can go to, you know,
+[0:05:15 - 0:05:16] you go to Shopify apps.
+[0:05:16 - 0:05:22] I know for a fact the majority of Shopify apps are not using Gainsight or Turn Zero.
+[0:05:22 - 0:05:23] They're just not.
+[0:05:23 - 0:05:27] They're not spending more than a couple of like a hundred bucks, 200 bucks a month to
+[0:05:27 - 0:05:29] get started to test something out.
+[0:05:29 - 0:05:33] That's just not in their DNA for a lot of these guys.
+[0:05:33 - 0:05:37] Turn Zero I think runs like an enterprise playbook and I know for sure Gainsight does.
+[0:05:37 - 0:05:40] And so that would be my like, I guess, response to that.
+[0:05:40 - 0:05:45] And I think there's a disruptor for the SMB to mid-market segment of these apps that are
+[0:05:45 - 0:05:51] showing up or already exist that turns their gains I would love to just like scoop up real quick.
+[0:05:52 - 0:05:58] Okay. Oh, I got you. So it's more of like a acquisition play, I suppose. Like, hey,
+[0:05:58 - 0:06:06] we cornered this market on SMB and what was the other thing in the e-commerce space. And
+[0:06:07 - 0:06:12] that's the real focus there is like that focus on that customer. So maybe not even a price point
+[0:06:12 - 0:06:17] difference but very hardcore focused on the customer segment.
+[0:06:17 - 0:06:24] I think, yeah, I haven't seen one. Yeah, exactly. I think, as far as the play, I think it would be an
+[0:06:24 - 0:06:30] acquisition play to gain market share very quickly in a product-led growth approach.
+[0:06:32 - 0:06:39] And then really, it's one of those things where I'd have to talk more about it because I think
+[0:06:39 - 0:06:40] I think that's important, right?
+[0:06:40 - 0:06:42] Like we've been running this company for like 10 years
+[0:06:42 - 0:06:45] and it's like, you know, we never really talked too much
+[0:06:45 - 0:06:46] about who the acquirer would be
+[0:06:46 - 0:06:47] or what the full exit strategy is.
+[0:06:47 - 0:06:49] And we're just now doing that, right?
+[0:06:49 - 0:06:50] It's always been like, we make a bunch of money,
+[0:06:50 - 0:06:52] it's profitable, we'll figure it out.
+[0:06:52 - 0:06:55] And that is true, and that is true to some extent,
+[0:06:55 - 0:06:57] but I think it's important to talk about the end goal.
+[0:06:58 - 0:07:00] But yes, I think it's one of those things
+[0:07:00 - 0:07:04] where I haven't seen enough in the market
+[0:07:04 - 0:07:08] that there's a clear leader in the SMB to mid market.
+[0:07:08 - 0:07:12] and I've only known about Churn Zero and Gainsight,
+[0:07:12 - 0:07:14] and they seem to be very much focused on the enterprise.
+[0:07:14 - 0:07:16] Okay, okay, gotcha.
+[0:07:16 - 0:07:18] What size company are you thinking
+[0:07:18 - 0:07:19] this would be targeted toward?
+[0:07:19 - 0:07:22] Like how many people at these companies?
+[0:07:22 - 0:07:25] Yeah, I'm gonna jump into it.
+[0:07:25 - 0:07:27] I don't know if you had a chance, what's Claude saying?
+[0:07:28 - 0:07:32] I have some concerns about section five,
+[0:07:32 - 0:07:33] any ideas or improvements you contribute,
+[0:07:33 - 0:07:35] even those built on your existing expertise
+[0:07:35 - 0:07:38] automatically become Travis's property.
+[0:07:38 - 0:07:40] So what does section five say?
+[0:07:40 - 0:07:42] All ideas, improvements, or derivative concepts
+[0:07:42 - 0:07:44] relating to the app that arise from discussions
+[0:07:44 - 0:07:46] remain the sole property.
+[0:07:47 - 0:07:48] I don't necessarily agree with that.
+[0:07:48 - 0:07:49] Right now.
+[0:07:49 - 0:07:51] It's like right now, but like I think if we were to get,
+[0:07:51 - 0:07:54] I'm basically just wanting to show you this
+[0:07:54 - 0:07:55] and give you like the whole rundown,
+[0:07:55 - 0:07:59] give you the, you know, and not feel concerned about like,
+[0:07:59 - 0:08:00] I don't know.
+[0:08:00 - 0:08:01] I want to get, this is not me,
+[0:08:01 - 0:08:03] but I'm just like stoked on this idea.
+[0:08:03 - 0:08:09] I'm not even really worried about it. It's more about like just the idea that you know
+[0:08:10 - 0:08:12] Get it out in front of you and see what your thoughts were
+[0:08:19 - 0:08:26] I mean honestly like I'm kind of at a point right now where like this is a unique opportunity
+[0:08:26 - 0:08:38] opportunity. I've come to the conclusion that a SaaS company as a solo founder is not really
+[0:08:38 - 0:08:49] going to be my path. I don't really see a path or a future where I would start a SaaS
+[0:08:49 - 0:08:56] company, a churn reduction SaaS company. If we could even simplify it to that, recipient
+[0:08:56 - 0:08:59] cannot start a churn related SaaS company,
+[0:08:59 - 0:09:00] something along those lines.
+[0:09:00 - 0:09:03] I think that's like simple enough for me.
+[0:09:03 - 0:09:04] Gotcha.
+[0:09:04 - 0:09:05] Gotcha.
+[0:09:05 - 0:09:08] Honestly, we'll figure it out.
+[0:09:08 - 0:09:09] I'm gonna walk you through it and share it with you
+[0:09:09 - 0:09:12] and I'll send you an updated one with this after.
+[0:09:12 - 0:09:13] It's no big deal.
+[0:09:13 - 0:09:14] Okay.
+[0:09:14 - 0:09:15] Okay.
+[0:09:15 - 0:09:16] Yeah.
+[0:09:16 - 0:09:18] So, churn risk right here.
+[0:09:20 - 0:09:21] Cool.
+[0:09:21 - 0:09:25] So, like I said, I've got the problem outlined.
+[0:09:25 - 0:09:28] Basically, and I'll shoot this over to you
+[0:09:28 - 0:09:31] once we get done here, but the idea is that
+[0:09:32 - 0:09:33] you've seen the issue.
+[0:09:33 - 0:09:37] We have no real good way of understanding customers.
+[0:09:37 - 0:09:39] And we're slowly starting to get it
+[0:09:39 - 0:09:41] with the Slack updates, right?
+[0:09:41 - 0:09:42] Of the AI, but most like,
+[0:09:42 - 0:09:46] I'm basically writing this as myself three months ago
+[0:09:46 - 0:09:51] that we really don't have the idea of who's angry,
+[0:09:51 - 0:09:52] are they being escalated properly?
+[0:09:52 - 0:09:54] And I feel like that is
+
+---
+
+[0:00:00 - 0:00:08] I've never really seen a great way to make sure that angry customers are escalated.
+[0:00:08 - 0:00:15] The problem is outlined here that you really can't have a pulse on the customer.
+[0:00:15 - 0:00:21] When you get to a certain size, let's say $200,000 in ARR, basically the big one is
+[0:00:21 - 0:00:23] like 500 support tickets per month.
+[0:00:23 - 0:00:26] So not like a super small company,
+[0:00:26 - 0:00:31] but have enough inbound that there's a lot of insight there
+[0:00:31 - 0:00:33] and roughly a hundred customers really kind of just making
+[0:00:33 - 0:00:37] sure it's an established app that has customer base
+[0:00:37 - 0:00:38] that you've got inbound.
+[0:00:38 - 0:00:40] If you go look at like the Shopify app store,
+[0:00:43 - 0:00:45] you can really, that'd be the whole go-to-market
+[0:00:45 - 0:00:49] is like pulling down categories of the app store
+[0:00:49 - 0:00:52] and you can tell by reviews, you can tell by traction,
+[0:00:52 - 0:00:55] You can talk about a lot of similar website traffic,
+[0:00:55 - 0:00:57] whatever, you can basically get these cohorts
+[0:00:57 - 0:00:58] of Shopify apps and be like,
+[0:00:58 - 0:01:01] I know for a fact they deal with a churn issue, right?
+[0:01:01 - 0:01:04] Because e-commerce SaaS companies do,
+[0:01:04 - 0:01:05] and you could go to market at it,
+[0:01:05 - 0:01:06] and you could probably easily find,
+[0:01:06 - 0:01:10] just based on like number of reviews and different metrics,
+[0:01:10 - 0:01:13] you could probably find a good cohort list
+[0:01:13 - 0:01:15] that you know they're getting at least 500 tickets a month.
+[0:01:15 - 0:01:17] And you've probably seen with our metrics,
+[0:01:17 - 0:01:17] I don't know if you've noticed,
+[0:01:17 - 0:01:22] but I think we get like 2000 a month,
+[0:01:22 - 0:01:23] something like that.
+[0:01:23 - 0:01:25] Yeah, six months over the last three months, yep.
+[0:01:25 - 0:01:26] Yeah, yeah.
+[0:01:26 - 0:01:28] So we only have, we have 400 customers
+[0:01:28 - 0:01:31] and that's like, that's not even a lot.
+[0:01:31 - 0:01:33] That's not a lot, right?
+[0:01:33 - 0:01:34] That's a bad ratio, if anything.
+[0:01:34 - 0:01:36] And probably there's something to do with that ratio.
+[0:01:36 - 0:01:39] And so the target persona is really,
+[0:01:39 - 0:01:41] and so I think this size company is probably
+[0:01:41 - 0:01:45] like 10 to 30 employees, right?
+[0:01:45 - 0:01:46] Probably like that.
+[0:01:48 - 0:01:50] Going up to the CEO, the owner, a lot of times,
+[0:01:50 - 0:01:53] the customer success lead or even a product lead,
+[0:01:53 - 0:01:55] I think those three personas
+[0:01:57 - 0:01:59] are probably ideal.
+[0:01:59 - 0:02:02] Management team, like a support team manager,
+[0:02:02 - 0:02:03] stuff like that.
+[0:02:03 - 0:02:05] That's currently struggling with churn,
+[0:02:05 - 0:02:08] prioritizing the product roadmap between new features,
+[0:02:08 - 0:02:09] improving experiences, right?
+[0:02:09 - 0:02:12] So I've got churn, I wanna help reduce that,
+[0:02:12 - 0:02:14] but I'm also trying to figure out how to be proactive
+[0:02:14 - 0:02:18] and build better product features to reduce churn as well.
+[0:02:18 - 0:02:20] That's the person, right?
+[0:02:20 - 0:02:27] There's four like sections of this, really three phases I could see it rolling out.
+[0:02:27 - 0:02:31] It's really just starting with a negative sentiment piece to keep it simple.
+[0:02:31 - 0:02:36] And like, I think I almost see these like these top three could be like three plans,
+[0:02:36 - 0:02:40] like a free like a starter plan, pro plan, like an enterprise plan.
+[0:02:40 - 0:02:41] That's how I'm kind of vision it.
+[0:02:41 - 0:02:44] Like you can get insight in your fresh rate customers.
+[0:02:44 - 0:02:48] You know, if you pay or pay a little bit more go to the next plan, you actually can look
+[0:02:48 - 0:02:51] at some more metrics around significant support customers.
+[0:02:51 - 0:02:53] I'll go into that.
+[0:02:53 - 0:02:56] This is one that we do today.
+[0:02:56 - 0:02:58] We're trying to, we do,
+[0:02:58 - 0:02:59] the cadence isn't great,
+[0:02:59 - 0:03:03] but we have integrated some product metrics in
+[0:03:03 - 0:03:06] the HubSpot that we run reports on to find
+[0:03:06 - 0:03:09] silently struggling customers that are not really writing in,
+[0:03:09 - 0:03:11] but there's product data
+[0:03:11 - 0:03:14] that basically shows that they're silently struggling.
+[0:03:14 - 0:03:15] They haven't hit a certain step,
+[0:03:15 - 0:03:17] they're not logging in, stuff like that.
+[0:03:17 - 0:03:18] Yeah.
+[0:03:18 - 0:03:22] So I see those as like three phases and maybe even three plans,
+[0:03:22 - 0:03:24] stair-step plans to get them to pay more.
+[0:03:24 - 0:03:27] And then this last piece is just saying across all three of them,
+[0:03:27 - 0:03:31] you want to be able to identify, organize, and analyze the recurring themes.
+[0:03:31 - 0:03:36] And ideally that helps build whether it's better support documents
+[0:03:36 - 0:03:39] or product features across these customers.
+[0:03:39 - 0:03:40] Yeah.
+[0:03:40 - 0:03:41] Better UX even.
+[0:03:41 - 0:03:42] Yeah.
+[0:03:42 - 0:03:43] Cool.
+[0:03:43 - 0:03:45] And so the first one is just a very simple one.
+[0:03:45 - 0:03:47] I think this is like an app we could get up really quickly.
+[0:03:47 - 0:03:50] It's basically what we're doing already,
+[0:03:50 - 0:03:52] but just kind of saying it's Slack.
+[0:03:52 - 0:03:53] It would be like, you know,
+[0:03:53 - 0:03:55] they say I should effectively identify customers
+[0:03:55 - 0:03:56] that express negative sentiment.
+[0:03:59 - 0:04:01] You know, I think reporting on positive sentiment,
+[0:04:01 - 0:04:04] like getting sentiment across every single ticket
+[0:04:04 - 0:04:05] that comes in would be ideal
+[0:04:05 - 0:04:07] because I think there's an opportunity to show
+[0:04:07 - 0:04:09] negative versus positive sentiment long-term, right?
+[0:04:09 - 0:04:10] And some trends there.
+[0:04:12 - 0:04:13] They're labeled.
+[0:04:13 - 0:04:17] And then there's basically this like churn risk cards are generated.
+[0:04:17 - 0:04:24] So let me see if I can, I've got like a, like there's basically the idea that a support
+[0:04:24 - 0:04:30] ticket happens, a trigger then occurs and a churn risk card is basically created.
+[0:04:30 - 0:04:31] Okay.
+[0:04:31 - 0:04:35] And so the cards could look something like, they can be on like a Kanban board kind of
+[0:04:35 - 0:04:36] thing, right?
+[0:04:36 - 0:04:37] Okay.
+[0:04:37 - 0:04:41] And it can be worked.
+[0:04:41 - 0:04:42] So there's different views and I'll go into it.
+[0:04:42 - 0:04:45] But I envision the basis of this is like a card.
+[0:04:45 - 0:04:48] And we do this now in HubSpot and there's an argument.
+[0:04:48 - 0:04:49] Our biggest competitor would be like,
+[0:04:49 - 0:04:51] I'm just gonna do this in my CRM, right?
+[0:04:51 - 0:04:55] And that's fine, but I think you can layer on value enough
+[0:04:55 - 0:04:58] that, and if you make it competitive enough
+[0:04:58 - 0:05:00] that you wouldn't wanna do it in your CRM.
+[0:05:01 - 0:05:03] Let's say right here.
+[0:05:03 - 0:05:06] So yeah, I'm surprised that HubSpot doesn't have
+[0:05:06 - 0:05:10] a negative sentiment detector of some kind, right?
+[0:05:10 - 0:05:13] Yeah, they really don't.
+[0:05:13 - 0:05:17] And even if they did, I'm not concerned about it.
+[0:05:17 - 0:05:21] I think it's just there's such a unique go to market here
+[0:05:21 - 0:05:23] to SaaS founders.
+[0:05:23 - 0:05:25] And like I said, I think we can do this all with just the pretense.
+[0:05:25 - 0:05:29] And if you sign something at some point
+[0:05:29 - 0:05:31] before we get going here, we can just
+[0:05:31 - 0:05:34] build this as your additional five hours.
+[0:05:34 - 0:05:36] It's part of the job now.
+[0:05:36 - 0:05:38] And whether you want to help, either way,
+[0:05:38 - 0:05:45] I think packaging is up for Flxpoint with the idea that we'd love to do it for the customer
+[0:05:45 - 0:05:46] is the goal.
+[0:05:46 - 0:05:50] So it would be a separate product though, a separate URL, a separate code base, all
+[0:05:50 - 0:05:51] that kind of thing.
+[0:05:51 - 0:05:52] Yeah.
+[0:05:52 - 0:05:53] Correct.
+[0:05:53 - 0:05:54] The main source of data is HubSpot, right?
+[0:05:54 - 0:05:59] We just connect to the HubSpot API, we pull the data in, we do the analysis and show it
+[0:05:59 - 0:06:00] on the dashboard.
+[0:06:00 - 0:06:01] Basically the...
+[0:06:01 - 0:06:02] Exactly.
+[0:06:02 - 0:06:03] Okay.
+[0:06:03 - 0:06:04] Yeah.
+[0:06:04 - 0:06:05] Okay.
+[0:06:05 - 0:06:06] Exactly.
+[0:06:06 - 0:06:07] And that's the other part I love about it.
+[0:06:07 - 0:06:12] there for a while as far as like what we would want to do from a go to market and just a
+[0:06:12 - 0:06:17] private roadmap. And then when we felt ready, you know, go into Zendesk, go into Help Scout,
+[0:06:17 - 0:06:21] those kinds of guys and like, you know, going to show up in their app store. I think there's
+[0:06:21 - 0:06:24] just a lot of like channel marketing that can be done.
+[0:06:24 - 0:06:29] Oh, you said their app store. So are you envisioning this being an app that sits like within the
+[0:06:29 - 0:06:34] product? I don't know how the app store works actually, but or a standalone.
+[0:06:34 - 0:06:39] I'm saying in the App Store of Help Scout, HubSpot, and Zendesk.
+[0:06:39 - 0:06:41] Oh, okay. I don't know how that works,
+[0:06:41 - 0:06:42] but I can look into it.
+[0:06:42 - 0:06:47] Yeah. So we're in the Shopify App Store,
+[0:06:47 - 0:06:48] like Flxpoint is, right?
+[0:06:48 - 0:06:48] Yeah.
+[0:06:48 - 0:06:52] So it's about just getting in their App Store.
+[0:06:52 - 0:06:54] It's basically just a lot of times it's just like
+[0:06:54 - 0:06:58] an authentication method to our app,
+[0:06:58 - 0:07:00] and it just shows that we are pre-built,
+[0:07:00 - 0:07:04] quote-unquote native and supported and approved
+[0:07:04 - 0:07:06] by those platforms.
+[0:07:06 - 0:07:11] Okay. I will look into how to be a HubSpot app.
+[0:07:11 - 0:07:13] Yeah.
+[0:07:13 - 0:07:15] How to get a HubSpot app store.
+[0:07:15 - 0:07:17] Yeah. Maybe, right?
+[0:07:17 - 0:07:18] That's part of it.
+[0:07:18 - 0:07:22] A good example, usually it's taking what you've already built,
+[0:07:22 - 0:07:27] and it's just really just getting approved in the HubSpot.
+[0:07:27 - 0:07:30] You don't really need to be in the app store for it to
+[0:07:30 - 0:07:32] integrate with HubSpot,
+[0:07:32 - 0:07:33] but it is a step on the process.
+[0:07:33 - 0:07:35] I don't think it's like one of the first steps,
+[0:07:35 - 0:07:36] but it might be helpful.
+[0:07:36 - 0:07:37] Okay.
+[0:07:38 - 0:07:41] So churn risk cards should have the following associated data.
+[0:07:41 - 0:07:43] So I'm basically envisioning like these cards,
+[0:07:43 - 0:07:47] like a Trello card or a Notion card or whatever,
+[0:07:47 - 0:07:50] the owner status, it brings in the contact email
+[0:07:50 - 0:07:53] and name from HubSpot, the company name and MRR,
+[0:07:53 - 0:07:55] direct link to support ticket,
+[0:07:55 - 0:07:57] and then support ticket topics.
+[0:07:57 - 0:07:59] And we'll talk about how to get those topics.
+[0:07:59 - 0:08:00] Okay.
+[0:08:00 - 0:08:02] That's the idea there.
+[0:08:02 - 0:08:04] Churn risk cards should be presented in a conv on board
+[0:08:04 - 0:08:06] like I just showed, very simple,
+[0:08:06 - 0:08:09] sorted new column descending create date.
+[0:08:10 - 0:08:11] Right, churn risk cards.
+[0:08:11 - 0:08:12] Oh yeah, so this is a big one.
+[0:08:12 - 0:08:16] I think it's like one of those features,
+[0:08:16 - 0:08:17] do you really need it right out the gate or not?
+[0:08:17 - 0:08:19] But I feel like you would.
+[0:08:19 - 0:08:21] Churn risk card should have a comment timeline
+[0:08:21 - 0:08:23] in which you can tag users to be notified of the comment.
+[0:08:23 - 0:08:27] I know it adds scope to it, but I think it's pretty key.
+[0:08:27 - 0:08:29] I think it's pretty simple.
+[0:08:29 - 0:08:39] But I see just this number one right here as app that you could sell for $9 a month to a couple hundred Shopify apps easily.
+[0:08:39 - 0:08:47] Like nothing. Just to bubble up, just to bubble up frustrated customers and get them in a queue for them.
+[0:08:47 - 0:08:54] I mean, I say $9, it could be $29, it could be $79. I think there's different levels of amount of tickets.
+[0:08:54 - 0:08:56] but in general, just that, which I think is like,
+[0:08:56 - 0:08:58] basically you already have most of it built, right?
+[0:08:58 - 0:08:59] With this negative sentiment,
+[0:08:59 - 0:09:01] you just need a simple card view
+[0:09:01 - 0:09:03] that can be coded up in a couple of weeks.
+[0:09:04 - 0:09:06] Yeah, dude, I think I can do this in a weekend, number one.
+[0:09:06 - 0:09:08] Right, I think so too, right?
+[0:09:08 - 0:09:12] Yeah, I mean, there's a lot more to it, right?
+[0:09:12 - 0:09:15] There's authentication, there's hosting and support,
+[0:09:15 - 0:09:17] not support, payment and all that kind of stuff.
+[0:09:17 - 0:09:19] I don't know how Spot Marketplace handles that,
+[0:09:19 - 0:09:23] but the core feature set, yeah, easily.
+[0:09:23 - 0:09:26] pull the data, do a sentiment analysis.
+[0:09:26 - 0:09:28] And I probably wouldn't use the same methodology
+[0:09:28 - 0:09:29] that Matthew's using right now
+[0:09:29 - 0:09:31] with just calling a standard LLM.
+[0:09:31 - 0:09:34] There's other, I think more traditional machine learning
+[0:09:34 - 0:09:36] stuff that probably does a better job of that.
+[0:09:36 - 0:09:37] We could explore around on it.
+[0:09:37 - 0:09:41] Or there's a specialized LLM,
+[0:09:41 - 0:09:44] specialized LLM models that you can call
+[0:09:44 - 0:09:45] that might get a better job.
+[0:09:45 - 0:09:46] So we just have to test it probably,
+[0:09:46 - 0:09:50] but you can get something up and working pretty quickly
+[0:09:50 - 0:09:53] and then swap that out later for better results.
+[0:09:53 - 0:09:54] Exactly.
+[0:09:54 - 0:09:56] Yeah, I don't think the tech, that's what I love about this,
+[0:09:56 - 0:09:58] the tech is not crazy difficult
+[0:09:58 - 0:10:00] in these first couple of phases.
+[0:10:00 - 0:10:01] Yeah.
+[0:10:02 - 0:10:04] And it's like, okay, yes, there's other people out there,
+[0:10:04 - 0:10:05] like why couldn't they do it?
+[0:10:05 - 0:10:09] But I think just me as being a SaaS CEO for last 12 years
+[0:10:09 - 0:10:11] and talking with others,
+[0:10:11 - 0:10:14] it's all about that aha moment of that like, oh my God,
+[0:10:14 - 0:10:16] it doesn't have to be a crazy big tool,
+[0:10:16 - 0:10:17] it just needs to solve one thing.
+[0:10:17 - 0:10:19] I think that aha moment of like,
+[0:10:19 - 0:10:20] I don't have any insight
+[0:10:20 - 0:10:25] to any of my customer support tickets or like a pulse on it.
+[0:10:25 - 0:10:27] And then just doing a simple, you know,
+[0:10:27 - 0:10:28] all right, connect to my HubSpot account
+[0:10:28 - 0:10:30] and like the onboarding flow.
+[0:10:30 - 0:10:31] And all of a sudden it populates,
+[0:10:31 - 0:10:35] here's these tickets of frustrated customers
+[0:10:35 - 0:10:36] from the last 30 days.
+[0:10:36 - 0:10:38] And you can click into it and you get context
+[0:10:38 - 0:10:40] and understand what the conversation is.
+[0:10:40 - 0:10:43] Like that's gonna be an aha moment in the first,
+[0:10:43 - 0:10:45] who knows, hopefully the first minute,
+[0:10:45 - 0:10:48] the three minutes of them signing into the app.
+[0:10:48 - 0:10:53] And like, I think that's the hook that gets me excited about the opportunity here.
+[0:10:53 - 0:10:58] And then you get them in, and then they just keep it for like a cheap or free type version of it.
+[0:10:58 - 0:11:01] You know, even if they don't want to invest, whatever.
+[0:11:01 - 0:11:02] I mean, that's one approach.
+[0:11:02 - 0:11:08] And they just, they just, you know, they have it because it's like, Oh, man, this is important for me to keep a pulse of my customer base.
+[0:11:08 - 0:11:12] And then you upsell them to all the other stuff to get them up to the next level.
+[0:11:12 - 0:11:13] Yeah, that makes sense.
+[0:11:14 - 0:11:17] So I love to go to market there, the product growth there.
+[0:11:17 - 0:11:22] Yeah, so that's phase one. I think we can get that up fully test it make sure it's good to go before we can move on
+[0:11:22 - 0:11:24] To phase two and these are all just they're all just ideas, right?
+[0:11:24 - 0:11:30] Like it's all about testing and and feeling good about it and like getting into hands of real people other than just us
+[0:11:32 - 0:11:34] But I see value in the significant support one
+[0:11:36 - 0:11:41] You know just because some people might get frustrated but I also just found some customers I was poking around yesterday
+[0:11:41 - 0:11:44] As some of the customers that I'm like live Lily just left
+[0:11:44 - 0:11:49] It's like a glowing G2 review, but have been going back and forth with support since then,
+[0:11:49 - 0:11:58] unlike this weird variant parent child structure issue that I can tell she's a very nice lady.
+[0:11:58 - 0:12:03] She's not going to ever come across frustrated, but I could tell it was a barrier to her to
+[0:12:03 - 0:12:05] really realizing the value in the app.
+[0:12:05 - 0:12:06] Right?
+[0:12:06 - 0:12:10] She said, Hey, I just, I just try to integrate another vendor and the vendor has the same
+[0:12:10 - 0:12:15] issue where they don't have skews on the parent, but they do on the variant. And like for me,
+[0:12:15 - 0:12:21] as someone who's looking to improve the product to reduce what we call paper cuts, like that's
+[0:12:21 - 0:12:26] something I want bubbled up to me, right? Where I see them going back and forth on an issue.
+[0:12:26 - 0:12:32] So that's why I have that significant support phase. Yeah, yeah, I like that a lot. That's
+[0:12:32 - 0:12:37] way beyond the just negative positive sentiment, right? That's like the person's not mad,
+[0:12:37 - 0:12:43] but they keep on having to come back to us. That's a huge like, that's something that's specific to
+[0:12:44 - 0:12:50] this market, right? This like, this economy. That's a good question. Maybe, I think, integration
+[0:12:51 - 0:13:00] companies, right? Like, companies that deal with connecting of data, right? But yeah, I mean, I
+[0:13:00 - 0:13:07] think the best approach is to pick a market segment and just make that your beachhead and double down
+[0:13:07 - 0:13:09] there and really build a good product for that market segment.
+[0:13:09 - 0:13:11] But then I think as other ones,
+[0:13:11 - 0:13:15] you could theoretically see this applying to just e-commerce sellers,
+[0:13:15 - 0:13:19] stuff like that. But I think specifically,
+[0:13:19 - 0:13:22] I would want to focus on apps and then the Shopify app part,
+[0:13:22 - 0:13:24] it just makes it easy and then you expand out to
+[0:13:24 - 0:13:27] other SaaS applications and stay in that kind of market.
+[0:13:27 - 0:13:29] Okay.
+[0:13:29 - 0:13:32] Cool. Then, some of you are struggling.
+[0:13:32 - 0:13:34] This is one, I say here,
+[0:13:34 - 0:13:35] this is like a phase three.
+[0:13:35 - 0:13:40] I think this one, you know, this is where you can kind of go enterprise.
+[0:13:40 - 0:13:43] You can charge a thousand, 2000 bucks a month for it.
+[0:13:43 - 0:13:43] Right.
+[0:13:43 - 0:13:44] Like you can get up there.
+[0:13:44 - 0:13:45] It's almost like the Klaviyo model.
+[0:13:45 - 0:13:47] Are you familiar with Klaviyo at all?
+[0:13:47 - 0:13:48] It sounds familiar, but now.
+[0:13:49 - 0:13:49] Yeah.
+[0:13:49 - 0:13:51] Like, I mean, it's a HubSpot's kind of like this too.
+[0:13:51 - 0:13:56] You can get started for $29 a month, $79 a month, whatever, but they've got
+[0:13:56 - 0:13:59] hundreds of customers paying a thousand to 5,000 bucks a month, right.
+[0:13:59 - 0:14:03] That really, you know, leverage the leverage it fully.
+[0:14:03 - 0:14:05] I think this is where we get into that phase.
+[0:14:05 - 0:14:08] This is more like the enterprise where,
+[0:14:08 - 0:14:10] we could start simple and just say,
+[0:14:10 - 0:14:13] hey, we don't integrate with your app.
+[0:14:13 - 0:14:14] We don't have an API.
+[0:14:14 - 0:14:16] If we feel like that's too much to take on,
+[0:14:16 - 0:14:18] I want to keep it as simple as possible.
+[0:14:18 - 0:14:21] But you have a developer,
+[0:14:21 - 0:14:22] if they're probably asking for stuff like this,
+[0:14:22 - 0:14:24] you have a developer, why don't you just
+[0:14:24 - 0:14:26] port those into fields in HubSpot?
+[0:14:26 - 0:14:29] When the registration date,
+[0:14:29 - 0:14:32] the login times, basically what Flxpoint's done.
+[0:14:32 - 0:14:35] port those into HubSpot as custom field,
+[0:14:35 - 0:14:39] and then we have this churn risk app
+[0:14:39 - 0:14:44] has the ability to just map in a custom field
+[0:14:44 - 0:14:47] to one of the data points that we know,
+[0:14:47 - 0:14:49] like some native fields in our system.
+[0:14:49 - 0:14:51] Okay. Yeah, I think I see what you're going with this.
+[0:14:51 - 0:14:56] There's software out there like Post Hog or Google Analytics,
+[0:14:56 - 0:14:59] these kind of product,
+[0:14:59 - 0:15:02] how many people are doing this feature within the product,
+[0:15:02 - 0:15:03] this feature within the product.
+[0:15:03 - 0:15:05] That's where I thought you were gonna go with this,
+[0:15:05 - 0:15:07] but it could be something like a HubSpot.
+[0:15:07 - 0:15:10] We'll have to see what, obviously Flxpoint uses HubSpot
+[0:15:10 - 0:15:11] custom fields to do that kind of stuff,
+[0:15:11 - 0:15:15] but I'm wondering across the industry if that's normal
+[0:15:15 - 0:15:19] or if that's out there, if other people are using
+[0:15:19 - 0:15:22] Google Analytics more often for that kind of thing.
+[0:15:22 - 0:15:24] Yeah, yeah, and it really comes down to,
+[0:15:24 - 0:15:25] I mean, there's probably a good chance,
+[0:15:25 - 0:15:28] and really about the go-to-market here
+[0:15:28 - 0:15:32] on how we would sell this and what we'd require.
+[0:15:32 - 0:15:34] We would just, the only thing I learned with Flxpoint
+[0:15:34 - 0:15:37] is we jumped over, we bent over backwards multiple times
+[0:15:37 - 0:15:39] just to get a deal closed.
+[0:15:39 - 0:15:42] And it's almost like I would love, what's that?
+[0:15:42 - 0:15:43] I think that's common.
+[0:15:43 - 0:15:45] Right, yeah, I'm sure.
+[0:15:45 - 0:15:47] But we saw a lot of tech debt with it.
+[0:15:47 - 0:15:48] It's like, I think we figure out
+[0:15:48 - 0:15:50] what are we okay with doing?
+[0:15:50 - 0:15:52] Right, like what do we tell our customers?
+[0:15:52 - 0:15:55] And if they say, no, we can't do that.
+[0:15:55 - 0:15:56] Like, do we have an API?
+[0:15:56 - 0:16:00] Okay, then we just pointed towards the API and you know, so.
+[0:16:00 - 0:16:01] Okay, no, that's an important point though.
+[0:16:01 - 0:16:03] Like if we want to start with an API, right?
+[0:16:03 - 0:16:05] Like we consume the API.
+[0:16:06 - 0:16:09] Like that might, that's an important architecture decision to start with.
+[0:16:11 - 0:16:13] Yeah, when you say we can.
+[0:16:13 - 0:16:13] What you might want to do.
+[0:16:15 - 0:16:20] Yeah, it's almost like do we provide like a REST API from the past data to us, right?
+[0:16:20 - 0:16:21] Or what are you saying?
+[0:16:21 - 0:16:30] I'm saying if you are in phase three or beyond or some phase here is going to require us
+[0:16:30 - 0:16:38] is going to enable more customers to come on if we have an API at that point, we might
+[0:16:38 - 0:16:46] as well start with an API as opposed to starting with a fully packaged Next.js or Nuxt or whatever.
+[0:16:46 - 0:16:50] Let's start with a backend API and a separated front end,
+[0:16:50 - 0:16:53] and we consume the API and at some point,
+[0:16:53 - 0:16:56] we enable customers to also consume the API.
+[0:16:56 - 0:17:00] Yes, 100 percent. I'm glad you brought that up because I'm
+[0:17:00 - 0:17:03] a big fan of API-first development in general,
+[0:17:03 - 0:17:04] because it makes you think about the data model,
+[0:17:04 - 0:17:06] it makes you think about how people are going to be
+[0:17:06 - 0:17:09] communicating with you and then at some point,
+[0:17:09 - 0:17:11] someone's going to want to integrate with our API.
+[0:17:11 - 0:17:14] Yeah, you could sell that. That's a product.
+[0:17:14 - 0:17:19] Yeah, okay, that makes sense. I'm glad you mentioned that.
+[0:17:19 - 0:17:23] Cool. So that's like, you know, that's actually way down the road. I think there's so much value
+[0:17:23 - 0:17:25] just in phase one and phase two.
+[0:17:25 - 0:17:26] Dude, I'm ready to, let's build.
+[0:17:28 - 0:17:31] All right, and that's what I want to give this to you before the weekend just to get thinking about it.
+[0:17:33 - 0:17:39] And then the fourth one is just like where I think there's a lot of value that it's like,
+[0:17:39 - 0:17:42] it's really about, okay, the identification,
+[0:17:42 - 0:17:46] the organization and the analyzation of the themes
+[0:17:46 - 0:17:46] of these churn risks.
+[0:17:46 - 0:17:49] A churn risk card is created.
+[0:17:49 - 0:17:51] There should be metadata that comes with,
+[0:17:51 - 0:17:52] that gets associated with that,
+[0:17:52 - 0:17:56] that comes from the ticket and comes from the company and.
+[0:17:56 - 0:18:00] And yeah, probably the ticket content and the company
+[0:18:00 - 0:18:03] are like the two biggest entities, right?
+[0:18:03 - 0:18:05] And there needs to be like a data model diagram
+[0:18:05 - 0:18:06] at some point.
+[0:18:06 - 0:18:09] But in general, here's what we just walk you through this.
+[0:18:09 - 0:18:13] Upon creation of support ticket, A, it will do two things.
+[0:18:13 - 0:18:15] It will evaluate the ticket to populate sentiment
+[0:18:15 - 0:18:16] like we talked about.
+[0:18:16 - 0:18:18] It will also evaluate the ticket content
+[0:18:18 - 0:18:21] to populate one or many ticket topics.
+[0:18:21 - 0:18:22] So this is a secret sauce.
+[0:18:22 - 0:18:26] And this is why I don't think I'm concerned with like,
+[0:18:28 - 0:18:30] one, I think this is gonna give lock-in to the app,
+[0:18:30 - 0:18:33] can make it sticky, but also not consider with people like,
+[0:18:33 - 0:18:34] oh, I'll just do this in HubSpot, right?
+[0:18:34 - 0:18:35] Like, I mean, you could,
+[0:18:35 - 0:18:38] but I think there's enough value to be added here
+[0:18:38 - 0:18:40] in the topic management.
+[0:18:40 - 0:18:41] So, and we talked a little bit about this,
+[0:18:41 - 0:18:44] but I think upon initial onboarding,
+[0:18:44 - 0:18:46] 200 tickets are imported.
+[0:18:46 - 0:18:48] And I don't think it's like step one or step,
+[0:18:48 - 0:18:50] maybe it's just like while they're doing other stuff,
+[0:18:50 - 0:18:52] if they're being important in the background
+[0:18:52 - 0:18:54] and hopefully by the time they're stoked
+[0:18:54 - 0:18:56] on the sentiment analysis, they're like,
+[0:18:56 - 0:18:58] okay, your tickets have been imported
+[0:18:58 - 0:19:00] and here's the ticket topics we've identified.
+[0:19:00 - 0:19:02] And they basically have like a,
+[0:19:02 - 0:19:04] whether it's a dedicated UI,
+[0:19:04 - 0:19:06] which I probably think at minimum they do,
+[0:19:06 - 0:19:09] or whether they do it via like a modal throughout the app,
+[0:19:09 - 0:19:14] they're basically merging, normalizing ticket topics
+[0:19:15 - 0:19:19] to help train the AI a lot upfront, right?
+[0:19:19 - 0:19:21] Like we're doing that with Matthew,
+[0:19:22 - 0:19:25] but a little bit throughout every month or week
+[0:19:25 - 0:19:27] or whatever as new tickets come in to basically say like,
+[0:19:27 - 0:19:30] these are the buckets that I care about the most.
+[0:19:30 - 0:19:32] And I wanna train you on how to make sure
+[0:19:32 - 0:19:33] that when these tickets come in,
+[0:19:33 - 0:19:36] it goes in the proper bucket.
+[0:19:36 - 0:19:37] That feels to me the most difficult
+[0:19:37 - 0:19:40] from a development perspective,
+[0:19:40 - 0:19:43] because I think it has to heavily leverage
+[0:19:43 - 0:19:45] the LLMs for that.
+[0:19:45 - 0:19:48] But that's what I'm probably most excited about
+[0:19:48 - 0:19:50] to take this to the next level.
+[0:19:50 - 0:19:53] Yeah, we'll have to think on that one.
+[0:19:53 - 0:19:57] So you're saying automatically over time
+[0:19:57 - 0:19:59] as the user interacts with the app and says like,
+[0:20:01 - 0:20:02] well, I don't know how it's gonna work,
+[0:20:02 - 0:20:07] but over time it figures out what buckets are good.
+[0:20:08 - 0:20:09] I don't want to mark, I don't want to say,
+[0:20:09 - 0:20:11] this is what I envision,
+[0:20:11 - 0:20:13] and maybe you know, you better than me,
+[0:20:13 - 0:20:14] you know, definitely know better than me,
+[0:20:14 - 0:20:17] but this is what I envision.
+[0:20:17 - 0:20:18] Right now what Matthew's putting together
+[0:20:18 - 0:20:20] is not fully usable for me
+[0:20:20 - 0:20:23] because I still don't believe in the buckets
+[0:20:23 - 0:20:25] to be usable to drive the product roadmap.
+[0:20:26 - 0:20:29] And like I said, this is a very difficult phase,
+[0:20:29 - 0:20:32] I don't know, but I think ultimately,
+[0:20:32 - 0:20:34] Maybe it's, I think it's actually phase one.
+[0:20:34 - 0:20:39] But what I like, what I envision is a ticket,
+[0:20:39 - 0:20:42] we see all these tickets, they come in,
+[0:20:42 - 0:20:45] maybe like on a one by one basis,
+[0:20:45 - 0:20:46] we have to train the AI.
+[0:20:46 - 0:20:49] I think, hold on, let me back up.
+[0:20:49 - 0:20:51] The onboarding, it's like,
+[0:20:53 - 0:20:56] you get the 12 ticket topics,
+[0:20:56 - 0:20:58] and you're like, let me merge these two,
+[0:20:58 - 0:21:00] because, and then let me tell you
+[0:21:00 - 0:21:01] why they should be merged, right?
+[0:21:01 - 0:21:03] like spam and marketing emails.
+[0:21:03 - 0:21:04] Let's just use that as an example.
+[0:21:04 - 0:21:05] Okay.
+[0:21:05 - 0:21:06] Right?
+[0:21:06 - 0:21:07] Okay.
+[0:21:07 - 0:21:07] It gives me an accident to like take these two spam
+[0:21:07 - 0:21:09] and marketing emails show up as two tags.
+[0:21:09 - 0:21:10] Yeah.
+[0:21:10 - 0:21:13] And then when I do that, I go merge these two
+[0:21:13 - 0:21:15] and then it pops up and says, why are you merging?
+[0:21:15 - 0:21:18] Please let us know so we can better classify
+[0:21:18 - 0:21:20] tickets going forward.
+[0:21:20 - 0:21:20] Okay.
+[0:21:20 - 0:21:22] And I'm like, anything that is marketing,
+[0:21:22 - 0:21:25] promotional related should be considered as spam.
+[0:21:25 - 0:21:28] I basically like write out a prompt or whatever
+[0:21:28 - 0:21:31] that's saved down to some rag, you know, database.
+[0:21:31 - 0:21:35] And then and then it saves it and then I've trained it a little bit there on like how I
+[0:21:36 - 0:21:39] Like my tickets to be bucketed. Yeah, right
+[0:21:39 - 0:21:44] Yeah, and then there's like then it's decided because this is the domain knowledge issue that you brought up
+[0:21:44 - 0:21:48] But if we solve the domain knowledge issue, that's the secret sauce
+[0:21:48 - 0:21:53] Yeah, and and so the quantity and the pricing sinks, right? Maybe it just says like it
+[0:21:54 - 0:21:57] Segments those and I'm like, hey, no, it really just matter
+[0:21:57 - 0:22:01] I need those combined because those are the same thing in my world or whatever.
+[0:22:01 - 0:22:04] So combine them.
+[0:22:04 - 0:22:05] Another one maybe, so that's just like the initial.
+[0:22:05 - 0:22:07] It's like merging them to the LLM.
+[0:22:07 - 0:22:08] Does that make sense?
+[0:22:08 - 0:22:09] Yeah, it does.
+[0:22:09 - 0:22:10] Yeah.
+[0:22:10 - 0:22:15] This reminds me, so weird how stuff comes back up, but I was at a startup weekend in
+[0:22:15 - 0:22:23] Dayton here in Ohio and we were working on this email app and we wanted to leverage LLMs
+[0:22:23 - 0:22:27] The thing that we ended up on was this kind of,
+[0:22:27 - 0:22:28] I don't know if you listen to Bill Maher,
+[0:22:28 - 0:22:30] I've ever heard him, but he sometimes says,
+[0:22:30 - 0:22:32] new rule, and then he goes on to whatever
+[0:22:32 - 0:22:34] thing he's gonna say, but that's basically it, right?
+[0:22:34 - 0:22:37] Is you give it a natural language rule,
+[0:22:37 - 0:22:39] and says, anything that comes in from marketing
+[0:22:39 - 0:22:41] or whatever, whatever, that goes into this bucket.
+[0:22:41 - 0:22:44] And now, not even present them with the options,
+[0:22:44 - 0:22:47] but have them, here's your big giant thing,
+[0:22:47 - 0:22:49] and now they could type in something like,
+[0:22:49 - 0:22:50] okay, all this type of ticket,
+[0:22:50 - 0:22:52] put that all into this bucket.
+[0:22:52 - 0:22:57] And then now their list goes from 200 to 120.
+[0:22:57 - 0:22:59] I just chunked out 80 of them.
+[0:22:59 - 0:23:00] So that kind of like new rule
+[0:23:00 - 0:23:02] could be the opposite side of that, right?
+[0:23:02 - 0:23:04] Like I create it by me talking
+[0:23:04 - 0:23:07] or you can create it by here's some of the ones we think
+[0:23:07 - 0:23:09] and you tell us whether we're right or not.
+[0:23:09 - 0:23:11] Yeah, 100%.
+[0:23:11 - 0:23:13] I think that's the part of the app
+[0:23:13 - 0:23:16] that makes it super valuable, makes it sticky
+[0:23:16 - 0:23:18] because now you've built all this custom ruling
+[0:23:18 - 0:23:21] around how to manage and group people's tickets.
+[0:23:21 - 0:23:23] You're not going anywhere once you have that.
+[0:23:23 - 0:23:25] Yeah, exactly.
+[0:23:25 - 0:23:27] Yeah, I mean, we can like export you
+[0:23:27 - 0:23:28] in a JSON file or something,
+[0:23:28 - 0:23:30] but like, what are you gonna do with that?
+[0:23:30 - 0:23:33] No one else is doing that ruling like we're doing.
+[0:23:33 - 0:23:34] Yeah, I got it.
+[0:23:34 - 0:23:36] Exactly, exactly.
+[0:23:36 - 0:23:38] So that's why I'm falling in love with this app.
+[0:23:38 - 0:23:40] There's like so many little pieces of it
+[0:23:40 - 0:23:43] that like, it's the awesome moments early,
+[0:23:43 - 0:23:45] there's the stickiness, there's an easy go-to-market,
+[0:23:45 - 0:23:47] at least a really defined go-to-market.
+[0:23:47 - 0:23:49] You know, it all sounds great on paper too.
+[0:23:49 - 0:23:50] You know, it really does.
+[0:23:50 - 0:23:50] Sure.
+[0:23:50 - 0:23:55] You gotta get the first 10 people to actually believe in it, but it's one of those things
+[0:23:55 - 0:23:58] where it seems like a slam dunk.
+[0:23:58 - 0:24:02] So yeah, that's the idea behind the merging of the ticket topics.
+[0:24:02 - 0:24:03] Let's see.
+[0:24:03 - 0:24:04] That's basically it.
+[0:24:04 - 0:24:08] And then like, you know, phase one basic reporting is just on the frustrated customer in this
+[0:24:08 - 0:24:09] first phase.
+[0:24:09 - 0:24:15] Not even worrying about the silently struggling and the support one.
+[0:24:15 - 0:24:18] But just the frustrated customer, I think there's a couple different views.
+[0:24:18 - 0:24:23] a churn risk view, not just the Kanban card, but like it's basically the top entities churn
+[0:24:23 - 0:24:28] risk and you're looking at number of churn risks and like a bar chart over by day, right?
+[0:24:28 - 0:24:33] Pie chart, line chart, company view that looks like a Lear board type view.
+[0:24:33 - 0:24:37] You know, I could kind of, I did some replet and some lovable stuff.
+[0:24:37 - 0:24:42] But like, you know, I even like this eventually like an AI powered suggestions for like the
+[0:24:42 - 0:24:43] product team.
+[0:24:43 - 0:24:45] Like that's next level stuff.
+[0:24:45 - 0:24:46] Right?
+[0:24:46 - 0:24:49] Like you're seeing a lot of inventory sync issues to gunbroker.
+[0:24:49 - 0:24:51] You should look at refactoring that.
+[0:24:51 - 0:24:54] Stuff like that is next level.
+[0:24:54 - 0:24:59] That's like Gainsight, turn zero, which by the way, I signed up for a Gainsight demo
+[0:24:59 - 0:25:00] this morning.
+[0:25:00 - 0:25:03] Just to give you a little tech.
+[0:25:03 - 0:25:04] Competitive tech.
+[0:25:04 - 0:25:05] Yeah.
+[0:25:05 - 0:25:09] Let's see, where's one that was okay?
+[0:25:09 - 0:25:11] Something like this, right?
+[0:25:11 - 0:25:15] A trend of churn risks in general, right?
+[0:25:15 - 0:25:19] the high-risk companies, they've had 47. And this is like, I could see this, this is like
+[0:25:19 - 0:25:24] 30 days by default, but you could easily just change it to like last week, last six months
+[0:25:24 - 0:25:28] and just make sure you're, you know, just get a feel for like how it's moving, how it's
+[0:25:28 - 0:25:33] changing. But this is what's that?
+[0:25:33 - 0:25:36] Which companies to fire? Acme doesn't even pay us that much. Get the hell out of here
+[0:25:36 - 0:25:37] with your 47 tickets.
+[0:25:37 - 0:25:38] Yeah, yeah.
+[0:25:38 - 0:25:42] Factor and MRR from the CRM is big.
+[0:25:42 - 0:25:45] So yeah, I mean, that's the idea, man.
+[0:25:45 - 0:25:48] Like I said, I'm super stoked on it.
+[0:25:48 - 0:25:51] The way that I see moving forward is like, I'd love for you, I'd love to double your
+[0:25:51 - 0:26:00] hours and have you work on this with the other hours for Flxpoint specifically.
+[0:26:00 - 0:26:06] But with the idea that, you know, and I don't know, this is uncharted territory for me on
+[0:26:06 - 0:26:07] and how we would approach this.
+[0:26:07 - 0:26:08] But like, if it's something you're into,
+[0:26:08 - 0:26:10] and you don't have to be into it,
+[0:26:10 - 0:26:12] but if it's something you're into,
+[0:26:12 - 0:26:15] we could then talk about, okay,
+[0:26:15 - 0:26:18] how do we now partner up and go to market with it together?
+[0:26:18 - 0:26:20] Because you kind of suggested, right?
+[0:26:20 - 0:26:22] At minimum, I would love for you
+[0:26:22 - 0:26:27] to start building it for Flxpoint so that we have it.
+[0:26:28 - 0:26:31] And then, yeah, like I said,
+[0:26:31 - 0:26:34] we have to structure some kind of agreement
+[0:26:34 - 0:26:37] at some point in probably the next week or two,
+[0:26:37 - 0:26:39] and you just gotta make a call.
+[0:26:39 - 0:26:41] You can be like, hey Travis, I think it's a cool idea.
+[0:26:41 - 0:26:43] I don't think it has a lot of legs,
+[0:26:43 - 0:26:44] and I'll build it for you guys,
+[0:26:44 - 0:26:46] because you're paying me my consulting rate,
+[0:26:46 - 0:26:47] and that's about it,
+[0:26:47 - 0:26:49] and I'll give you the source code after,
+[0:26:49 - 0:26:51] and whatever, that works.
+[0:26:51 - 0:26:53] Or if you're like, man, I think you're onto something,
+[0:26:53 - 0:26:55] this is the app I wanna do, you let me know.
+[0:26:55 - 0:26:58] And honestly, either way works for me.
+[0:26:58 - 0:27:00] I'd prefer for you to be into it,
+[0:27:00 - 0:27:02] because I've thought, I was like,
+[0:27:02 - 0:27:03] I've got developments.
+[0:27:03 - 0:27:08] I have access to developers, but I think having that deep knowledge and just understanding
+[0:27:08 - 0:27:13] and want to dig into AI more is a key asset that you've got.
+[0:27:13 - 0:27:15] Thanks for saying that.
+[0:27:15 - 0:27:17] I'm totally into it.
+[0:27:17 - 0:27:22] I have questions about co-founding.
+[0:27:22 - 0:27:28] I've done some co-founding with people, but all pre-revenue stuff and never in this type
+[0:27:28 - 0:27:33] of situation where you already have a consulting relationship.
+[0:27:33 - 0:27:41] So maybe you just give me your top level view of what you tend to do in terms of ownership
+[0:27:41 - 0:27:46] and decision making and that kind of stuff.
+[0:27:46 - 0:27:47] Yeah.
+[0:27:47 - 0:27:48] I'll be honest with you.
+[0:27:48 - 0:27:55] The only way I've seen it work, I don't know the exact percentage, but I'd want to be the
+[0:27:55 - 0:27:57] majority owner.
+[0:27:57 - 0:28:00] I don't believe in 50-50.
+[0:28:00 - 0:28:06] I would want to be the majority owner with it locked tight for you that you're secure
+[0:28:06 - 0:28:10] and you feel fine with that of me running.
+[0:28:10 - 0:28:15] Because this is how I would see it going, whether it's you or another technical co-founder
+[0:28:15 - 0:28:17] that I might work with.
+[0:28:17 - 0:28:24] It's me up every night hustling my ass off, trying to get this to market, making it my
+[0:28:24 - 0:28:28] blood, sweat and tears to get it going.
+[0:28:28 - 0:28:33] And having some really strong conviction about direction
+[0:28:33 - 0:28:35] and where we need to go and how we need to go.
+[0:28:35 - 0:28:37] And we've worked together a little bit,
+[0:28:37 - 0:28:41] but obviously being a good partner along the way,
+[0:28:41 - 0:28:44] but the 50-50 thing where no one truly has the,
+[0:28:44 - 0:28:45] okay, we got to do it.
+[0:28:45 - 0:28:46] It just doesn't work.
+[0:28:46 - 0:28:48] You waffle too much, right?
+[0:28:48 - 0:28:49] You flounder.
+[0:28:50 - 0:28:52] And so the way that I would typically look at it,
+[0:28:52 - 0:28:54] just spit balling right now would be like,
+[0:28:58 - 0:28:59] not even a 60-40, it'd be like,
+[0:29:01 - 0:29:04] we'd leave like 10%, maybe 15% for like investors,
+[0:29:04 - 0:29:05] like round the game.
+[0:29:07 - 0:29:10] Yeah, I think we'd leave, we'd leave like,
+[0:29:10 - 0:29:13] because I do think this is an exitable,
+[0:29:13 - 0:29:15] and like that would be the play here type company,
+[0:29:16 - 0:29:20] like a fast moving, sell it in three to five years
+[0:29:20 - 0:29:21] kind of thing.
+[0:29:21 - 0:29:26] Get it growing 100% year over year for the first three years,
+[0:29:26 - 0:29:30] get it past five million and sell it for like an 8 to 12X.
+[0:29:30 - 0:29:33] That would be the hope.
+[0:29:33 - 0:29:36] But yeah, I don't know.
+[0:29:36 - 0:29:40] It'd be like some kind of majority share for me,
+[0:29:40 - 0:29:45] slight less majority for you with 10 to 15 percent,
+[0:29:45 - 0:29:48] and for investors, that'd be the thought.
+[0:29:48 - 0:29:50] That works for me. So you're thinking like
+[0:29:50 - 0:29:55] 15% for investors, that leaves 85 left.
+[0:29:55 - 0:29:58] And then from there it would split maybe 45, 40
+[0:29:58 - 0:29:59] or something like that.
+[0:30:01 - 0:30:03] Does that sound something similar,
+[0:30:03 - 0:30:05] even if it's 50, 35?
+[0:30:07 - 0:30:11] I think I'd want like 51 to be left over.
+[0:30:11 - 0:30:13] I don't even know if that even matters.
+[0:30:13 - 0:30:18] I see, so 51, 35, 15 is something like that.
+[0:30:18 - 0:30:23] We could even get you up to like 40 and then 10, right?
+[0:30:23 - 0:30:27] Like 51, 40, 10 maybe, you know, like just spit.
+[0:30:27 - 0:30:28] Real quick on the investors though,
+[0:30:28 - 0:30:31] like what do you think we'll need money for?
+[0:30:31 - 0:30:34] Yeah, we won't need a ton if any,
+[0:30:34 - 0:30:37] but there's smart money out there
+[0:30:37 - 0:30:40] and there's ability to really, let's put it this way.
+[0:30:40 - 0:30:42] If we see this is starting to take off
+[0:30:42 - 0:30:43] and then we're getting it,
+[0:30:43 - 0:30:45] cause exactly this is the way I see it going.
+[0:30:45 - 0:30:47] We get a beach head SMB apps, right?
+[0:30:47 - 0:30:51] just to get some feedback or whatever, we realized that,
+[0:30:51 - 0:30:52] this is the part I haven't done.
+[0:30:52 - 0:30:54] I just started putting this together like last night
+[0:30:54 - 0:30:55] or two days ago, right?
+[0:30:55 - 0:31:00] But like, we're gonna be tempted to go against a gain site
+[0:31:00 - 0:31:03] and a crowd churn zero.
+[0:31:03 - 0:31:05] We're gonna wanna go to the enterprise.
+[0:31:05 - 0:31:07] At least that's right now what I'm thinking,
+[0:31:07 - 0:31:09] that you're gonna be tempted to do it,
+[0:31:09 - 0:31:12] especially if you can do it fairly efficiently,
+[0:31:12 - 0:31:14] because that's what's gonna get their,
+[0:31:14 - 0:31:15] that's what's gonna get them thinking about you,
+[0:31:15 - 0:31:17] and that's what's gonna get the acquisition
+[0:31:17 - 0:31:20] to happen very quickly when you're taking their customers.
+[0:31:21 - 0:31:22] I'm not gonna take all their customers,
+[0:31:22 - 0:31:23] but we're gonna take some of them.
+[0:31:23 - 0:31:26] And in general, I think there's an enterprise use case here
+[0:31:26 - 0:31:29] that we don't wanna be spinning our wheels on SMB
+[0:31:29 - 0:31:31] all day long and just that we're gonna be churning out
+[0:31:31 - 0:31:32] for us.
+[0:31:32 - 0:31:33] I think it's a great proving ground.
+[0:31:33 - 0:31:36] And we're not even SMB, like, I think we can start
+[0:31:36 - 0:31:39] right at the mid market, you know, high end SMB.
+[0:31:39 - 0:31:42] But I think we have a enterprise type solution here
+[0:31:42 - 0:31:47] that it would not be hard to be built for that persona.
+[0:31:47 - 0:31:50] This is all just guessing until I get in. Like I understand the personas of enterprise versus
+[0:31:50 - 0:31:55] mid-market in this. It's going to be one of those things. I don't really, you know, we'll be able
+[0:31:55 - 0:32:00] to tell. But when we go to enterprise, we're going to want some of the money there will be helped.
+[0:32:00 - 0:32:08] Just get us, I'd probably want to get an investor that has a huge portfolio, smart money of like
+[0:32:08 - 0:32:14] SaaS apps. Right. I'd want to find that because they're going to get us into like, let's just say,
+[0:32:14 - 0:32:21] I got my former boss, he sold his company for $750 million like three years ago.
+[0:32:21 - 0:32:25] And he took on like partners like Dropbox as an investor.
+[0:32:25 - 0:32:26] Like he didn't need the money.
+[0:32:26 - 0:32:28] Like they were already like crushing it.
+[0:32:28 - 0:32:32] Like he brought in Dropbox, he brought in all these like big name guys just to like
+[0:32:32 - 0:32:33] to get the network.
+[0:32:33 - 0:32:39] And so like we got like the right kind of investor that have hundreds and then has buddies
+[0:32:39 - 0:32:42] that have hundreds of SaaS companies.
+[0:32:42 - 0:32:44] All they want to do is get this into their task companies.
+[0:32:44 - 0:32:48] And so there's that is the networking side and taking out smart money and not a ton like
+[0:32:48 - 0:32:49] let's just say 10%.
+[0:32:49 - 0:32:50] Right.
+[0:32:50 - 0:32:55] Let's like talk about like a 51, you know, 39, 10 or something like that.
+[0:32:55 - 0:32:56] Right.
+[0:32:56 - 0:32:59] Like, yeah, if that's it, it's just 10%.
+[0:32:59 - 0:33:00] It's getting that smart money.
+[0:33:00 - 0:33:04] And then also when we want to go for enterprise sales, I tried to do a flex point.
+[0:33:04 - 0:33:05] It is expensive.
+[0:33:05 - 0:33:08] It is very expensive to go enterprise sales.
+[0:33:08 - 0:33:17] And I think getting after private equity firms as our customer, at least as like in with
+[0:33:17 - 0:33:20] a private equity firm, all private equity firms want to do is reduce churn across their
+[0:33:20 - 0:33:21] portfolio.
+[0:33:21 - 0:33:22] Right.
+[0:33:22 - 0:33:26] So sales into those guys, I think it's a huge opportunity.
+[0:33:26 - 0:33:29] So like it's the networking, it's the software.
+[0:33:29 - 0:33:33] And lastly, if it's one of those things where I think this could, I am concerned that it's
+[0:33:33 - 0:33:36] not that hard from a tech perspective.
+[0:33:36 - 0:33:37] Right.
+[0:33:37 - 0:33:38] So you got to move fast.
+[0:33:38 - 0:33:39] We got to get quick.
+[0:33:39 - 0:33:43] We got to because with AI, with the fact that anyone can kind of build something similar
+[0:33:43 - 0:33:48] quickly, we just got to run and we need money to run very fast with sales, marketing and
+[0:33:48 - 0:33:49] go to market.
+[0:33:49 - 0:33:50] Gotcha.
+[0:33:50 - 0:33:51] Okay.
+[0:33:51 - 0:33:52] Yeah, that's a good explanation.
+[0:33:52 - 0:33:54] Yeah, that just overall, that sounds good.
+[0:33:54 - 0:33:58] Like at a top level, that sounds like it would work.
+[0:33:58 - 0:34:01] I'm excited to get started.
+[0:34:01 - 0:34:03] When what do we do?
+[0:34:03 - 0:34:05] Like you've got some.
+[0:34:05 - 0:34:19] Yeah, I mean, this is this is tough, right? Like, I guess if you're like, let's start building this for like, I would love for you, like, just to start thinking about it, start tweaking around. I'll send you this doc.
+[0:34:19 - 0:34:31] And then can we get together by like the end of the week? Like, you let me know, like, do you want me to start putting together like a formal like partnership agreement? Or do you want to sit on it? Let's talk early next week? Or like, what do you want?
+[0:34:31 - 0:34:37] early next week or what like what do you want? Yeah, why don't we talk and you talk about end of next week, right?
+[0:34:37 - 0:34:44] Yeah, here's here's what I'd like to do because we've worked together a little bit. Yeah, can you just go ahead and maybe put
+[0:34:44 - 0:34:50] together like a rough like what you think a phase one would look like kind of thing or just put it Yeah, I put together like a
+[0:34:50 - 0:34:56] business plan, a PRD, not full business plan, but I put together a PRD, like, would you be able to put together something on
+[0:34:56 - 0:35:00] your side like, okay, well, based on your PRD, here's how I think the tech should look.
+[0:35:00 - 0:35:02] Maybe here's a quick prototype and all that kind of stuff.
+[0:35:02 - 0:35:04] That's what I was thinking. Yeah, quick prototype.
+[0:35:04 - 0:35:06] Take a look at your PRD.
+[0:35:06 - 0:35:09] I can give you probably some thoughts on how I want to build it.
+[0:35:09 - 0:35:11] Just asynchronously, just like, hey,
+[0:35:11 - 0:35:15] already what I'm thinking is probably like a fast API backend,
+[0:35:15 - 0:35:20] and then which gives us access to Python to be able to do all sorts of machine learning fun.
+[0:35:20 - 0:35:22] Then I'm a Vue developer,
+[0:35:22 - 0:35:26] so I'd probably do a Vue front-end with Nuxt.
+[0:35:26 - 0:35:32] Then from there, I could work on it next week and then we could touch base on Friday and say,
+[0:35:32 - 0:35:36] do we got something? The only thing I need is access to HubSpot,
+[0:35:36 - 0:35:39] like a HubSpot API key probably.
+[0:35:39 - 0:35:42] Then this document that has some screenshots,
+[0:35:42 - 0:35:45] your PRD, which any other screenshots that you got,
+[0:35:45 - 0:35:48] those things that would help me understand,
+[0:35:48 - 0:35:51] what are the first couple of screens that we need to build?
+[0:35:51 - 0:35:56] Yeah, I live. What API endpoints are we going to need?
+[0:35:56 - 0:35:58] I literally threw this into Replet like basically through the
+[0:35:58 - 0:36:01] thing that rub. That's how I got those screens and I haven't
+[0:36:01 - 0:36:04] thrown this like final version in. I'd be curious to see what
+[0:36:04 - 0:36:07] the final version is just for this, but I'll send you this.
+[0:36:07 - 0:36:10] That's all I have right now, but like I kind of like showed you
+[0:36:10 - 0:36:13] what I you know from a co founded perspective like this
+[0:36:13 - 0:36:16] is this would be like this is two days of work of like what I
+[0:36:16 - 0:36:20] think we can do. My next steps would be building out the full
+[0:36:20 - 0:36:24] full go to market plan, you know, like the details behind
+[0:36:24 - 0:36:27] that. But ultimately, what I want to I don't want to lose
+[0:36:27 - 0:36:31] sight of is we should be building this product for flex
+[0:36:31 - 0:36:36] points use, right? But realizing that when we actually go to
+[0:36:36 - 0:36:39] market, like, which requires and goes all the way down to like
+[0:36:39 - 0:36:43] this phase three here. But ideally, it's in a phased
+[0:36:43 - 0:36:46] approach or like a modular build, to where like if you have
+[0:36:46 - 0:36:50] a certain plan, you only get access to one the frustrated
+[0:36:50 - 0:36:54] customers. If you have the plan, if you have the go up next plan,
+[0:36:54 - 0:36:56] then you get significant support. And then,
+[0:36:56 - 0:36:58] and then if you like go to the enterprise plan,
+[0:36:58 - 0:37:01] you get the silently struggling functionality. And my,
+[0:37:02 - 0:37:05] my thought is Flxpoint needs all of this, but as we build it,
+[0:37:05 - 0:37:08] just to make sure we do it with that mind of like different modules on this
+[0:37:08 - 0:37:10] functionality. Yep. Yep. There's going to need to be, yeah,
+[0:37:10 - 0:37:15] feature flags and so multi-tenant architecture like Flxpoint will be the
+[0:37:15 - 0:37:20] only tenant, but start with your multi-tenant in mind from the beginning.
+[0:37:20 - 0:37:24] Yeah, yeah, I got you man. So let's do it. Let's meet. Let's get up together Friday
+[0:37:24 - 0:37:29] If you can just show me I've got to be heads down this next week because we're working on this paper cuts thing
+[0:37:29 - 0:37:30] I'm presenting on Wednesday
+[0:37:30 - 0:37:33] but I want to get you just thinking about it and
+[0:37:33 - 0:37:39] And think about all the the app side of things any other thoughts about the business the partnership and then next Friday
+[0:37:39 - 0:37:41] Let's just talk like hey, do we want to do this?
+[0:37:41 - 0:37:45] You know do we watch and then if we do which I I know I do like yeah
+[0:37:45 - 0:37:47] I'll put together a partnership agreement. We can figure out from there
+[0:37:47 - 0:37:53] Do you want me to POC during that time or just focus on like architecture and business and stuff like that?
+[0:37:55 - 0:38:00] Sorry clarify what do you want me to do a POC like during that time as well
+[0:38:00 - 0:38:04] Yeah, that's that's the main thing. I was kind of looking for like yeah
+[0:38:04 - 0:38:07] I would just love and just being transparent like
+[0:38:08 - 0:38:10] You know, I'd love to see what you can put together
+[0:38:10 - 0:38:16] Yeah, right like between now and Friday and and then do it with the idea of like try to get as far as you can
+[0:38:16 - 0:38:19] and then with our HubSpot data.
+[0:38:19 - 0:38:23] And we can talk, you know, Monday, Tuesday, or whatever,
+[0:38:23 - 0:38:25] if you want to have any clarifying questions
+[0:38:25 - 0:38:27] on like the domain, but like the support ticket pipeline
+[0:38:27 - 0:38:30] is what we're gonna be going off of.
+[0:38:30 - 0:38:31] Let me show you here.
+[0:38:31 - 0:38:34] So if Flxpoint's the first client,
+[0:38:34 - 0:38:36] what we're gonna be pulling is...
+[0:38:39 - 0:38:39] Where am I at here?
+[0:38:39 - 0:38:41] This is where I'm gonna need help,
+[0:38:41 - 0:38:43] because I don't have any HubSpot background or experience.
+[0:38:43 - 0:38:44] I don't know where anything is,
+[0:38:44 - 0:38:48] or I'm assuming their API is probably wild.
+[0:38:48 - 0:38:49] It's got all sorts of different end points.
+[0:38:49 - 0:38:52] So I need to figure out what tickets to pull.
+[0:38:53 - 0:38:57] All you need to, yeah, it's basically these support tickets.
+[0:38:57 - 0:39:00] Yeah, you can probably ask Matthew, right?
+[0:39:00 - 0:39:01] Like this is obviously, by the way,
+[0:39:01 - 0:39:03] this is obviously just between me and you, right?
+[0:39:03 - 0:39:07] Like no one else should or should know about this.
+[0:39:07 - 0:39:08] Okay.
+[0:39:09 - 0:39:12] But the thought is you should be building off
+[0:39:12 - 0:39:14] of what Matthew has done, like you said,
+[0:39:14 - 0:39:16] in a different way, different technology,
+[0:39:16 - 0:39:17] if you feel that makes more sense.
+[0:39:17 - 0:39:19] But you can definitely, you know, well, he's don't.
+[0:39:19 - 0:39:20] It's the same tickets that he's pulling into
+[0:39:20 - 0:39:22] as Corey Brown agent.
+[0:39:22 - 0:39:23] Oh, okay, exactly.
+[0:39:23 - 0:39:25] I just have the code, yeah, all right.
+[0:39:25 - 0:39:28] Exactly, it's these emails coming into the support inbox.
+[0:39:28 - 0:39:31] It's things that are sent to support at Flxpoint.com
+[0:39:31 - 0:39:34] or are entered via the web app where they go contact us.
+[0:39:34 - 0:39:37] And that basically just routes it to support at Flxpoint.com.
+[0:39:37 - 0:39:38] Got it, okay.
+[0:39:38 - 0:39:40] It's basically everything at the top of the funnel,
+[0:39:40 - 0:39:42] like everything that comes in.
+[0:39:42 - 0:39:49] Yeah, everything that goes every single email that goes to support at flex point.com. Got it. Okay. Okay. Yeah
+[0:39:50 - 0:39:53] But yeah, if we can meet we'll meet together on Friday
+[0:39:53 - 0:39:57] I'd love to just review what you're thinking and then I think we you know
+[0:39:57 - 0:40:00] We'll go from there over the weekend kind of think about it. I'll start putting together
+[0:40:01 - 0:40:04] Partnership agreement and we'll go from there. All right. Yeah, sounds good, man
+[0:40:04 - 0:40:06] Hey, thanks for putting your confidence in me
+[0:40:07 - 0:40:11] I'm excited to like give it a try and see where the POC goes
+[0:40:12 - 0:40:15] I think I think there's something here, you know, so let's see what we can do.
+[0:40:16 - 0:40:18] Yeah, sounds great. All right.
+[0:40:18 - 0:40:19] Talk to you later. Thanks.

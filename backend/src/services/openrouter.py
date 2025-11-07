@@ -1,6 +1,7 @@
 import httpx
 import json
 from typing import List
+from tenacity import retry, stop_after_attempt, wait_exponential
 from src.services.ai_base import TicketAnalyzer
 from src.schemas.ai import SentimentAnalysisResult, TopicClassification, TicketAnalysisResult
 from src.models.ticket import SentimentScore
@@ -19,6 +20,10 @@ class OpenRouterAnalyzer(TicketAnalyzer):
         self.model = model
         self.base_url = "https://openrouter.ai/api/v1/chat/completions"
 
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=2, max=10)
+    )
     async def analyze_ticket(
         self,
         ticket_content: str,
@@ -53,7 +58,11 @@ class OpenRouterAnalyzer(TicketAnalyzer):
 
             result = response.json()
             content = result["choices"][0]["message"]["content"]
-            parsed = json.loads(content)
+
+            try:
+                parsed = json.loads(content)
+            except json.JSONDecodeError as e:
+                raise ValueError(f"Failed to parse LLM response as JSON: {e}") from e
 
             return self._parse_analysis_result(parsed)
 
@@ -111,6 +120,12 @@ Return your analysis as JSON with this structure:
 
     def _parse_analysis_result(self, parsed: dict) -> TicketAnalysisResult:
         """Parse the LLM response into structured result."""
+        # Validate required fields
+        if "sentiment" not in parsed:
+            raise ValueError("Missing required field 'sentiment' in LLM response")
+        if "topics" not in parsed:
+            raise ValueError("Missing required field 'topics' in LLM response")
+
         sentiment_data = parsed.get("sentiment", {})
         topics_data = parsed.get("topics", [])
 

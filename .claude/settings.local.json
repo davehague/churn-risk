@@ -1,7 +1,28 @@
 {
   "permissions": {
     "allow": [
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Skill(superpowers:brainstorming)",
+      "Skill(superpowers:subagent-driven-development)",
+      "Bash(poetry run pytest:*)",
+      "Bash(git rev-parse:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(timeout 3 poetry run uvicorn:*)",
+      "Bash(poetry run python:*)",
+      "Bash(git log:*)",
+      "Bash(python:*)",
+      "Bash(poetry run ruff check:*)",
+      "Bash(poetry run mypy:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npm run lint)",
+      "Bash(lsof:*)",
+      "Bash(npm run dev:*)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(timeout 5 poetry run uvicorn:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

@@ -14,6 +14,7 @@ class Settings(BaseSettings):
 
     # OpenRouter
     OPENROUTER_API_KEY: str
+    OPENROUTER_MODEL: str = "google/gemini-2.5-flash"  # Default model
 
     # HubSpot OAuth
     HUBSPOT_CLIENT_ID: str

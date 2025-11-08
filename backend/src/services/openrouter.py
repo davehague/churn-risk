@@ -14,10 +14,10 @@ class OpenRouterAnalyzer(TicketAnalyzer):
     def __init__(
         self,
         api_key: str = settings.OPENROUTER_API_KEY,
-        model: str = "openai/gpt-4o-mini"
+        model: str | None = None
     ):
         self.api_key = api_key
-        self.model = model
+        self.model = model or settings.OPENROUTER_MODEL
         self.base_url = "https://openrouter.ai/api/v1/chat/completions"
 
     @retry(
@@ -57,12 +57,33 @@ class OpenRouterAnalyzer(TicketAnalyzer):
             response.raise_for_status()
 
             result = response.json()
+
+            # Debug logging (can be removed in production)
+            if not result.get("choices"):
+                raise ValueError(f"No choices in response: {result}")
+
             content = result["choices"][0]["message"]["content"]
+
+            # Debug logging
+            if not content or not content.strip():
+                raise ValueError(f"Empty content in response. Full response: {result}")
+
+            # Strip markdown code blocks if present (some models wrap JSON in ```json...```)
+            content = content.strip()
+            if content.startswith("```"):
+                # Remove opening ```json or ```
+                lines = content.split("\n")
+                if lines[0].startswith("```"):
+                    lines = lines[1:]
+                # Remove closing ```
+                if lines and lines[-1].strip() == "```":
+                    lines = lines[:-1]
+                content = "\n".join(lines).strip()
 
             try:
                 parsed = json.loads(content)
             except json.JSONDecodeError as e:
-                raise ValueError(f"Failed to parse LLM response as JSON: {e}") from e
+                raise ValueError(f"Failed to parse LLM response as JSON. Content was: '{content[:200]}...'. Error: {e}") from e
 
             return self._parse_analysis_result(parsed)
 

@@ -5,9 +5,5 @@
 </template>
 
 <script setup lang="ts">
-const { initAuth } = useAuth()
-
-onMounted(() => {
-  initAuth()
-})
+// Auth initialization is handled by the global middleware
 </script>

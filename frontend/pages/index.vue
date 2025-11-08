@@ -22,3 +22,9 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+definePageMeta({
+  layout: false  // No layout for full-screen landing page
+})
+</script>

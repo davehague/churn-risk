@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-const { user, signOut } = useAuth()
+const { user } = useAuth()
 const userStore = useUserStore()
 
 const currentUser = computed(() => userStore.currentUser)

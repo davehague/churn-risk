@@ -9,7 +9,7 @@ export const useUserStore = defineStore('user', {
   }),
 
   actions: {
-    async fetchCurrentUser() {
+    async fetchCurrentUser(): Promise<void> {
       const { idToken } = useAuth()
       const config = useRuntimeConfig()
 
@@ -32,16 +32,24 @@ export const useUserStore = defineStore('user', {
 
         // TODO: Fetch tenant data separately if needed
         // For now, tenant_id is in user data
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Failed to fetch user:', error)
+
+        // Handle 401 - token expired or invalid
+        if ((error as any)?.statusCode === 401) {
+          const { signOut } = useAuth()
+          await signOut()
+        }
+
         this.currentUser = null
         this.tenant = null
+
       } finally {
         this.loading = false
       }
     },
 
-    async logout() {
+    async logout(): Promise<void> {
       const { signOut } = useAuth()
 
       this.currentUser = null

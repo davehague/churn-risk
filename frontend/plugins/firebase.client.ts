@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app'
+import { initializeApp, getApps } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 
 export default defineNuxtPlugin(() => {
@@ -10,7 +10,9 @@ export default defineNuxtPlugin(() => {
     projectId: config.public.firebaseProjectId,
   }
 
-  const app = initializeApp(firebaseConfig)
+  const app = getApps().length === 0
+    ? initializeApp(firebaseConfig)
+    : getApps()[0]
   const auth = getAuth(app)
 
   return {

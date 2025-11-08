@@ -6,9 +6,15 @@ export const useApi = <T>(url: string, options: UseFetchOptions<T> = {}) => {
 
   const defaults: UseFetchOptions<T> = {
     baseURL: config.public.apiBase,
-    headers: idToken.value
-      ? { Authorization: `Bearer ${idToken.value}` }
-      : {},
+    onRequest({ options }) {
+      if (idToken.value) {
+        const headers = options.headers || {}
+        ;(options.headers as any) = {
+          ...headers,
+          Authorization: `Bearer ${idToken.value}`
+        }
+      }
+    },
     onResponseError({ response }) {
       if (response.status === 401) {
         // Token expired or invalid, redirect to login

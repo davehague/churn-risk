@@ -95,13 +95,19 @@ const handleSubmit = async () => {
     // Success - redirect to dashboard
     router.push('/dashboard')
   } catch (err: any) {
-    console.error('Login failed:', err)
+    if (import.meta.dev) {
+      console.error('Login failed:', err)
+    }
 
-    // Parse Firebase error
-    if (err.message.includes('invalid-credential') || err.message.includes('user-not-found')) {
+    // Use error.code for reliable error detection
+    if (err.code === 'auth/invalid-credential' ||
+        err.code === 'auth/user-not-found' ||
+        err.code === 'auth/wrong-password') {
       error.value = 'Invalid email or password'
-    } else if (err.message.includes('too-many-requests')) {
+    } else if (err.code === 'auth/too-many-requests') {
       error.value = 'Too many failed login attempts. Please try again later.'
+    } else if (err.code === 'auth/user-disabled') {
+      error.value = 'This account has been disabled. Please contact support.'
     } else {
       error.value = 'Login failed. Please try again.'
     }

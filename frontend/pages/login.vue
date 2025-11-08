@@ -75,6 +75,7 @@
 const route = useRoute()
 const router = useRouter()
 const { signIn } = useAuth()
+const userStore = useUserStore()
 
 const form = reactive({
   email: (route.query.email as string) || '',
@@ -91,6 +92,9 @@ const handleSubmit = async () => {
 
   try {
     await signIn(form.email, form.password)
+
+    // Fetch user data immediately after login
+    await userStore.fetchCurrentUser()
 
     // Success - redirect to dashboard
     router.push('/dashboard')

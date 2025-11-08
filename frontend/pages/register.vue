@@ -104,7 +104,10 @@
               minlength="8"
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
-            <p class="mt-1 text-xs text-gray-500">
+            <p v-if="form.password && !isPasswordStrong" class="mt-1 text-sm text-red-600">
+              Password must be at least 8 characters with uppercase, lowercase, and number
+            </p>
+            <p v-else class="mt-1 text-xs text-gray-500">
               At least 8 characters with uppercase, lowercase, and number
             </p>
           </div>
@@ -166,6 +169,14 @@ const subdomainChecking = ref(false)
 const subdomainAvailable = ref<boolean | null>(null)
 let subdomainCheckTimeout: NodeJS.Timeout | null = null
 
+const isPasswordStrong = computed(() => {
+  if (form.password.length < 8) return false
+  const hasUpper = /[A-Z]/.test(form.password)
+  const hasLower = /[a-z]/.test(form.password)
+  const hasNumber = /[0-9]/.test(form.password)
+  return hasUpper && hasLower && hasNumber
+})
+
 const isFormValid = computed(() => {
   return (
     form.email &&
@@ -175,7 +186,7 @@ const isFormValid = computed(() => {
     form.companyName &&
     form.subdomain &&
     form.password === form.confirmPassword &&
-    form.password.length >= 8 &&
+    isPasswordStrong.value &&
     subdomainAvailable.value === true
   )
 })

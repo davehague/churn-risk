@@ -77,47 +77,61 @@
    - `types/auth.ts` - Auth type definitions
    - `types/user.ts` - User type definitions
 
-### What Could NOT Be Verified (Requires Live Firebase)
+### Manual End-to-End Testing ✓
 
-The following aspects require a fully configured Firebase project and cannot be tested automatically:
+**Update (2025-11-08):** Full end-to-end testing completed with live Firebase project!
 
-1. **End-to-End Registration Flow**
+**Successfully Verified:**
+
+1. **End-to-End Registration Flow** ✓
    - Firebase user creation in live project
-   - Email verification (if enabled)
-   - Firebase Console user listing
+   - Database tenant and user record creation
+   - Subdomain validation and uniqueness check
+   - Password strength validation
+   - Redirect to login after registration
 
-2. **End-to-End Login Flow**
+2. **End-to-End Login Flow** ✓
    - Firebase authentication with real credentials
    - JWT token generation and validation
-   - Token refresh behavior
+   - User data fetching from `/api/v1/me` endpoint
+   - Dashboard display with user information (name, email, role)
    - Session persistence across page refreshes
 
-3. **Frontend-Backend Integration**
+3. **Frontend-Backend Integration** ✓
    - Token exchange between Firebase and backend API
    - Protected route access with real tokens
-   - User data fetching from `/api/v1/me` endpoint
+   - Auth middleware correctly blocking unauthenticated access
    - Logout and session cleanup
 
-4. **Error Cases with Live Firebase**
-   - Invalid credentials error messages
-   - Rate limiting behavior
-   - Token expiration handling
-   - Network error recovery
+4. **Error Cases with Live Firebase** ✓
+   - Invalid credentials error messages (using Firebase error codes)
+   - Configuration errors properly surfaced to user
+   - User-friendly error messages displayed
 
-### Testing Limitations
+### Issues Found and Fixed During Manual Testing
 
-**Firebase Configuration Status:**
-- Backend requires `FIREBASE_PROJECT_ID` and `FIREBASE_CREDENTIALS_PATH`
-- Frontend requires `NUXT_PUBLIC_FIREBASE_API_KEY`, `NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN`, `NUXT_PUBLIC_FIREBASE_PROJECT_ID`
-- Tests use mocked Firebase Admin SDK calls
-- No live Firebase project configured for testing
+1. **Firebase Credentials Path Error**
+   - Error: "The default Firebase app does not exist"
+   - Root cause: Path was `./firebase-credentials.json` but file was in parent directory
+   - Fix: Changed to `../firebase-credentials.json` in backend/.env
 
-**Recommendation:** For full end-to-end testing, developers should:
-1. Create a Firebase project
-2. Download service account credentials
-3. Configure environment variables in both backend and frontend
-4. Manually test registration and login flows
-5. Verify database records after registration
+2. **Email/Password Auth Not Enabled**
+   - Error: "No auth provider found for the given identifier (CONFIGURATION_NOT_FOUND)"
+   - Root cause: Email/Password sign-in method not enabled in Firebase Console
+   - Fix: User enabled it in Firebase Console → Authentication → Sign-in method
+
+3. **User Data Not Displaying on Dashboard**
+   - Error: Dashboard showed "Welcome, !" with no user information
+   - Root cause: Layout watcher not triggering user data fetch after login
+   - Fix: Added explicit `await userStore.fetchCurrentUser()` call in login.vue after successful authentication (commit 79ca45c)
+
+### Testing Configuration Used
+
+**Firebase Configuration:**
+- Backend: `FIREBASE_PROJECT_ID` and `FIREBASE_CREDENTIALS_PATH` configured
+- Frontend: `NUXT_PUBLIC_FIREBASE_API_KEY`, `NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN`, `NUXT_PUBLIC_FIREBASE_PROJECT_ID` configured
+- Email/Password authentication enabled in Firebase Console
+- Service account credentials downloaded and configured
 
 ### Code Quality Notes
 

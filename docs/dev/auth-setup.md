@@ -41,8 +41,24 @@ poetry run pytest tests/integration/test_auth_registration.py -v
 
 ## Troubleshooting
 
+**Issue:** "The default Firebase app does not exist"
+**Solution:** Check that `FIREBASE_CREDENTIALS_PATH` points to the correct location. If backend is in `backend/` subdirectory and credentials are in project root, use `../firebase-credentials.json` (not `./firebase-credentials.json`).
+
+**Issue:** "No auth provider found for the given identifier (CONFIGURATION_NOT_FOUND)"
+**Solution:** Enable Email/Password authentication in Firebase Console:
+1. Go to Firebase Console → Authentication → Sign-in method
+2. Click on "Email/Password"
+3. Enable the first toggle (Email/Password)
+4. Save
+
 **Issue:** "User exists in Firebase but not in database"
 **Solution:** This means registration partially failed. Delete the Firebase user and try again.
 
 **Issue:** Token expired
 **Solution:** Firebase SDK automatically refreshes tokens. If it fails, user will be logged out.
+
+**Issue:** Dashboard shows "Welcome, !" with no user data
+**Solution:** This was fixed in commit 79ca45c. The login flow now explicitly calls `fetchCurrentUser()` after Firebase authentication. If you still see this, check browser console for 401 errors on `/api/v1/me` endpoint.
+
+**Issue:** Firebase re-initialization error during development (HMR)
+**Solution:** This is already handled in `plugins/firebase.client.ts` with `getApps()` guard. If you see this error, verify the plugin has: `const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]`

@@ -2139,16 +2139,22 @@ git commit -m "feat: add HubSpot integration and OAuth flow"
 
 ## Next Steps Summary
 
-The plan continues with these remaining tasks:
+**Updated Task Order** (as of 2025-11-08):
 
-- **Task 6:** Ticket Import & Analysis Service (bulk import 200 tickets, analyze with AI)
-- **Task 7:** Churn Risk Card Creation Logic (create cards for negative sentiment)
-- **Task 8:** WebSocket Real-Time Updates (onboarding progress, new tickets)
-- **Task 9:** Frontend - Firebase Auth & Layout
-- **Task 10:** Frontend - Onboarding Flow UI
-- **Task 11:** Frontend - Dashboard with Analytics
-- **Task 12:** Frontend - Churn Risk Kanban Board
-- **Task 13:** Frontend - Topic Management UI
+Tasks 1-5 have been completed. Remaining tasks reordered to implement auth before backend features:
+
+- **Task 6:** Frontend - Firebase Auth & Layout (NEXT - see design doc: `docs/plans/2025-11-08-firebase-auth-design.md`)
+  - Registration page with self-service tenant creation
+  - Login page with Firebase Client SDK
+  - Auth middleware and state management
+  - Layout component with navigation
+- **Task 7:** Ticket Import & Analysis Service (bulk import 200 tickets, analyze with AI)
+- **Task 8:** Churn Risk Card Creation Logic (create cards for negative sentiment)
+- **Task 9:** Frontend - Dashboard with Analytics
+- **Task 10:** Frontend - Churn Risk Kanban Board
+- **Task 11:** Frontend - Topic Management UI
+- **Task 12:** Frontend - Onboarding Flow UI
+- **Task 13:** WebSocket Real-Time Updates (onboarding progress, new tickets)
 - **Task 14:** HubSpot Webhook Handling (real-time ticket ingestion)
 - **Task 15:** GCP Deployment (Cloud Run, Cloud SQL, Cloud Tasks)
 - **Task 16:** End-to-End Testing & Polish

@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     # OpenRouter
     OPENROUTER_API_KEY: str
 
-    # HubSpot
+    # HubSpot OAuth
     HUBSPOT_CLIENT_ID: str
     HUBSPOT_CLIENT_SECRET: str
     HUBSPOT_REDIRECT_URI: str

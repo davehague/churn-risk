@@ -14,7 +14,6 @@ htmlcov/
 # Environment
 .env
 .env.local
-firebase-credentials.json
 
 # IDEs
 .vscode/
@@ -38,3 +37,9 @@ dist/
 
 # Logs
 *.log
+
+# HubSpot config file
+hubspot.config.yml
+
+# Firebase JSON file
+churn-risk-firebase-adminsdk-fbsvc-7988ab635b.json

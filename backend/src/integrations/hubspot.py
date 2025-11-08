@@ -10,7 +10,12 @@ class HubSpotClient:
     BASE_URL = "https://api.hubapi.com"
 
     def __init__(self, access_token: str):
-        self.access_token = access_token
+        """
+        Initialize HubSpot client with OAuth access token.
+
+        Args:
+            access_token: OAuth access token from authorization flow
+        """
         self.headers = {
             "Authorization": f"Bearer {access_token}",
             "Content-Type": "application/json",
@@ -117,11 +122,13 @@ class HubSpotClient:
 
     async def get_companies(self, limit: int = 100) -> Dict[str, Any]:
         """Fetch companies from HubSpot."""
+        params = {"limit": min(limit, 100)}
+
         async with httpx.AsyncClient() as client:
             response = await client.get(
                 f"{self.BASE_URL}/crm/v3/objects/companies",
                 headers=self.headers,
-                params={"limit": min(limit, 100)},
+                params=params,
                 timeout=30.0
             )
             response.raise_for_status()
@@ -129,11 +136,13 @@ class HubSpotClient:
 
     async def get_contacts(self, limit: int = 100) -> Dict[str, Any]:
         """Fetch contacts from HubSpot."""
+        params = {"limit": min(limit, 100)}
+
         async with httpx.AsyncClient() as client:
             response = await client.get(
                 f"{self.BASE_URL}/crm/v3/objects/contacts",
                 headers=self.headers,
-                params={"limit": min(limit, 100)},
+                params=params,
                 timeout=30.0
             )
             response.raise_for_status()

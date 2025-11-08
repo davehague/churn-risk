@@ -17,6 +17,18 @@ Start local services first:
 docker-compose up -d  # Starts PostgreSQL and Redis
 ```
 
+**Docker Services**:
+- PostgreSQL 15 on `localhost:5432`
+  - Database: `churn_risk_dev`
+  - Username: `postgres`
+  - Password: `password`
+- Redis 7 on `localhost:6379`
+
+Use this connection string in `.env`:
+```
+DATABASE_URL=postgresql://postgres:password@localhost:5432/churn_risk_dev
+```
+
 ### Backend
 
 ```bash
@@ -28,11 +40,12 @@ poetry run uvicorn src.main:app --reload --port 8000
 ```
 
 **Environment Variables**: See `backend/.env.example` for required config. Key vars:
-- `DATABASE_URL`: PostgreSQL connection string
+- `DATABASE_URL`: PostgreSQL connection string (Docker: `postgresql://postgres:password@localhost:5432/churn_risk_dev`)
 - `FIREBASE_PROJECT_ID` and `FIREBASE_CREDENTIALS_PATH`: Firebase Auth
-- `OPENROUTER_API_KEY`: AI service
-- `HUBSPOT_CLIENT_ID`, `HUBSPOT_CLIENT_SECRET`: OAuth flow (production)
-- `HUBSPOT_API_KEY`: Testing/development alternative to OAuth
+- `OPENROUTER_API_KEY`: AI service (sign up at https://openrouter.ai/)
+- `HUBSPOT_CLIENT_ID`, `HUBSPOT_CLIENT_SECRET`, `HUBSPOT_REDIRECT_URI`: OAuth flow (see `docs/dev/hubspot-oauth-setup.md`)
+  - Note: Developer API keys are deprecated - OAuth only
+- `SECRET_KEY`: Generate with `python3 -c "import secrets; print(secrets.token_urlsafe(32))"`
 
 ### Frontend
 
@@ -152,14 +165,23 @@ npm run lint        # ESLint
 3. Callback endpoint exchanges code for tokens
 4. Tokens stored in `Integration` model (encrypted in production)
 
+**Setup Guide**: See `docs/dev/hubspot-oauth-setup.md` for complete OAuth app creation with HubSpot CLI.
+
+**HubSpot App**: Located in `hs-churn-risk/` directory with OAuth configuration in `public-app.json`.
+
+**Required Scopes**:
+- `crm.objects.contacts.read` - Contact information
+- `crm.objects.companies.read` - Company data
+- `tickets` - Support ticket access
+
 **Webhook Ingestion**:
 - HubSpot webhooks trigger real-time ticket ingestion
 - Tickets analyzed via AI service layer
 - Churn risk cards auto-created for negative sentiment
 
-**Two Authentication Modes**:
-- **Development**: `HUBSPOT_API_KEY` for direct API access
-- **Production**: OAuth via `HUBSPOT_CLIENT_ID` + `HUBSPOT_CLIENT_SECRET`
+**Authentication**:
+- **OAuth only**: `HUBSPOT_CLIENT_ID` + `HUBSPOT_CLIENT_SECRET`
+- Developer API keys removed (deprecated by HubSpot)
 
 ## Testing Conventions
 
@@ -216,14 +238,35 @@ npm run lint        # ESLint
 
 ## Current Development Status
 
-**Implemented**:
-- Multi-tenant data model with RBAC
-- Firebase authentication integration
-- HubSpot OAuth flow and basic integration
-- OpenRouter AI service with retry logic
-- Database schema with Alembic migrations
+**Completed (as of 2025-11-08)**:
+- ✅ Multi-tenant data model with RBAC (11 tables, UUID-based)
+- ✅ Firebase authentication integration with token verification
+- ✅ HubSpot OAuth app creation and configuration (via HubSpot CLI)
+- ✅ HubSpot client with OAuth token support
+- ✅ OpenRouter AI service with retry logic and error handling
+- ✅ Database schema with Alembic migrations (initial_schema: c08085465bad)
+- ✅ Sentiment analysis working (tested with real tickets)
+- ✅ Topic classification working (tested with real tickets)
+- ✅ Backend smoke test script (`scripts/smoke_test.py`)
+- ✅ Database, OpenRouter, HubSpot integration verified
+- ✅ 23/23 tests passing (unit + integration)
+- ✅ Backend API server running on port 8000
 
-**In Progress** (check git status and recent commits):
-- Full webhook ingestion pipeline
-- Churn risk card generation
-- Frontend components for risk dashboard
+**Next Steps** (from implementation plan):
+- Task 6: Ticket Import & Analysis Service
+- Task 7: Churn Risk Card Creation Logic
+- Task 8: WebSocket Real-Time Updates
+- Tasks 9-13: Frontend implementation
+- Task 14: HubSpot Webhook Handling
+- Tasks 15-16: GCP Deployment & Testing
+
+**Testing**:
+- Smoke test script: `backend/scripts/smoke_test.py` (run with: `poetry run python scripts/smoke_test.py`)
+- Frontend test page: http://localhost:3000 (when running)
+- Full testing guide: `docs/dev/testing-guide.md`
+- Run all tests: `cd backend && poetry run pytest`
+
+**Known Issues**:
+- HubSpot OAuth requires user authorization flow (can't test automatically)
+- OAuth callback requires Firebase JWT authentication
+- Frontend is basic test page only (no real UI yet)

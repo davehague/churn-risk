@@ -2,18 +2,20 @@
   "uid": "app-churn-risk",
   "type": "app",
   "config": {
-    "description": "An example to demonstrate how to build a private oauth app with developer projects.",
+    "description": "Churn Risk Detection App - Analyzes HubSpot support tickets for sentiment and churn risk",
     "name": "churn-risk-Application",
     "distribution": "private",
     "auth": {
       "type": "oauth",
       "redirectUrls": [
-        "http://localhost:3000"
+        "http://localhost:3000",
+        "http://localhost:8000/api/integrations/hubspot/callback"
       ],
       "requiredScopes": [
         "oauth",
         "crm.objects.contacts.read",
-        "crm.objects.contacts.write"
+        "crm.objects.companies.read",
+        "tickets"
       ],
       "optionalScopes": [],
       "conditionallyRequiredScopes": []

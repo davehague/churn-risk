@@ -93,21 +93,24 @@ graph TB
 ## Component Descriptions
 
 ### Frontend (Nuxt 3 + Vue 3)
-**Status:** 🟡 Basic test page only
+**Status:** 🟡 Auth complete, features in progress
 
 **Purpose:** User interface for viewing churn risks, managing topics, and configuring integrations.
 
 **What Exists:**
 - Project scaffolding with Nuxt 3, Tailwind CSS
-- Basic test page for API validation
+- Firebase Client SDK integration
+- Complete authentication UI (registration, login, logout)
+- Protected routes with auth middleware
+- Landing page and dashboard
+- User state management with Pinia
 - CORS-enabled API calls to backend
 
 **What's Missing:**
-- Login/authentication UI
-- Dashboard with charts
+- Dashboard with charts and analytics
 - Churn risk kanban board
 - Topic management interface
-- Onboarding flow UI
+- HubSpot onboarding flow UI
 
 ---
 
@@ -134,21 +137,21 @@ graph TB
 ---
 
 ### Authentication (Firebase)
-**Status:** 🟢 Backend ready, no users created yet
+**Status:** 🟢 Fully implemented and tested
 
 **Purpose:** User authentication and JWT token verification.
 
 **What Works:**
 - Firebase Admin SDK initialized
+- Firebase Client SDK integrated in frontend
 - JWT token verification middleware
 - User lookup by Firebase UID
 - Role-based access control (ADMIN, MEMBER, VIEWER)
-
-**What's Missing:**
-- Frontend Firebase SDK integration
-- User registration flow
-- Login UI
-- No actual users created in Firebase
+- Self-service user registration with tenant creation
+- Login/logout functionality
+- Protected routes with auth middleware
+- User state management
+- End-to-end auth flow verified and working
 
 ---
 
@@ -190,25 +193,27 @@ graph TB
 ---
 
 ### HubSpot Integration
-**Status:** 🟡 OAuth configured, not connected yet
+**Status:** 🟢 Fully working, connected to FlxPoint HubSpot
 
 **Purpose:** Fetch support tickets and company data from HubSpot CRM.
 
 **Authentication:** OAuth 2.0 only (Developer API keys deprecated)
 
-**What Exists:**
+**What Works:**
 - HubSpot OAuth app created via CLI (`hs-churn-risk/`)
 - OAuth client ID and secret configured
 - OAuth authorization URL generation
 - Token exchange and refresh methods
 - API client for tickets, companies, contacts (OAuth tokens only)
-- Webhook subscription method (not used yet)
+- OAuth flow COMPLETED (FlxPoint account connected)
+- Successfully fetching real tickets from HubSpot
+- Access tokens stored in Integration table
+- Public OAuth callback endpoint (GET method, no auth required)
 
 **What's Missing:**
-- Completed OAuth flow (needs user to authorize)
-- Real ticket data import
 - Webhook ingestion pipeline
 - Incremental sync logic
+- Bulk ticket import service
 
 ---
 
@@ -271,16 +276,16 @@ Backend → Exchange code for tokens
 
 | Component | Technology | Status |
 |-----------|-----------|--------|
-| **Frontend** | Vue 3, Nuxt 3, Tailwind CSS | 🟡 Basic |
+| **Frontend** | Vue 3, Nuxt 3, Tailwind CSS | 🟡 Auth complete, features pending |
 | **Backend** | FastAPI (Python 3.11) | 🟢 Core done |
 | **Database** | PostgreSQL 15, SQLAlchemy | 🟢 Complete |
-| **Auth** | Firebase Admin SDK | 🟢 Backend ready |
+| **Auth** | Firebase Admin SDK + Client SDK | 🟢 Fully implemented |
 | **AI/ML** | OpenRouter (LLM gateway) | 🟢 Working |
-| **Integrations** | HubSpot OAuth 2.0 | 🟡 Configured |
+| **Integrations** | HubSpot OAuth 2.0 | 🟢 Connected to FlxPoint |
 | **Background Jobs** | Cloud Tasks (GCP) | 🔴 Not implemented |
 | **WebSockets** | FastAPI WebSocket | 🔴 Not implemented |
 | **Migrations** | Alembic | 🟢 Complete |
-| **Testing** | pytest, AsyncMock | 🟢 23/23 passing |
+| **Testing** | pytest, AsyncMock | 🟢 33/33 passing |
 | **Hosting** | GCP Cloud Run, Cloud SQL | 🔴 Not deployed |
 
 ---
@@ -310,27 +315,20 @@ Backend → Exchange code for tokens
 
 ## Current Limitations
 
-1. **No Real Users Yet**
-   - Firebase project created but no users
-   - Can't test authenticated endpoints end-to-end
-
-2. **OAuth Not Connected**
-   - HubSpot app configured
-   - User needs to authorize to get access tokens
-   - Can't fetch real tickets yet
-
-3. **No Background Processing**
+1. **No Background Processing**
    - All operations are synchronous
    - Won't scale for bulk imports
    - Cloud Tasks queue not set up
 
-4. **No Real UI**
-   - Only a test page exists
-   - Dashboard, kanban board, onboarding flow all pending
+2. **Limited UI Features**
+   - Basic dashboard exists but lacks charts/analytics
+   - Churn risk kanban board not built
+   - Topic management interface not built
+   - HubSpot onboarding flow not built
 
-5. **Not Deployed**
+3. **Not Deployed**
    - Running locally only
-   - GCP infrastructure not provisioned
+   - GCP infrastructure not provisioned (Cloud Run, Cloud SQL)
 
 ---
 

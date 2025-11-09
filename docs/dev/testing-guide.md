@@ -202,12 +202,9 @@ poetry run python test_ai_manual.py
 5. **Verify Redirect**
    - Should redirect to: `http://localhost:8000/api/v1/integrations/hubspot/callback?code=...`
    - Backend should exchange code for tokens
-   - Should return integration details (or 401 if no auth yet)
+   - Should redirect to frontend with success/error query parameters
 
-**Note:** OAuth callback currently requires Firebase authentication. To test fully, you'll need:
-- Firebase user created
-- JWT token in request
-- See Task 9 in implementation plan for frontend auth setup
+**Note:** OAuth callback is a public endpoint (no authentication required) and uses GET method. After successful authorization, you'll be redirected back to the frontend with `?hubspot=connected` or `?hubspot=error` query parameters.
 
 ---
 
@@ -220,7 +217,7 @@ cd backend
 poetry run pytest
 ```
 
-**Expected:** 23/23 tests passing
+**Expected:** 33/33 tests passing (10 auth tests + 23 other tests)
 
 ### Run Specific Test Files
 
@@ -288,16 +285,15 @@ DATABASE_URL=postgresql://postgres:password@localhost:5432/churn_risk_dev
 - Check API key is valid: https://openrouter.ai/keys
 - Check rate limits: https://openrouter.ai/account
 
-### Issue: "HubSpot OAuth returns 401"
+### Issue: "HubSpot OAuth callback not working"
 
-**Expected** - OAuth requires authenticated user (Firebase JWT).
+**Check:**
+- OAuth callback uses GET method (not POST)
+- Callback endpoint is public (no authentication required)
+- Redirect URI in HubSpot app config matches your backend URL
+- Client ID and Client Secret are correctly configured in `.env`
 
-**To fully test:**
-1. Create Firebase user first
-2. Get JWT token
-3. Include in request: `Authorization: Bearer <jwt>`
-
-**For now:** OAuth URL generation working is sufficient validation.
+**For testing:** Use the frontend OAuth flow - it handles all redirects automatically.
 
 ### Issue: "CORS error in browser"
 
@@ -319,7 +315,7 @@ cd frontend && npm run dev
 
 ## Success Criteria
 
-Before continuing to Task 6, verify:
+Before moving to cloud deployment, verify:
 
 - ✅ Backend health endpoint responding
 - ✅ Database connection working
@@ -327,18 +323,22 @@ Before continuing to Task 6, verify:
 - ✅ OpenRouter AI analyzing tickets correctly
 - ✅ Sentiment analysis returning 5-level scores with confidence
 - ✅ Topic extraction working (even without configured topics)
-- ✅ HubSpot OAuth URL generation working
-- ✅ Frontend test page displaying correctly
+- ✅ HubSpot OAuth flow complete (connected to FlxPoint)
+- ✅ Fetching real tickets from HubSpot working
+- ✅ Firebase authentication fully implemented (registration + login)
+- ✅ Frontend auth UI complete (landing, register, login, dashboard)
+- ✅ Protected routes with auth middleware working
 - ✅ Frontend can call backend APIs (CORS working)
-- ✅ 23/23 tests passing
+- ✅ 33/33 tests passing (10 auth + 23 other)
 - ✅ No TypeScript errors in frontend
 
 ---
 
 ## Next Steps
 
-Once all tests pass, you're ready to proceed with:
-- **Task 6:** Ticket Import & Analysis Service
+All tests passing! You're ready to proceed with:
+- **Cloud Deployment:** GCP Cloud Run, Cloud SQL setup
+- **Task 6:** Ticket Import & Analysis Service (after deployment)
 - **Task 7:** Churn Risk Card Creation Logic
 - **Task 8:** WebSocket Real-Time Updates
 

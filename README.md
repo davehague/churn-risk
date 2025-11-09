@@ -72,10 +72,11 @@ DATABASE_URL=postgresql://postgres:password@localhost:5432/churn_risk_dev
 
 # Firebase Auth
 FIREBASE_PROJECT_ID=your-project-id
-FIREBASE_CREDENTIALS_PATH=./firebase-credentials.json
+FIREBASE_CREDENTIALS_PATH=../firebase-credentials.json  # Relative to backend/ directory
 
 # OpenRouter AI
 OPENROUTER_API_KEY=sk-or-your-key
+OPENROUTER_MODEL=google/gemini-2.5-flash  # Optional, defaults to gpt-4o-mini
 
 # HubSpot OAuth
 HUBSPOT_CLIENT_ID=your-client-id
@@ -116,37 +117,23 @@ CORS_ORIGINS=http://localhost:3000,http://localhost:8000
 
 ```
 churn-risk-app/
-├── backend/                      # FastAPI backend
-│   ├── src/
-│   │   ├── api/                  # API routes and routers
-│   │   ├── models/               # SQLAlchemy database models
-│   │   ├── schemas/              # Pydantic schemas for validation
-│   │   ├── services/             # Business logic (AI, email, etc.)
-│   │   ├── integrations/         # External API clients (HubSpot)
-│   │   └── core/                 # Core utilities (config, auth, database)
-│   ├── tests/
-│   │   ├── unit/                 # Fast tests with mocked dependencies
-│   │   └── integration/          # Tests with real DB/services
-│   ├── scripts/
-│   │   └── smoke_test.py         # Smoke test script
-│   ├── alembic/                  # Database migrations
-│   └── pyproject.toml            # Poetry dependencies
-├── frontend/                     # Nuxt 3 frontend (WIP)
-│   ├── components/
-│   ├── composables/
-│   ├── layouts/
-│   ├── pages/
-│   ├── stores/
-│   └── types/
-├── hs-churn-risk/                # HubSpot OAuth app configuration
-│   └── public-app.json           # OAuth scopes and redirect URIs
-├── docs/
-│   ├── dev/                      # Development guides
-│   ├── plans/                    # Architecture and implementation plans
-├── docker-compose.yml            # Local PostgreSQL and Redis
-├── CLAUDE.md                     # Comprehensive dev guide for Claude Code
-└── README.md                     # This file
+├── backend/           # FastAPI backend with AI service layer
+├── frontend/          # Nuxt 3/Vue 3 frontend with Firebase auth
+├── hs-churn-risk/     # HubSpot OAuth app configuration
+├── docs/              # Development guides and architecture docs
+│   ├── dev/           # Setup guides (HubSpot OAuth, testing, etc.)
+│   └── plans/         # Implementation plans and status docs
+├── docker-compose.yml # Local PostgreSQL and Redis services
+├── CLAUDE.md          # Developer guide for Claude Code
+├── backend/CLAUDE.md  # Backend-specific development guide
+└── frontend/CLAUDE.md # Frontend-specific development guide
 ```
+
+**For detailed structure**: See `backend/CLAUDE.md` and `frontend/CLAUDE.md`
+
+## Current Status
+
+**See**: `docs/plans/plain-english.md` for detailed status
 
 ## License
 

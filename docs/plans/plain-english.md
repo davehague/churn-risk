@@ -172,5 +172,6 @@ Plain English status summary:
   - OAuth redirect URI corrected to include /v1 prefix
   - Test script: backend/scripts/fetch_real_tickets.py
 
-  Next up: Ticket Import & Analysis Service (Task 6 from original plan)
+  Next up: GCP Cloud Deployment (Cloud Run, Cloud SQL, production environment setup)
+  Then: Ticket Import & Analysis Service (Task 6 from original plan)
 

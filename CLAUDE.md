@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**📚 Specialized Guides:**
+- **Backend Development**: See `backend/CLAUDE.md` for backend-specific patterns, testing, and service layer details
+- **Frontend Development**: See `frontend/CLAUDE.md` for frontend patterns, auth, API calls, and component structure
+- **Additional Documentation**: See `docs/dev/` for architecture, testing guides, and HubSpot OAuth setup
+
+---
+
 ## Project Overview
 
 Multi-tenant SaaS application that analyzes HubSpot support tickets using AI to detect churn risk, perform sentiment analysis, and classify topics. Uses webhook-based real-time ingestion.
@@ -61,43 +68,22 @@ npm run dev  # Runs on localhost:3000
 - API Docs: http://localhost:8000/api/v1/docs
 - Frontend: http://localhost:3000
 
-## Common Commands
+## Quick Reference
 
-### Backend
+**Common Commands**: See `backend/CLAUDE.md` and `frontend/CLAUDE.md` for detailed command lists.
 
-**Tests**:
+**Quick Commands**:
 ```bash
-cd backend
-poetry run pytest                    # All tests
-poetry run pytest tests/unit/        # Unit tests only
-poetry run pytest tests/integration/ # Integration tests only
-poetry run pytest tests/unit/test_auth.py::test_name  # Single test
-PYTHONPATH=/Users/davidhague/source/churn-risk-app/backend poetry run pytest  # If path issues
-```
+# Start services
+docker-compose up -d                              # PostgreSQL & Redis
 
-**Linting & Formatting**:
-```bash
-poetry run ruff check src     # Lint
-poetry run black src          # Format
-poetry run mypy src           # Type check
-```
+# Backend
+cd backend && poetry run uvicorn src.main:app --reload --port 8000
+cd backend && poetry run pytest                   # Run tests
+cd backend && poetry run alembic upgrade head     # Run migrations
 
-**Database Migrations**:
-```bash
-poetry run alembic revision --autogenerate -m "description"  # Create migration
-poetry run alembic upgrade head     # Apply migrations
-poetry run alembic downgrade -1     # Rollback one migration
-poetry run alembic history          # View migration history
-PYTHONPATH=/Users/davidhague/source/churn-risk-app/backend poetry run alembic upgrade head  # If path issues
-```
-
-### Frontend
-
-```bash
-npm run dev         # Development server
-npm run build       # Production build
-npm run typecheck   # TypeScript validation
-npm run lint        # ESLint
+# Frontend
+cd frontend && npm run dev                        # Dev server (port 3000)
 ```
 
 ## Architecture
@@ -132,30 +118,14 @@ npm run lint        # ESLint
 
 **Relationships**: All foreign keys use `ondelete="CASCADE"` to ensure data integrity. Tenant deletion removes all associated data.
 
-### AI Service Layer
+### Service Layer Architecture
 
-**Abstraction Pattern** (`src/services/ai_base.py`):
-- `SentimentAnalyzer`: Abstract base for sentiment analysis
-- `TopicClassifier`: Abstract base for topic classification
-- `TicketAnalyzer`: Combined analysis interface
+**AI Service** (`backend/src/services/`):
+- Abstract base classes define interfaces (`SentimentAnalyzer`, `TopicClassifier`, `TicketAnalyzer`)
+- OpenRouter implementation with retry logic and structured output
+- **Pattern**: Always code against ABCs, not concrete implementations (enables provider swapping)
 
-**Implementation** (`src/services/openrouter.py`):
-- Implements all three ABC interfaces
-- Uses tenacity for retry logic with exponential backoff
-- Handles rate limits and transient failures
-- Structured output via Pydantic schemas
-
-**Usage**: Always code against the ABC interfaces, not concrete implementations. This allows swapping AI providers without changing business logic.
-
-### API Structure
-
-**Routing**: All API routes prefixed with `/api/v1` (configured in `settings.API_V1_PREFIX`)
-
-**Authentication**: Most routes require Firebase JWT. Use `current_user: User = Depends(get_current_user)` parameter.
-
-**Database Sessions**: Use `db: Session = Depends(get_db)` for database access. Sessions auto-close via dependency.
-
-**Error Handling**: Raise `HTTPException` with appropriate status codes. Frontend expects standardized error responses.
+**See `backend/CLAUDE.md`** for detailed service layer patterns, dependency injection, and API endpoint structure.
 
 ### HubSpot Integration
 
@@ -183,48 +153,17 @@ npm run lint        # ESLint
 - **OAuth only**: `HUBSPOT_CLIENT_ID` + `HUBSPOT_CLIENT_SECRET`
 - Developer API keys removed (deprecated by HubSpot)
 
-## Testing Conventions
+## Key Patterns & Conventions
 
-**Test Organization**:
-- `tests/unit/`: Fast tests with mocked dependencies
-- `tests/integration/`: Tests with real database/external services
+**Multi-Tenancy**: ALL database queries must filter by `tenant_id` to enforce tenant isolation. Return 404 (not 403) for cross-tenant access attempts.
 
-**Pytest Configuration**: Located in `pytest.ini`. Uses `asyncio_mode = auto` for async tests.
+**Testing**: See `backend/CLAUDE.md` for detailed testing patterns. Tests organized in `backend/tests/unit/` (mocked) and `backend/tests/integration/` (real DB).
 
-**Running Tests**:
-- Always run from `backend/` directory
-- Use `PYTHONPATH` prefix if import errors occur
-- Tests use async fixtures and `pytest-asyncio`
+**Configuration**: Environment-based config via `pydantic-settings`. See `backend/.env.example` for all required variables.
 
-**Key Test Files**:
-- `test_auth.py`: Firebase token validation
-- `test_dependencies.py`: FastAPI dependencies
-- `test_models.py`: SQLAlchemy models
-- `test_openrouter.py`: AI service with mocked HTTP
+**Authentication**: Firebase JWT tokens validated via `verify_firebase_token` → `get_current_user` dependency chain.
 
-## Configuration Management
-
-**Settings Class** (`src/core/config.py`):
-- Uses `pydantic-settings` for type-safe config
-- Loads from `.env` file via `SettingsConfigDict`
-- Access via `from src.core.config import settings`
-
-**Required vs Optional**:
-- Database, Firebase, OpenRouter: Always required
-- HubSpot: Either API key OR OAuth credentials
-- GCP: Optional for local dev, required for production
-
-**CORS**: Configured via `CORS_ORIGINS` (comma-separated list). Parsed by `settings.get_cors_origins_list()`.
-
-## Key Patterns
-
-**Dependency Injection**: FastAPI dependencies for auth, DB sessions, and user context. Chain dependencies (e.g., `require_admin` depends on `get_current_user`).
-
-**Database Queries**: Always filter by `tenant_id` to enforce multi-tenancy isolation.
-
-**Async/Await**: All route handlers and service methods are async. Use `await` for DB queries with async engine (if migrated) or external API calls.
-
-**Error Context**: Include tenant/user context in error logs for multi-tenant debugging.
+**See specialized guides** (`backend/CLAUDE.md`, `frontend/CLAUDE.md`) for detailed patterns and best practices.
 
 ## Deployment Notes
 
@@ -238,7 +177,7 @@ npm run lint        # ESLint
 
 ## Current Development Status
 
-**Completed (as of 2025-11-08)**:
+**Completed (as of 2025-11-09)**:
 - ✅ Multi-tenant data model with RBAC (11 tables, UUID-based)
 - ✅ Firebase authentication - FULLY IMPLEMENTED & TESTED
   - Backend registration API with subdomain validation
@@ -263,23 +202,23 @@ npm run lint        # ESLint
 - ✅ Backend API server running on port 8000
 - ✅ Frontend running on port 3000 with complete auth UI
 
-**Next Steps** (from implementation plan):
-- Task 6: Ticket Import & Analysis Service
-- Task 7: Churn Risk Card Creation Logic
-- Task 8: WebSocket Real-Time Updates
-- Tasks 9-13: Frontend implementation
-- Task 14: HubSpot Webhook Handling
-- Tasks 15-16: GCP Deployment & Testing
+**🚀 Next Steps** (as of 2025-11-09):
 
-**Testing**:
-- Smoke test script: `backend/scripts/smoke_test.py` (run with: `poetry run python scripts/smoke_test.py`)
-- Frontend test page: http://localhost:3000 (when running)
+**IMMEDIATE**: GCP Cloud Deployment
+- Set up Cloud Run for backend
+- Set up Cloud SQL for PostgreSQL
+- Configure production environment variables
+- Deploy and verify all integrations work in cloud
+
+**Then Continue with Features**:
+- Ticket Import & Analysis Service (bulk import with AI)
+- Churn Risk Card Creation Logic
+- Frontend Dashboard with Analytics
+- Churn Risk Kanban Board
+- WebSocket Real-Time Updates
+- HubSpot Webhook Handling
+
+**Testing & Verification**:
+- Smoke test: `cd backend && poetry run python scripts/smoke_test.py`
+- All tests: `cd backend && poetry run pytest` (33/33 passing)
 - Full testing guide: `docs/dev/testing-guide.md`
-- Run all tests: `cd backend && poetry run pytest`
-
-**Recent Updates** (2025-11-08):
-- ✅ HubSpot OAuth callback fixed (GET method, public endpoint)
-- ✅ OAuth redirect URI corrected (includes /v1 prefix)
-- ✅ Successfully connected to FlxPoint HubSpot account
-- ✅ Verified ticket fetching and AI sentiment analysis working
-- ✅ AI model configuration moved to environment variables

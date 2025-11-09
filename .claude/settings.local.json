@@ -22,7 +22,11 @@
       "Bash(python3:*)",
       "Bash(timeout 5 poetry run uvicorn:*)",
       "Bash(cat:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "WebSearch",
+      "Bash(poetry run alembic:*)",
+      "Skill(superpowers:finishing-a-development-branch)",
+      "Bash(poetry run uvicorn:*)"
     ],
     "deny": [],
     "ask": []

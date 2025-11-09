@@ -1,6 +1,6 @@
 # Architecture Overview - Churn Risk App
 
-**Last Updated:** 2025-11-08
+**Last Updated:** 2025-11-09
 
 A simple, high-level view of the Churn Risk App architecture and how components connect.
 
@@ -87,6 +87,82 @@ graph TB
 - 🟢 **Green** = Fully implemented and tested
 - 🟡 **Yellow** = Partially implemented
 - 🔴 **Pink** = Not yet implemented
+
+---
+
+## Deployment Environments
+
+### Local Development
+
+**Purpose:** Fast iteration, easy debugging, minimal cost
+
+**Infrastructure:**
+```
+Backend:     poetry run uvicorn src.main:app --reload
+Database:    docker-compose (PostgreSQL 15)
+Redis:       docker-compose (Redis 7)
+Frontend:    npm run dev
+```
+
+**Key Characteristics:**
+- Backend runs directly via Poetry (no containerization)
+- Database and Redis in Docker containers (defined in `docker-compose.yml`)
+- All services on localhost
+- Uses `.env` file for configuration
+- Firebase credentials from local file
+- HubSpot OAuth redirect to `localhost:8000`
+
+**Advantages:**
+- Fast startup (no container build time)
+- Easy debugging (direct Python process)
+- Simple to reset database (docker-compose down -v)
+- No cloud costs
+
+---
+
+### Production (GCP)
+
+**Purpose:** Scalable, managed, production-grade deployment
+
+**Infrastructure:**
+```
+Backend:     Cloud Run (containerized FastAPI)
+Database:    Cloud SQL for PostgreSQL (managed service)
+Redis:       Memorystore for Redis (managed service)
+Frontend:    Cloud Run or Cloud Storage + Cloud CDN
+```
+
+**Key Characteristics:**
+- Backend containerized via Dockerfile, deployed to Cloud Run
+- Managed PostgreSQL (Cloud SQL) with automated backups, high availability
+- Managed Redis (Memorystore) with automatic failover
+- All services communicate via private VPC
+- Secrets managed via Secret Manager
+- Auto-scaling based on traffic
+- Custom domain with SSL
+
+**Advantages:**
+- Auto-scaling (0 to thousands of requests)
+- Managed infrastructure (Google handles OS updates, security patches)
+- High availability (multi-zone redundancy)
+- Pay-per-use pricing
+- Automated backups and point-in-time recovery
+- Built-in monitoring and logging
+
+---
+
+### Key Differences
+
+| Aspect | Local Development | Production (GCP) |
+|--------|-------------------|------------------|
+| **Backend** | Python process via Poetry | Docker container on Cloud Run |
+| **Database** | Docker PostgreSQL | Cloud SQL (managed PostgreSQL) |
+| **Redis** | Docker Redis | Memorystore (managed Redis) |
+| **Secrets** | `.env` file | Secret Manager |
+| **Scaling** | Single instance | Auto-scaling (0-1000+ instances) |
+| **Cost** | Free (local resources) | Pay-per-use (with $300 free credits) |
+| **Setup Time** | 5 minutes | 30-60 minutes (first time) |
+| **Backups** | Manual (docker volume) | Automated daily + point-in-time |
 
 ---
 

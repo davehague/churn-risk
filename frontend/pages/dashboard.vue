@@ -167,6 +167,9 @@
         </div>
       </div>
     </main>
+
+    <!-- Ticket Detail Modal -->
+    <TicketDetailModal />
   </div>
 </template>
 
@@ -272,8 +275,6 @@ function formatLastSync(date: Date): string {
 // Handle ticket card click
 function handleTicketClick(ticket: Ticket) {
   ticketsStore.selectTicket(ticket)
-  // TODO: Open modal (Task 5)
-  console.log('Ticket clicked:', ticket.id)
 }
 
 // Handle refresh button

@@ -26,7 +26,7 @@ class Ticket(Base, UUIDMixin, TimestampMixin):
     """Support ticket model."""
     __tablename__ = "tickets"
     __table_args__ = (
-        Index("ix_tickets_tenant_external", "tenant_id", "external_id"),
+        Index("ix_tickets_tenant_external", "tenant_id", "external_id", unique=True),
         Index("ix_tickets_tenant_sentiment", "tenant_id", "sentiment_score", "created_at"),
     )
 

@@ -97,7 +97,12 @@ class TicketImportService:
                 result.failed += 1
 
         # 5. Commit all changes
-        self.db.commit()
+        try:
+            self.db.commit()
+        except Exception as e:
+            logger.error(f"Failed to commit ticket import transaction: {e}")
+            self.db.rollback()
+            raise
 
         return result
 
@@ -273,6 +278,10 @@ async def import_and_analyze_tickets(
     """
     Convenience function for importing and analyzing tickets.
 
+    Note: This function manages its own database transaction. It will commit all
+    changes on success or rollback on failure. The caller should not commit the
+    session after calling this function.
+
     Args:
         tenant_id: Tenant ID to import tickets for
         db: Database session
@@ -281,6 +290,10 @@ async def import_and_analyze_tickets(
 
     Returns:
         ImportResult with counts of imported, analyzed, skipped, and failed tickets
+
+    Raises:
+        ValueError: If HubSpot integration not found or inactive
+        Exception: If transaction commit fails (session will be rolled back)
     """
     service = TicketImportService(db, analyzer)
     return await service.import_and_analyze_tickets(tenant_id, days_back)

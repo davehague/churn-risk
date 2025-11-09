@@ -11,7 +11,7 @@
           <div class="mt-4 flex md:mt-0 md:ml-4">
             <button
               @click="handleRefresh"
-              :disabled="ticketsStore.importing"
+              :disabled="ticketsStore.importing || !hasHubSpotIntegration"
               class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
             >
               <svg v-if="!ticketsStore.importing" class="mr-2 -ml-1 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -33,6 +33,72 @@
 
     <main>
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- OAuth Success/Error Messages -->
+        <div v-if="oauthSuccess" class="mt-6 rounded-md bg-green-50 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-green-800">HubSpot connected successfully!</p>
+            </div>
+            <div class="ml-auto pl-3">
+              <button @click="oauthSuccess = false" class="inline-flex text-green-500 hover:text-green-700">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="oauthError" class="mt-6 rounded-md bg-red-50 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-800">{{ oauthErrorMessage || 'Failed to connect to HubSpot' }}</p>
+            </div>
+            <div class="ml-auto pl-3">
+              <button @click="oauthError = false" class="inline-flex text-red-500 hover:text-red-700">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- HubSpot Connection Banner -->
+        <div v-if="!hasHubSpotIntegration && !checkingIntegration" class="mt-6 rounded-lg bg-blue-50 border border-blue-200 p-6">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="ml-3 flex-1">
+              <h3 class="text-sm font-medium text-blue-800">Connect HubSpot to Import Tickets</h3>
+              <div class="mt-2 text-sm text-blue-700">
+                <p>Connect your HubSpot account to start analyzing support tickets and detecting churn risk.</p>
+              </div>
+              <div class="mt-4">
+                <button
+                  @click="connectHubSpot"
+                  :disabled="connecting"
+                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  {{ connecting ? 'Connecting...' : 'Connect HubSpot' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- Tab Navigation -->
         <div class="border-b border-gray-200 mt-6">
           <nav class="-mb-px flex space-x-8">
@@ -153,7 +219,7 @@
                 <svg class="h-4 w-4 mr-1.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                {{ formatRelativeDate(ticket.created_at) }}
+                {{ formatRelativeDate(ticket.hubspot_created_at || ticket.created_at) }}
               </div>
 
               <div v-if="ticket.sentiment_confidence" class="flex items-center text-xs">
@@ -182,6 +248,113 @@ definePageMeta({
 
 const ticketsStore = useTicketsStore()
 const activeTab = ref('all')
+const hasHubSpotIntegration = ref(false)
+const checkingIntegration = ref(true)
+const connecting = ref(false)
+const oauthSuccess = ref(false)
+const oauthError = ref(false)
+const oauthErrorMessage = ref('')
+
+const { idToken, loading: authLoading } = useAuth()
+
+// Check for OAuth callback success/error in URL
+const route = useRoute()
+if (route.query.hubspot === 'connected') {
+  oauthSuccess.value = true
+} else if (route.query.hubspot === 'error') {
+  oauthError.value = true
+  oauthErrorMessage.value = route.query.message as string || 'Failed to connect to HubSpot'
+}
+
+// Watch for auth to be ready, then check integrations (only once)
+let hasCheckedIntegration = false
+watch(authLoading, async (loading) => {
+  if (!loading && idToken.value && !hasCheckedIntegration) {
+    hasCheckedIntegration = true
+    await checkHubSpotIntegration()
+  }
+}, { immediate: true })
+
+// Check if user has HubSpot integration
+async function checkHubSpotIntegration() {
+  const config = useRuntimeConfig()
+
+  console.log('[HubSpot Check] Starting integration check...')
+
+  if (!idToken.value) {
+    console.log('[HubSpot Check] No auth token available')
+    checkingIntegration.value = false
+    return
+  }
+
+  checkingIntegration.value = true
+  try {
+    console.log('[HubSpot Check] Fetching integrations from API...')
+    const data = await $fetch<any[]>(`${config.public.apiBase}/api/v1/integrations`, {
+      headers: {
+        Authorization: `Bearer ${idToken.value}`
+      }
+    })
+
+    console.log('[HubSpot Check] Received integrations:', data)
+
+    if (data && Array.isArray(data)) {
+      // Log what each integration looks like
+      data.forEach((int: any, i: number) => {
+        console.log(`[HubSpot Check] Integration ${i}:`, {
+          type: int.type,
+          status: int.status,
+          full: int
+        })
+      })
+
+      const hubspotIntegration = data.find((int: any) => {
+        console.log('[HubSpot Check] Checking integration type:', int.type, 'against hubspot')
+        return int.type === 'hubspot'
+      })
+      console.log('[HubSpot Check] HubSpot integration found:', hubspotIntegration)
+
+      hasHubSpotIntegration.value = data.some((int: any) => int.type === 'hubspot' && int.status === 'active')
+      console.log('[HubSpot Check] Has active HubSpot integration:', hasHubSpotIntegration.value)
+    }
+  } catch (error) {
+    console.error('[HubSpot Check] Failed to check integrations:', error)
+  } finally {
+    checkingIntegration.value = false
+    console.log('[HubSpot Check] Check complete. Has integration:', hasHubSpotIntegration.value)
+  }
+}
+
+// Connect to HubSpot
+async function connectHubSpot() {
+  const config = useRuntimeConfig()
+
+  if (!idToken.value) {
+    oauthError.value = true
+    oauthErrorMessage.value = 'You must be logged in to connect HubSpot'
+    return
+  }
+
+  connecting.value = true
+  try {
+    const data = await $fetch<{ authorization_url: string }>(`${config.public.apiBase}/api/v1/integrations/hubspot/authorize`, {
+      headers: {
+        Authorization: `Bearer ${idToken.value}`
+      }
+    })
+
+    if (data && data.authorization_url) {
+      // Redirect to HubSpot OAuth page
+      window.location.href = data.authorization_url
+    }
+  } catch (error) {
+    console.error('Failed to get authorization URL:', error)
+    oauthError.value = true
+    oauthErrorMessage.value = 'Failed to start OAuth flow'
+  } finally {
+    connecting.value = false
+  }
+}
 
 // Tab configuration
 const tabs = computed(() => [
@@ -284,12 +457,18 @@ async function handleRefresh() {
 
 // Auto-fetch logic on mount
 onMounted(async () => {
-  // First, try to fetch existing tickets
-  await ticketsStore.fetchTickets()
+  // Check if HubSpot is connected
+  await checkHubSpotIntegration()
 
-  // If no tickets found, automatically import
-  if (ticketsStore.tickets.length === 0) {
-    await ticketsStore.importTickets()
+  // Only fetch tickets if HubSpot is connected
+  if (hasHubSpotIntegration.value) {
+    // First, try to fetch existing tickets
+    await ticketsStore.fetchTickets()
+
+    // If no tickets found, automatically import
+    if (ticketsStore.tickets.length === 0) {
+      await ticketsStore.importTickets()
+    }
   }
 })
 </script>

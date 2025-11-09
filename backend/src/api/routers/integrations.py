@@ -37,14 +37,25 @@ async def list_integrations(
 async def hubspot_authorize_url(
     current_user: User = Depends(require_admin)
 ):
-    """Get HubSpot OAuth authorization URL."""
+    """Get HubSpot OAuth authorization URL with state parameter."""
     from src.core.config import settings
+    import jwt
+    from datetime import timedelta
+
+    # Create state token with tenant_id
+    state_payload = {
+        "tenant_id": str(current_user.tenant_id),
+        "user_id": str(current_user.id),
+        "exp": datetime.utcnow() + timedelta(minutes=15)  # State expires in 15 minutes
+    }
+    state = jwt.encode(state_payload, settings.SECRET_KEY, algorithm="HS256")
 
     auth_url = (
         f"https://app.hubspot.com/oauth/authorize"
         f"?client_id={settings.HUBSPOT_CLIENT_ID}"
         f"&redirect_uri={settings.HUBSPOT_REDIRECT_URI}"
         f"&scope=crm.objects.contacts.read crm.objects.companies.read tickets"
+        f"&state={state}"
     )
 
     return {"authorization_url": auth_url}
@@ -59,35 +70,39 @@ async def hubspot_oauth_callback(
     """
     Handle HubSpot OAuth callback.
 
-    NOTE: This endpoint is public (no auth required) because it's called by HubSpot's redirect.
-    In production, you should:
-    1. Use the 'state' parameter to validate the request and identify the user
-    2. Redirect back to the frontend with success/error status
-
-    For development/testing, we'll create a test tenant if none exists.
+    This endpoint is public (no auth required) because it's called by HubSpot's redirect.
+    It uses the 'state' parameter to validate the request and identify the user's tenant.
     """
     from src.core.config import settings
-    from src.models.tenant import Tenant, PlanTier
+    from src.models.tenant import Tenant
+    from fastapi.responses import RedirectResponse
+    import jwt
+    from uuid import UUID
 
     try:
+        # Validate state parameter
+        if not state:
+            raise HTTPException(status_code=400, detail="Missing state parameter")
+
+        # Decode state to get tenant_id
+        try:
+            state_payload = jwt.decode(state, settings.SECRET_KEY, algorithms=["HS256"])
+            tenant_id = UUID(state_payload["tenant_id"])
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=400, detail="State token expired. Please try connecting again.")
+        except (jwt.InvalidTokenError, KeyError, ValueError) as e:
+            raise HTTPException(status_code=400, detail="Invalid state parameter")
+
+        # Get the tenant
+        tenant = db.query(Tenant).filter(Tenant.id == tenant_id).first()
+        if not tenant:
+            raise HTTPException(status_code=404, detail="Tenant not found")
+
         # Exchange code for access token
         token_data = await HubSpotClient.exchange_code_for_token(
             code=code,
             redirect_uri=settings.HUBSPOT_REDIRECT_URI
         )
-
-        # For development: Get or create a test tenant
-        # In production, this should use the state parameter to identify the user's tenant
-        tenant = db.query(Tenant).first()
-        if not tenant:
-            tenant = Tenant(
-                name="Test Tenant",
-                subdomain="test",
-                plan_tier=PlanTier.STARTER
-            )
-            db.add(tenant)
-            db.commit()
-            db.refresh(tenant)
 
         # Check if integration already exists for this tenant
         existing = db.query(Integration).filter(
@@ -114,19 +129,16 @@ async def hubspot_oauth_callback(
         db.commit()
         db.refresh(integration)
 
-        # Return success message (in production, redirect to frontend)
-        return {
-            "success": True,
-            "message": "HubSpot connected successfully!",
-            "integration_id": str(integration.id),
-            "tenant_id": str(tenant.id)
-        }
+        # Redirect to frontend dashboard with success
+        frontend_url = settings.CORS_ORIGINS.split(",")[0] if settings.CORS_ORIGINS else "http://localhost:3000"
+        return RedirectResponse(url=f"{frontend_url}/dashboard?hubspot=connected")
 
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Failed to connect to HubSpot: {str(e)}"
-        )
+        # Redirect to frontend with error
+        frontend_url = settings.CORS_ORIGINS.split(",")[0] if settings.CORS_ORIGINS else "http://localhost:3000"
+        return RedirectResponse(url=f"{frontend_url}/dashboard?hubspot=error&message={str(e)}")
 
 
 @router.delete("/{integration_id}")

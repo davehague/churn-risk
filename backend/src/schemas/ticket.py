@@ -33,7 +33,10 @@ class TicketResponse(BaseModel):
     sentiment_score: SentimentScore | None
     sentiment_confidence: float | None
     sentiment_analyzed_at: datetime | None
-    created_at: datetime
+    created_at: datetime  # When we imported the ticket
+    hubspot_created_at: datetime | None  # When ticket was created in HubSpot
+    hubspot_updated_at: datetime | None  # When ticket was last modified in HubSpot
+    priority: str | None  # Ticket priority (HIGH, MEDIUM, LOW, etc.)
     status: TicketStatus
     company: CompanyResponse | None
     contact: ContactResponse | None

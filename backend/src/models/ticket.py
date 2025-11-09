@@ -39,6 +39,11 @@ class Ticket(Base, UUIDMixin, TimestampMixin):
     content = Column(Text, nullable=False)
     status = Column(SQLEnum(TicketStatus), default=TicketStatus.NEW, nullable=False)
 
+    # HubSpot metadata
+    hubspot_created_at = Column(DateTime, nullable=True)  # When ticket was created in HubSpot
+    hubspot_updated_at = Column(DateTime, nullable=True)  # When ticket was last modified in HubSpot
+    priority = Column(String(50), nullable=True)  # Ticket priority (e.g., HIGH, MEDIUM, LOW)
+
     # Sentiment analysis
     sentiment_score = Column(SQLEnum(SentimentScore), nullable=True, index=True)
     sentiment_confidence = Column(Float, nullable=True)

@@ -64,6 +64,59 @@ class HubSpotClient:
             response.raise_for_status()
             return response.json()
 
+    async def search_tickets(
+        self,
+        limit: int = 100,
+        sort_by: str = "createdate",
+        sort_direction: str = "DESCENDING",
+        properties: List[str] | None = None
+    ) -> Dict[str, Any]:
+        """
+        Search tickets from HubSpot with sorting.
+
+        Uses the HubSpot Search API to fetch tickets sorted by a specified property.
+        This is the preferred method for getting recent tickets.
+
+        Args:
+            limit: Number of tickets to fetch (max 100)
+            sort_by: Property to sort by (default: "createdate")
+            sort_direction: "ASCENDING" or "DESCENDING" (default: "DESCENDING")
+            properties: List of properties to fetch
+
+        Returns:
+            Dict with 'results' and 'paging' keys
+        """
+        default_properties = [
+            "subject",
+            "content",
+            "hs_ticket_id",
+            "hs_ticket_priority",
+            "hs_pipeline_stage",
+            "createdate",
+            "hs_lastmodifieddate",
+        ]
+
+        request_body = {
+            "limit": min(limit, 100),
+            "properties": properties or default_properties,
+            "sorts": [
+                {
+                    "propertyName": sort_by,
+                    "direction": sort_direction
+                }
+            ]
+        }
+
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                f"{self.BASE_URL}/crm/v3/objects/tickets/search",
+                headers=self.headers,
+                json=request_body,
+                timeout=30.0
+            )
+            response.raise_for_status()
+            return response.json()
+
     async def get_tickets(
         self,
         limit: int = 100,
@@ -72,6 +125,9 @@ class HubSpotClient:
     ) -> Dict[str, Any]:
         """
         Fetch tickets from HubSpot.
+
+        Note: This method does not support sorting. For sorted results,
+        use search_tickets() instead.
 
         Args:
             limit: Number of tickets to fetch (max 100)

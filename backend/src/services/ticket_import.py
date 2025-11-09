@@ -80,8 +80,9 @@ class TicketImportService:
         client = HubSpotClient(access_token)
 
         # 3. Fetch tickets from last N days
+        logger.info(f"Fetching tickets for tenant {tenant_id}, {days_back} days back...")
         try:
-            tickets_data = await self._fetch_recent_tickets(client, days_back)
+            tickets_data = await self._fetch_recent_tickets(client, integration, days_back)
         except Exception as e:
             logger.error(f"Failed to fetch tickets from HubSpot: {e}")
             raise
@@ -89,21 +90,25 @@ class TicketImportService:
         logger.info(f"Fetched {len(tickets_data)} tickets from HubSpot for tenant {tenant_id}")
 
         # 4. Process each ticket
-        for ticket_data in tickets_data:
+        for i, ticket_data in enumerate(tickets_data, 1):
             try:
-                await self._process_ticket(tenant_id, ticket_data, result)
+                logger.info(f"[Ticket Import] Processing ticket {i}/{len(tickets_data)}: {ticket_data.get('id')}")
+                await self._process_ticket(tenant_id, ticket_data, result, integration)
             except Exception as e:
-                logger.error(f"Failed to process ticket {ticket_data.get('id')}: {e}")
+                logger.error(f"[Ticket Import] Failed to process ticket {ticket_data.get('id')}: {e}", exc_info=True)
                 result.failed += 1
 
         # 5. Commit all changes
+        logger.info(f"[Ticket Import] Committing {result.imported} imported, {result.analyzed} analyzed tickets...")
         try:
             self.db.commit()
+            logger.info(f"[Ticket Import] Commit successful!")
         except Exception as e:
-            logger.error(f"Failed to commit ticket import transaction: {e}")
+            logger.error(f"[Ticket Import] Failed to commit ticket import transaction: {e}", exc_info=True)
             self.db.rollback()
             raise
 
+        logger.info(f"[Ticket Import] Import complete: {result}")
         return result
 
     async def _get_hubspot_integration(self, tenant_id: UUID) -> Integration | None:
@@ -118,41 +123,78 @@ class TicketImportService:
     async def _fetch_recent_tickets(
         self,
         client: HubSpotClient,
+        integration: Integration,
         days_back: int
     ) -> list[Dict[str, Any]]:
         """
-        Fetch tickets created in the last N days from HubSpot.
+        Fetch the most recent tickets from HubSpot using Search API.
 
-        Note: HubSpot's get_tickets doesn't support filtering by date,
-        so we fetch all tickets and filter client-side for MVP.
-        Future enhancement: Use search API with date filters.
+        Uses HubSpot Search API with sorting by creation date descending
+        to get the most recently created tickets.
+
+        Args:
+            client: HubSpot API client
+            integration: Integration record for token refresh
+            days_back: Not used currently (kept for API compatibility)
+
+        Returns:
+            List of ticket data from HubSpot
         """
-        # Calculate cutoff date
-        cutoff_date = datetime.now(timezone.utc) - timedelta(days=days_back)
+        import httpx
+        from src.integrations.hubspot import HubSpotClient as HSClient
 
-        # Fetch tickets from HubSpot (up to 100)
-        response = await client.get_tickets(limit=100)
-        all_tickets = response.get("results", [])
+        # Fetch tickets sorted by creation date (newest first) using Search API
+        try:
+            response = await client.search_tickets(
+                limit=20,
+                sort_by="createdate",
+                sort_direction="DESCENDING"
+            )
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 401:
+                # Token expired, refresh and retry
+                logger.info("Access token expired, refreshing...")
+                refresh_token = integration.credentials.get("refresh_token")
+                if not refresh_token:
+                    raise ValueError("No refresh token available")
 
-        # Filter by creation date
-        recent_tickets = []
-        for ticket in all_tickets:
-            properties = ticket.get("properties", {})
-            createdate_str = properties.get("createdate")
+                # Refresh the token
+                new_tokens = await HSClient.refresh_access_token(refresh_token)
 
-            if createdate_str:
-                # HubSpot returns ISO 8601 format
-                createdate = datetime.fromisoformat(createdate_str.replace("Z", "+00:00"))
-                if createdate >= cutoff_date:
-                    recent_tickets.append(ticket)
+                # Update integration credentials
+                integration.credentials = new_tokens
+                integration.last_synced_at = datetime.now(timezone.utc)
+                self.db.commit()
 
-        return recent_tickets
+                logger.info("Token refreshed successfully")
+
+                # Create new client with fresh token and retry
+                client = HubSpotClient(access_token=new_tokens["access_token"])
+                response = await client.search_tickets(
+                    limit=20,
+                    sort_by="createdate",
+                    sort_direction="DESCENDING"
+                )
+            else:
+                raise
+
+        tickets = response.get("results", [])
+        logger.info(f"Fetched {len(tickets)} most recent tickets from HubSpot (sorted by createdate DESC)")
+
+        # Log the date range for debugging
+        if tickets:
+            first_date = tickets[0].get("properties", {}).get("createdate")
+            last_date = tickets[-1].get("properties", {}).get("createdate") if len(tickets) > 0 else None
+            logger.info(f"Date range: {first_date} to {last_date}")
+
+        return tickets
 
     async def _process_ticket(
         self,
         tenant_id: UUID,
         ticket_data: Dict[str, Any],
-        result: ImportResult
+        result: ImportResult,
+        integration: Integration
     ) -> None:
         """
         Process a single ticket: upsert to DB and analyze if needed.
@@ -161,6 +203,7 @@ class TicketImportService:
             tenant_id: Tenant ID
             ticket_data: Raw ticket data from HubSpot
             result: ImportResult to update with counts
+            integration: HubSpot integration with credentials
         """
         properties = ticket_data.get("properties", {})
         external_id = ticket_data.get("id")
@@ -174,14 +217,32 @@ class TicketImportService:
         subject = properties.get("subject", "No Subject")
         content = properties.get("content", "")
         status_str = properties.get("hs_pipeline_stage", "new")
+        priority = properties.get("hs_ticket_priority")  # Can be None, HIGH, MEDIUM, LOW, etc.
 
         # Map HubSpot status to our enum
         status = self._map_ticket_status(status_str)
 
+        # Parse HubSpot creation date
+        hubspot_created_at = None
+        createdate_str = properties.get("createdate")
+        if createdate_str:
+            # HubSpot returns ISO 8601 format
+            hubspot_created_at = datetime.fromisoformat(createdate_str.replace("Z", "+00:00"))
+
+        # Parse HubSpot last modified date
+        hubspot_updated_at = None
+        updated_str = properties.get("hs_lastmodifieddate")
+        if updated_str:
+            hubspot_updated_at = datetime.fromisoformat(updated_str.replace("Z", "+00:00"))
+
         # Build external URL
-        # HubSpot URL format: https://app.hubspot.com/contacts/{portalId}/ticket/{ticketId}
-        # For MVP, we'll use a placeholder portal ID (can be fetched from API in future)
-        external_url = f"https://app.hubspot.com/contacts/ticket/{external_id}"
+        # HubSpot URL format: https://app.hubspot.com/help-desk/{portalId}/view/search/ticket/{ticketId}/
+        hub_id = integration.credentials.get("hub_id")
+        if hub_id:
+            external_url = f"https://app.hubspot.com/help-desk/{hub_id}/view/search/ticket/{external_id}/"
+        else:
+            # Fallback to basic URL if hub_id not available
+            external_url = f"https://app.hubspot.com/contacts/ticket/{external_id}"
 
         # Check if ticket already exists
         existing_ticket = self._get_ticket_by_external_id(tenant_id, external_id)
@@ -191,6 +252,9 @@ class TicketImportService:
             existing_ticket.subject = subject
             existing_ticket.content = content
             existing_ticket.status = status
+            existing_ticket.hubspot_created_at = hubspot_created_at
+            existing_ticket.hubspot_updated_at = hubspot_updated_at
+            existing_ticket.priority = priority
             existing_ticket.external_url = external_url
             existing_ticket.source_metadata = properties
 
@@ -203,6 +267,9 @@ class TicketImportService:
                 subject=subject,
                 content=content,
                 status=status,
+                hubspot_created_at=hubspot_created_at,
+                hubspot_updated_at=hubspot_updated_at,
+                priority=priority,
                 external_url=external_url,
                 source_metadata=properties
             )

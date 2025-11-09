@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment files (DO NOT include in container)
+.env
+.env.local
+.env.*.local
+
+# Secrets (DO NOT include in container)
+firebase-credentials.json
+*.key
+*.pem
+
+# Development
+.git
+.gitignore
+README.md
+tests/
+scripts/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Database
+*.db
+*.sqlite
+alembic/versions/*_local_*
+
+# Logs
+*.log

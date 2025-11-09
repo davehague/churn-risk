@@ -1,4 +1,8 @@
-# 01 - GCP Account Setup
+# 01 - GCP Account Setup - COMPLETE! 
+
+NOTE:  The below account was used.  I was unable to sign up for more accounts using my phone number ending in 8844, so I used this account:
+davehig614@gmail.com
+
 
 **Estimated Time:** 15-20 minutes
 **Cost:** $0 (you'll get $300 in free credits)

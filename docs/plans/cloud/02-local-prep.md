@@ -1,4 +1,6 @@
-# 02 - Local Environment Prep
+# 02 - Local Environment Prep - COMPLETE!
+
+Updated gcloud, installed cloud-sql-proxy, set region.  Rest was already set
 
 **Estimated Time:** 10-15 minutes
 **Prerequisites:** Guide 01 completed (GCP account created)

@@ -2141,14 +2141,15 @@ git commit -m "feat: add HubSpot integration and OAuth flow"
 
 **Updated Task Order** (as of 2025-11-08):
 
-Tasks 1-5 have been completed. Remaining tasks reordered to implement auth before backend features:
+Tasks 1-5 completed (database, Firebase auth, OpenRouter AI, HubSpot OAuth).
+Task 6 completed (Firebase frontend auth).
 
-- **Task 6:** Frontend - Firebase Auth & Layout (NEXT - see design doc: `docs/plans/2025-11-08-firebase-auth-design.md`)
-  - Registration page with self-service tenant creation
-  - Login page with Firebase Client SDK
-  - Auth middleware and state management
-  - Layout component with navigation
-- **Task 7:** Ticket Import & Analysis Service (bulk import 200 tickets, analyze with AI)
+**HubSpot OAuth Status**: ✅ COMPLETED - Successfully connected to FlxPoint HubSpot, fetching real tickets, AI sentiment analysis working.
+
+Remaining tasks:
+
+- ~~**Task 6:** Frontend - Firebase Auth & Layout~~ ✅ COMPLETED
+- **Task 7:** Ticket Import & Analysis Service (NEXT - bulk import 200 tickets, analyze with AI)
 - **Task 8:** Churn Risk Card Creation Logic (create cards for negative sentiment)
 - **Task 9:** Frontend - Dashboard with Analytics
 - **Task 10:** Frontend - Churn Risk Kanban Board

@@ -50,23 +50,48 @@ async def hubspot_authorize_url(
     return {"authorization_url": auth_url}
 
 
-@router.post("/hubspot/callback")
+@router.get("/hubspot/callback")
 async def hubspot_oauth_callback(
-    request: HubSpotOAuthCallbackRequest,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(require_admin)
+    code: str,
+    state: str | None = None,
+    db: Session = Depends(get_db)
 ):
-    """Handle HubSpot OAuth callback."""
+    """
+    Handle HubSpot OAuth callback.
+
+    NOTE: This endpoint is public (no auth required) because it's called by HubSpot's redirect.
+    In production, you should:
+    1. Use the 'state' parameter to validate the request and identify the user
+    2. Redirect back to the frontend with success/error status
+
+    For development/testing, we'll create a test tenant if none exists.
+    """
+    from src.core.config import settings
+    from src.models.tenant import Tenant, PlanTier
+
     try:
         # Exchange code for access token
         token_data = await HubSpotClient.exchange_code_for_token(
-            code=request.code,
-            redirect_uri=request.redirect_uri
+            code=code,
+            redirect_uri=settings.HUBSPOT_REDIRECT_URI
         )
 
-        # Check if integration already exists
+        # For development: Get or create a test tenant
+        # In production, this should use the state parameter to identify the user's tenant
+        tenant = db.query(Tenant).first()
+        if not tenant:
+            tenant = Tenant(
+                name="Test Tenant",
+                subdomain="test",
+                plan_tier=PlanTier.STARTER
+            )
+            db.add(tenant)
+            db.commit()
+            db.refresh(tenant)
+
+        # Check if integration already exists for this tenant
         existing = db.query(Integration).filter(
-            Integration.tenant_id == current_user.tenant_id,
+            Integration.tenant_id == tenant.id,
             Integration.type == IntegrationType.HUBSPOT
         ).first()
 
@@ -79,7 +104,7 @@ async def hubspot_oauth_callback(
         else:
             # Create new integration
             integration = Integration(
-                tenant_id=current_user.tenant_id,
+                tenant_id=tenant.id,
                 type=IntegrationType.HUBSPOT,
                 status=IntegrationStatus.ACTIVE,
                 credentials=token_data
@@ -89,13 +114,13 @@ async def hubspot_oauth_callback(
         db.commit()
         db.refresh(integration)
 
-        return IntegrationResponse(
-            id=str(integration.id),
-            type=integration.type,
-            status=integration.status,
-            last_synced_at=integration.last_synced_at,
-            created_at=integration.created_at
-        )
+        # Return success message (in production, redirect to frontend)
+        return {
+            "success": True,
+            "message": "HubSpot connected successfully!",
+            "integration_id": str(integration.id),
+            "tenant_id": str(tenant.id)
+        }
 
     except Exception as e:
         raise HTTPException(

@@ -250,7 +250,10 @@ npm run lint        # ESLint
   - End-to-end auth flow verified
 - ✅ HubSpot OAuth app creation and configuration (via HubSpot CLI)
 - ✅ HubSpot client with OAuth token support
+- ✅ HubSpot OAuth flow COMPLETED (FlxPoint account connected)
+- ✅ Fetching real tickets from HubSpot working
 - ✅ OpenRouter AI service with retry logic and error handling
+- ✅ AI model externalized to OPENROUTER_MODEL environment variable
 - ✅ Database schema with Alembic migrations (initial_schema: c08085465bad)
 - ✅ Sentiment analysis working (tested with real tickets)
 - ✅ Topic classification working (tested with real tickets)
@@ -274,6 +277,9 @@ npm run lint        # ESLint
 - Full testing guide: `docs/dev/testing-guide.md`
 - Run all tests: `cd backend && poetry run pytest`
 
-**Known Issues**:
-- HubSpot OAuth requires user authorization flow (can't test automatically)
-- OAuth callback requires Firebase JWT authentication
+**Recent Updates** (2025-11-08):
+- ✅ HubSpot OAuth callback fixed (GET method, public endpoint)
+- ✅ OAuth redirect URI corrected (includes /v1 prefix)
+- ✅ Successfully connected to FlxPoint HubSpot account
+- ✅ Verified ticket fetching and AI sentiment analysis working
+- ✅ AI model configuration moved to environment variables

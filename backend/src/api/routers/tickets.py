@@ -1,7 +1,7 @@
 """Ticket API endpoints."""
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import select, func
 from src.core.database import get_db
 from src.api.dependencies import get_current_user
@@ -88,9 +88,12 @@ async def list_tickets(
     Returns:
         TicketListResponse with list of tickets and total count
     """
-    # Build base query
+    # Build base query with eager loading to prevent N+1 queries
     query = select(Ticket).where(
         Ticket.tenant_id == current_user.tenant_id
+    ).options(
+        joinedload(Ticket.company),
+        joinedload(Ticket.contact)
     )
 
     # Apply sentiment filter if provided

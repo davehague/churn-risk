@@ -1,5 +1,6 @@
 """Unit tests for ticket import service."""
 
+import os
 import pytest
 from datetime import datetime, timedelta, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
@@ -17,8 +18,15 @@ from src.schemas.ai import SentimentAnalysisResult, TopicClassification, TicketA
 
 @pytest.fixture
 def db_session():
-    """Create test database session using PostgreSQL."""
-    engine = create_engine("postgresql://postgres:password@localhost:5432/churn_risk_dev")
+    """Create test database session using DATABASE_URL env var."""
+    # Use DATABASE_URL from environment (SQLite for CI/CD, PostgreSQL for local)
+    database_url = os.getenv("DATABASE_URL", "postgresql://postgres:password@localhost:5432/churn_risk_dev")
+    engine = create_engine(database_url)
+
+    # Create tables for SQLite (for CI/CD)
+    if database_url.startswith("sqlite"):
+        Base.metadata.create_all(engine)
+
     Session = sessionmaker(bind=engine)
     session = Session()
     yield session

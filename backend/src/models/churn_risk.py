@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, ForeignKey, Enum as SQLEnum, DateTime, Text, Index
-from sqlalchemy.dialects.postgresql import UUID, ARRAY
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.types import JSON
 from sqlalchemy.orm import relationship
 import enum
 from src.models.base import Base, UUIDMixin, TimestampMixin
@@ -57,7 +58,7 @@ class ChurnRiskComment(Base, UUIDMixin, TimestampMixin):
     card_id = Column(UUID(as_uuid=True), ForeignKey("churn_risk_cards.id", ondelete="CASCADE"), nullable=False, index=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     content = Column(Text, nullable=False)
-    mentions = Column(ARRAY(UUID(as_uuid=True)), default=list)  # User IDs tagged
+    mentions = Column(JSON, default=list)  # User IDs tagged as JSON array, uses ARRAY on PostgreSQL, TEXT on SQLite
 
     # Relationships
     tenant = relationship("Tenant")

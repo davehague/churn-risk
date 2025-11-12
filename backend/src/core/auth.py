@@ -8,7 +8,7 @@ from typing import Dict
 
 # Initialize Firebase Admin SDK only if credentials file exists
 # This allows tests to run without actual credentials
-if not firebase_admin._apps and os.path.exists(settings.FIREBASE_CREDENTIALS_PATH):
+if not firebase_admin._apps and settings.FIREBASE_CREDENTIALS_PATH and os.path.exists(settings.FIREBASE_CREDENTIALS_PATH):
     cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS_PATH)
     firebase_admin.initialize_app(cred)
 

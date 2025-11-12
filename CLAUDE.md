@@ -177,7 +177,7 @@ cd frontend && npm run dev                        # Dev server (port 3000)
 
 ## Current Development Status
 
-**Completed (as of 2025-11-09)**:
+**Completed (as of 2025-11-12)**:
 - ✅ Multi-tenant data model with RBAC (11 tables, UUID-based)
 - ✅ Firebase authentication - FULLY IMPLEMENTED & TESTED
   - Backend registration API with subdomain validation
@@ -198,19 +198,19 @@ cd frontend && npm run dev                        # Dev server (port 3000)
 - ✅ Topic classification working (tested with real tickets)
 - ✅ Backend smoke test script (`scripts/smoke_test.py`)
 - ✅ Database, OpenRouter, HubSpot integration verified
-- ✅ 33/33 tests passing (10 auth tests + 23 other tests)
+- ✅ **57/57 tests passing** (unit + integration tests)
 - ✅ Backend API server running on port 8000
 - ✅ Frontend running on port 3000 with complete auth UI
+- ✅ **GCP Cloud Deployment COMPLETE**
+  - Cloud Run backend (buildpack deployment)
+  - Cloud SQL PostgreSQL (managed database)
+  - Secret Manager (production secrets)
+  - Automated CI/CD with Cloud Build
+  - Production URL: https://churn-risk-api-461448724047.us-east1.run.app
 
-**🚀 Next Steps** (as of 2025-11-09):
+**🚀 Next Steps** (as of 2025-11-12):
 
-**IMMEDIATE**: GCP Cloud Deployment
-- Set up Cloud Run for backend
-- Set up Cloud SQL for PostgreSQL
-- Configure production environment variables
-- Deploy and verify all integrations work in cloud
-
-**Then Continue with Features**:
+**Feature Development**:
 - Ticket Import & Analysis Service (bulk import with AI)
 - Churn Risk Card Creation Logic
 - Frontend Dashboard with Analytics
@@ -220,5 +220,6 @@ cd frontend && npm run dev                        # Dev server (port 3000)
 
 **Testing & Verification**:
 - Smoke test: `cd backend && poetry run python scripts/smoke_test.py`
-- All tests: `cd backend && poetry run pytest` (33/33 passing)
+- All tests: `cd backend && poetry run pytest` (57/57 passing)
 - Full testing guide: `docs/dev/testing-guide.md`
+- CI/CD: Automated tests + deployment on every push to main

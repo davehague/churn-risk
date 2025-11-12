@@ -1,4 +1,8 @@
-# 11 - CI/CD Setup (Optional)
+# 11 - CI/CD Setup - ✅ COMPLETED
+
+**Status**: ✅ **Working** - Automated tests + deployment on every push to main
+**Production URL**: https://churn-risk-api-461448724047.us-east1.run.app
+**Latest Build**: 57/57 tests passing, deployed with buildpacks
 
 **Estimated Time:** 30-45 minutes
 **Cost:** $0 (first 120 build-minutes/day free)
@@ -10,12 +14,12 @@
 
 Set up automated deployments using Google Cloud Build. When you push to GitHub, your app automatically builds and deploys to Cloud Run.
 
-**What You'll Set Up:**
-- GitHub repository connection
-- Cloud Build triggers
-- Automatic testing before deployment
-- Blue-green deployments
-- Rollback capability
+**What We Set Up:**
+- ✅ GitHub repository connection (Cloud Build GitHub App)
+- ✅ Cloud Build trigger on push to main branch
+- ✅ Automatic testing before deployment (57 tests with SQLite)
+- ✅ Buildpack deployment to Cloud Run (not Docker)
+- ✅ Automatic rollback capability (Cloud Run revisions)
 
 ---
 
@@ -42,17 +46,26 @@ Click **"CONNECT REPOSITORY"**
 
 ---
 
-## Step 2: Create cloudbuild.yaml
+## Step 2: Create cloudbuild.yaml - ✅ COMPLETED
 
-### 2.1 Create Build Configuration
+### 2.1 Final Working Configuration
 
-Create `backend/cloudbuild.yaml`:
+**File**: `backend/cloudbuild.yaml` (already created)
 
 ```yaml
 steps:
   # Step 1: Run tests
   - name: 'python:3.11-slim'
+    dir: 'backend'
     entrypoint: 'bash'
+    env:
+      - 'DATABASE_URL=sqlite:///./test.db'
+      - 'FIREBASE_PROJECT_ID=test-project'
+      - 'OPENROUTER_API_KEY=test-key'
+      - 'HUBSPOT_CLIENT_ID=test-client-id'
+      - 'HUBSPOT_CLIENT_SECRET=test-client-secret'
+      - 'HUBSPOT_REDIRECT_URI=http://localhost:8000/callback'
+      - 'SECRET_KEY=test-secret-key-for-ci-cd-builds-only'
     args:
       - '-c'
       - |
@@ -61,44 +74,18 @@ steps:
         poetry install
         pytest tests/
 
-  # Step 2: Build Docker image
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'build'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/churn-risk-backend:$SHORT_SHA'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/churn-risk-backend:latest'
-      - '.'
-    dir: 'backend'
-
-  # Step 3: Push Docker image
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'gcr.io/$PROJECT_ID/churn-risk-backend:$SHORT_SHA'
-
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'gcr.io/$PROJECT_ID/churn-risk-backend:latest'
-
-  # Step 4: Deploy to Cloud Run
+  # Step 2: Deploy to Cloud Run using buildpack
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     args:
       - 'run'
       - 'deploy'
       - 'churn-risk-api'
-      - '--image=gcr.io/$PROJECT_ID/churn-risk-backend:$SHORT_SHA'
-      - '--region=us-central1'
+      - '--source=.'
+      - '--region=us-east1'
       - '--platform=managed'
       - '--allow-unauthenticated'
-
-# Store images in Container Registry
-images:
-  - 'gcr.io/$PROJECT_ID/churn-risk-backend:$SHORT_SHA'
-  - 'gcr.io/$PROJECT_ID/churn-risk-backend:latest'
+    dir: 'backend'
 
 options:
   logging: CLOUD_LOGGING_ONLY
@@ -107,12 +94,18 @@ options:
 timeout: '1200s'  # 20 minutes
 ```
 
-**Commit this file:**
-```bash
-git add backend/cloudbuild.yaml
-git commit -m "feat: add Cloud Build CI/CD configuration"
-git push
-```
+**Key Differences from Original Guide:**
+- ✅ Uses **buildpack deployment** (`--source=.`) instead of Docker builds
+- ✅ Tests run with **SQLite** (fast, no external DB needed)
+- ✅ Test environment variables provided inline
+- ✅ Simpler, more reliable than custom Dockerfiles
+- ✅ Same deployment method as manual deployments (proven working)
+
+**Why Buildpacks?**
+- Docker builds failed 11 times with ModuleNotFoundError (see troubleshooting-deployment.md)
+- Buildpack deployment was the only working solution
+- Production service already runs on buildpacks
+- Keeps CI/CD consistent with manual deployments
 
 ---
 

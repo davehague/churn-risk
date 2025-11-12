@@ -1,6 +1,6 @@
 # Architecture Overview - Churn Risk App
 
-**Last Updated:** 2025-11-09
+**Last Updated:** 2025-11-12
 
 A simple, high-level view of the Churn Risk App architecture and how components connect.
 
@@ -361,8 +361,9 @@ Backend → Exchange code for tokens
 | **Background Jobs** | Cloud Tasks (GCP) | 🔴 Not implemented |
 | **WebSockets** | FastAPI WebSocket | 🔴 Not implemented |
 | **Migrations** | Alembic | 🟢 Complete |
-| **Testing** | pytest, AsyncMock | 🟢 33/33 passing |
-| **Hosting** | GCP Cloud Run, Cloud SQL | 🔴 Not deployed |
+| **Testing** | pytest, AsyncMock | 🟢 57/57 passing |
+| **Hosting** | GCP Cloud Run, Cloud SQL | 🟢 Deployed with CI/CD |
+| **CI/CD** | Cloud Build, GitHub triggers | 🟢 Automated deployments |
 
 ---
 
@@ -384,8 +385,8 @@ Backend → Exchange code for tokens
 
 ### Secrets Management
 - Local development: `.env` file (not committed)
-- Production: GCP Secret Manager (planned)
-- OAuth tokens stored in encrypted JSONB column (encryption pending)
+- Production: GCP Secret Manager (implemented)
+- OAuth tokens stored in JSON column (database encrypted at rest)
 
 ---
 
@@ -401,10 +402,6 @@ Backend → Exchange code for tokens
    - Churn risk kanban board not built
    - Topic management interface not built
    - HubSpot onboarding flow not built
-
-3. **Not Deployed**
-   - Running locally only
-   - GCP infrastructure not provisioned (Cloud Run, Cloud SQL)
 
 ---
 
@@ -426,7 +423,10 @@ See detailed plan in: `docs/plans/2025-11-06-phase-1-mvp-implementation.md`
 
 ## Testing
 
-- **Unit Tests:** 23/23 passing (auth, models, AI, HubSpot)
+- **All Tests:** 57/57 passing (unit + integration)
+  - Unit tests: Auth, models, AI service, HubSpot client, ticket import
+  - Integration tests: Auth registration, HubSpot OAuth flow
+- **CI/CD:** Automated test runs on every push (SQLite)
 - **Smoke Tests:** `backend/scripts/smoke_test.py`
 - **Manual Testing:** Frontend test page at http://localhost:3000
 - **Full Guide:** `docs/dev/testing-guide.md`
@@ -434,4 +434,4 @@ See detailed plan in: `docs/plans/2025-11-06-phase-1-mvp-implementation.md`
 ---
 
 **Document Owner:** David Hague
-**Last Review:** 2025-11-08
+**Last Review:** 2025-11-12

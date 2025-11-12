@@ -4,7 +4,7 @@ steps:
     dir: 'backend'
     entrypoint: 'bash'
     env:
-      - 'DATABASE_URL=postgresql://test:test@localhost:5432/test_db'
+      - 'DATABASE_URL=sqlite:///./test.db'
       - 'FIREBASE_PROJECT_ID=test-project'
       - 'OPENROUTER_API_KEY=test-key'
       - 'HUBSPOT_CLIENT_ID=test-client-id'

@@ -55,10 +55,19 @@ Plain English status summary:
   - ✅ Access tokens stored in Integration table
 
   Testing:
-  - ✅ 33/33 unit and integration tests passing (10 auth tests + 23 other tests)
+  - ✅ 57/57 unit and integration tests passing (all test suites)
+  - ✅ CI/CD automated testing on every push (SQLite)
   - ✅ Smoke test script working
   - ✅ Auth setup documentation complete
   - ✅ Testing report documented
+
+  Production Deployment:
+  - ✅ Backend deployed to GCP Cloud Run
+  - ✅ Cloud SQL PostgreSQL database (managed)
+  - ✅ Secret Manager for production secrets
+  - ✅ CI/CD with Cloud Build (automated deployments)
+  - ✅ Production URL: https://churn-risk-api-461448724047.us-east1.run.app
+  - ✅ Monitoring and logging enabled
 
   ---
   🟡 What's Partially Done:
@@ -111,21 +120,19 @@ Plain English status summary:
   - ❌ Real-time ticket ingestion pipeline
   - ❌ WebSocket connections for live updates
 
-  Deployment:
-  - ❌ GCP Cloud Run deployment
-  - ❌ Cloud SQL in GCP
-  - ❌ Production environment
-
   ---
   📊 Summary by Integration:
 
   | Integration        | Status           | Can We Use It?                                    |
   |--------------------|------------------|---------------------------------------------------|
-  | PostgreSQL         | 🟢 Fully working | ✅ Yes - tables created, queries work              |
+  | PostgreSQL         | 🟢 Fully working | ✅ Yes - Cloud SQL in production                   |
   | Firebase Auth      | 🟢 Fully working | ✅ Yes - registration, login, route protection    |
   | OpenRouter AI      | 🟢 Fully working | ✅ Yes - analyzing tickets right now               |
   | HubSpot            | 🟢 Fully working | ✅ Yes - OAuth complete, fetching real tickets    |
   | Frontend ↔ Backend | 🟢 Connected     | ✅ Yes - CORS working, API calls succeed           |
+  | GCP Cloud Run      | 🟢 Deployed      | ✅ Yes - production backend running                |
+  | GCP Secret Manager | 🟢 Working       | ✅ Yes - production secrets configured             |
+  | CI/CD (Cloud Build)| 🟢 Working       | ✅ Yes - automated deployments on push             |
   | Cloud Tasks        | 🔴 Not built     | ❌ No - not implemented                            |
   | WebSockets         | 🔴 Not built     | ❌ No - not implemented                            |
 
@@ -150,28 +157,32 @@ Plain English status summary:
   ---
   🚫 What You Can't Do Yet:
 
-  1. ~~❌ Fetch real tickets from HubSpot (OAuth not authorized)~~ ✅ NOW WORKING
-  2. ❌ See dashboard with charts and analytics (basic dashboard exists, no charts yet)
-  3. ❌ Create churn risk cards (no service built)
-  4. ❌ Import 200 tickets (no bulk import service)
-  5. ❌ Manage topics (no UI built)
-  6. ❌ View kanban board (no UI built)
+  1. ❌ See dashboard with charts and analytics (basic dashboard exists, no charts yet)
+  2. ❌ Create churn risk cards (no service built)
+  3. ❌ Import 200 tickets (no bulk import service)
+  4. ❌ Manage topics (no UI built)
+  5. ❌ View kanban board (no UI built)
 
   ---
-  📝 Recent Progress (HubSpot OAuth & AI Integration):
+  📝 Recent Progress (GCP Deployment & CI/CD - Nov 12, 2025):
 
-  Just completed HubSpot OAuth integration and AI sentiment analysis:
-  - Fixed OAuth callback endpoint (POST → GET, removed auth requirement)
-  - Connected to FlxPoint HubSpot account via OAuth
-  - Access tokens stored in database Integration table
-  - Successfully fetching 20 real tickets from HubSpot
+  Just completed full production deployment and CI/CD setup:
+  - ✅ Backend deployed to GCP Cloud Run (buildpack deployment)
+  - ✅ Cloud SQL PostgreSQL database in production
+  - ✅ Secret Manager configured with all production secrets
+  - ✅ CI/CD pipeline with Cloud Build (automated on every push)
+  - ✅ 57/57 tests passing in CI/CD (SQLite for speed)
+  - ✅ Automated deployments to production
+  - ✅ Cross-database compatibility (PostgreSQL/SQLite)
+  - ✅ Production URL: https://churn-risk-api-461448724047.us-east1.run.app
+  - ✅ All integrations working in production (Firebase, HubSpot, OpenRouter)
+  - ✅ Monitoring and logging enabled
+
+  Previous milestones:
+  - HubSpot OAuth integration and AI sentiment analysis
+  - Connected to FlxPoint HubSpot account
   - Analyzing sentiment with google/gemini-2.5-flash via OpenRouter
-  - AI model externalized to OPENROUTER_MODEL environment variable
-  - Fixed Gemini 2.5 Flash JSON parsing (markdown code block stripping)
-  - Identified churn risk tickets with negative sentiment analysis
-  - OAuth redirect URI corrected to include /v1 prefix
-  - Test script: backend/scripts/fetch_real_tickets.py
 
-  Next up: GCP Cloud Deployment (Cloud Run, Cloud SQL, production environment setup)
-  Then: Ticket Import & Analysis Service (Task 6 from original plan)
+  Next up: Ticket Import & Analysis Service (Task 6 from original plan)
+  Then: Churn Risk Card Creation Logic, Dashboard UI
 

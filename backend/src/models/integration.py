@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, ForeignKey, Enum as SQLEnum, DateTime, Text
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.types import JSON
 from sqlalchemy.orm import relationship
 import enum
 from src.models.base import Base, UUIDMixin, TimestampMixin
@@ -26,8 +27,8 @@ class Integration(Base, UUIDMixin, TimestampMixin):
     tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False, index=True)
     type = Column(SQLEnum(IntegrationType), nullable=False)
     status = Column(SQLEnum(IntegrationStatus), default=IntegrationStatus.ACTIVE, nullable=False)
-    credentials = Column(JSONB, nullable=False)  # Encrypted in production
-    settings = Column(JSONB, default=dict)
+    credentials = Column(JSON, nullable=False)  # Encrypted in production, uses JSONB on PostgreSQL, TEXT on SQLite
+    settings = Column(JSON, default=dict)  # Uses JSONB on PostgreSQL, TEXT on SQLite
     last_synced_at = Column(DateTime, nullable=True)
     error_message = Column(Text, nullable=True)
 

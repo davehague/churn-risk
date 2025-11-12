@@ -1,0 +1,56 @@
+steps:
+  # Step 1: Run tests
+  - name: 'python:3.11-slim'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        pip install poetry
+        poetry config virtualenvs.create false
+        poetry install
+        pytest tests/
+
+  # Step 2: Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/churn-risk-backend:$SHORT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/churn-risk-backend:latest'
+      - '.'
+    dir: 'backend'
+
+  # Step 3: Push Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/churn-risk-backend:$SHORT_SHA'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/churn-risk-backend:latest'
+
+  # Step 4: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'churn-risk-api'
+      - '--image=gcr.io/$PROJECT_ID/churn-risk-backend:$SHORT_SHA'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+
+# Store images in Container Registry
+images:
+  - 'gcr.io/$PROJECT_ID/churn-risk-backend:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/churn-risk-backend:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
+
+timeout: '1200s'  # 20 minutes

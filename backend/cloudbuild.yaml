@@ -3,6 +3,14 @@ steps:
   - name: 'python:3.11-slim'
     dir: 'backend'
     entrypoint: 'bash'
+    env:
+      - 'DATABASE_URL=postgresql://test:test@localhost:5432/test_db'
+      - 'FIREBASE_PROJECT_ID=test-project'
+      - 'OPENROUTER_API_KEY=test-key'
+      - 'HUBSPOT_CLIENT_ID=test-client-id'
+      - 'HUBSPOT_CLIENT_SECRET=test-client-secret'
+      - 'HUBSPOT_REDIRECT_URI=http://localhost:8000/callback'
+      - 'SECRET_KEY=test-secret-key-for-ci-cd-builds-only'
     args:
       - '-c'
       - |

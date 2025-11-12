@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import List
+from typing import List, Optional
 
 
 class Settings(BaseSettings):
@@ -10,7 +10,7 @@ class Settings(BaseSettings):
 
     # Firebase
     FIREBASE_PROJECT_ID: str
-    FIREBASE_CREDENTIALS_PATH: str
+    FIREBASE_CREDENTIALS_PATH: Optional[str] = None  # Only for local dev
 
     # OpenRouter
     OPENROUTER_API_KEY: str
@@ -35,6 +35,21 @@ class Settings(BaseSettings):
         case_sensitive=True,
         extra="ignore"
     )
+
+    def get_firebase_credentials(self) -> dict:
+        """
+        Get Firebase credentials from file (local) or Secret Manager (production).
+        """
+        # Local development - use file
+        if self.ENVIRONMENT == "development" and self.FIREBASE_CREDENTIALS_PATH:
+            import json
+            with open(self.FIREBASE_CREDENTIALS_PATH) as f:
+                return json.load(f)
+
+        # Production - use Secret Manager
+        from src.core.secrets import get_secret_manager
+        sm = get_secret_manager()
+        return sm.get_json_secret("firebase-credentials")
 
     def get_cors_origins_list(self) -> List[str]:
         """Parse CORS_ORIGINS string into list."""

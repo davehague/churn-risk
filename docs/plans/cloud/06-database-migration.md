@@ -98,8 +98,10 @@ c08085465bad_initial_schema.py
 ### 2.3 Check Current Migration Status (Before Running)
 
 ```bash
-# Load .env.migration
-export $(cat .env.migration | xargs)
+# Load .env.migration (handles special characters properly)
+set -a
+source .env.migration
+set +a
 
 # Check migration status
 poetry run alembic current
@@ -117,11 +119,42 @@ INFO  [alembic.runtime.migration] Will assume transactional DDL.
 
 ## Step 3: Run Migrations
 
-### 3.1 Apply All Migrations
+### 3.1 Grant Permissions (First Time Only)
+
+Before running migrations for the first time, grant the necessary permissions:
 
 ```bash
-# Make sure .env.migration is loaded
-export $(cat .env.migration | xargs)
+# Connect as postgres superuser
+psql "host=127.0.0.1 port=5432 sslmode=disable user=postgres dbname=churn_risk_prod"
+```
+
+**Enter postgres password when prompted** (from Guide 04).
+
+Then run these SQL commands:
+
+```sql
+-- Grant all privileges on the public schema
+GRANT ALL PRIVILEGES ON SCHEMA public TO churn_risk_app;
+
+-- Allow creating tables in the future
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO churn_risk_app;
+
+-- Grant privileges on sequences (for auto-incrementing fields)
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO churn_risk_app;
+
+-- Exit psql
+\q
+```
+
+**Why this is needed:** By default, the `churn_risk_app` user doesn't have permissions to create tables in the `public` schema. This grants the necessary permissions.
+
+### 3.2 Apply All Migrations
+
+```bash
+# Load .env.migration (handles special characters properly)
+set -a
+source .env.migration
+set +a
 
 # Run migrations
 poetry run alembic upgrade head
@@ -149,7 +182,7 @@ INFO  [alembic.runtime.migration] Running upgrade  -> c08085465bad, Initial sche
 
 **Time:** Usually takes 2-5 seconds.
 
-### 3.2 Verify Migration Completed
+### 3.3 Verify Migration Completed
 
 ```bash
 poetry run alembic current
@@ -376,8 +409,10 @@ poetry run alembic upgrade head
 
 **4. Deploy to production:**
 ```bash
-# Connect via Cloud SQL Proxy
-export $(cat .env.migration | xargs)
+# Connect via Cloud SQL Proxy and load environment
+set -a
+source .env.migration
+set +a
 poetry run alembic upgrade head
 ```
 
@@ -409,6 +444,19 @@ poetry run alembic history
 
 ## Troubleshooting
 
+### Problem: "export: not valid in this context" when loading .env.migration
+
+**Cause:** The simple `export $(cat .env.migration | xargs)` command fails when environment variable values contain special characters like parentheses.
+
+**Solution:** Use the `set -a; source .env.migration; set +a` approach instead:
+```bash
+set -a
+source .env.migration
+set +a
+```
+
+This properly handles special characters in variable values.
+
 ### Problem: "Can't connect to database"
 
 **Solutions:**
@@ -419,11 +467,20 @@ poetry run alembic history
 
 ### Problem: "Permission denied for schema public"
 
-**Solution:**
+**Cause:** The `churn_risk_app` user doesn't have permissions to create tables in the `public` schema.
+
+**Solution:** This should be handled by Step 3.1. If you skipped that step, run:
+```bash
+# Connect as postgres superuser
+psql "host=127.0.0.1 port=5432 sslmode=disable user=postgres dbname=churn_risk_prod"
+```
+
+Then grant permissions:
 ```sql
--- Reconnect as postgres user and grant permissions
 GRANT ALL PRIVILEGES ON SCHEMA public TO churn_risk_app;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO churn_risk_app;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO churn_risk_app;
+\q
 ```
 
 ### Problem: "Migration already exists" or duplicate tables

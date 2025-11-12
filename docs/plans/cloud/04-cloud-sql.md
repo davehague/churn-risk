@@ -1,5 +1,45 @@
 # 04 - Cloud SQL Setup
 
+```
+ gcloud sql instances create churn-risk-db \
+    --database-version=POSTGRES_15 \
+    --tier=db-f1-micro \
+    --region=us-east1 \
+    --root-password='RicketyRocketWaterMice4*' \
+    --storage-type=SSD \
+    --storage-size=10GB \
+    --storage-auto-increase \
+    --backup-start-time=03:00 \
+    --maintenance-window-day=SUN \
+    --maintenance-window-hour=3
+```
+
+Creating Cloud SQL instance for POSTGRES_15...done.                                                           
+Created [https://sqladmin.googleapis.com/sql/v1beta4/projects/churn-risk-app/instances/churn-risk-db].
+NAME           DATABASE_VERSION  LOCATION    TIER         PRIMARY_ADDRESS  PRIVATE_ADDRESS  STATUS
+churn-risk-db  POSTGRES_15       us-east1-c  db-f1-micro  34.74.123.47     -                RUNNABLE
+
+```
+cloud-sql-proxy churn-risk-app:us-east1:churn-risk-db
+psql "host=127.0.0.1 port=5432 sslmode=disable user=postgres dbname=postgres"
+```
+
+```
+CREATE USER churn_risk_app WITH PASSWORD 'EagleBrinkAlloy53!';
+```
+
+```
+poetry run python -c "from sqlalchemy import create_engine; from src.core.config import settings; engine = create_engine('postgresql://churn_risk_app:EagleBrinkAlloy53!@127.0.0.1:5432/churn_risk_prod'); conn = engine.connect(); print('Connected to Cloud SQL!'); conn.close()"
+```
+
+⏺ The issue is that zsh interprets ! as a history expansion operator. The exclamation mark in your password EagleBrinkAlloy53! is causing the error.
+
+```
+poetry run python -c 'from sqlalchemy import create_engine; engine = create_engine("postgresql://churn_risk_app:EagleBrinkAlloy53!@127.0.0.1:5432/churn_risk_prod"); conn = engine.connect(); print("Connected to Cloud SQL!"); conn.close()'
+```
+
+Instance Connection Name:  `churn-risk-app:us-east1:churn-risk-db`
+
 **Estimated Time:** 20-30 minutes
 **Cost:** ~$7/month (db-f1-micro), covered by free tier credits
 **Prerequisites:** Guides 01-03 completed

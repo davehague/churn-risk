@@ -1,6 +1,6 @@
 # 08 - Cloud Run Deployment
 
-**Estimated Time:** 30-40 minutes
+**Estimated Time:** 20-30 minutes
 **Cost:** ~$5/month (within free tier), auto-scales with traffic
 **Prerequisites:** Guides 01-07 completed
 
@@ -8,10 +8,10 @@
 
 ## Overview
 
-Deploy your FastAPI backend to Cloud Run - Google's serverless container platform. This is the main production deployment.
+Deploy your FastAPI backend to Cloud Run using source-based deployment. Cloud Run will automatically containerize your Python application.
 
 **What You'll Deploy:**
-- Docker container to Google Container Registry (GCR)
+- Python application using Cloud Run buildpacks (no Dockerfile needed)
 - Cloud Run service with auto-scaling
 - Environment variables and secret references
 - Cloud SQL connection via Unix socket
@@ -21,226 +21,219 @@ Deploy your FastAPI backend to Cloud Run - Google's serverless container platfor
 
 ---
 
-## Step 1: Push Docker Image to Container Registry
+## Step 1: Prepare Application Files
 
-### 1.1 Tag Image for GCR
+### 1.1 Generate requirements.txt
+
+Cloud Run's Python buildpack uses `requirements.txt` for dependencies.
 
 ```bash
 cd backend
 
-# Get your project ID
-PROJECT_ID=$(gcloud config get-value project)
-
-# Tag image for Google Container Registry
-docker tag churn-risk-backend:test gcr.io/${PROJECT_ID}/churn-risk-backend:v1
+# Generate requirements.txt from Poetry
+poetry run pip freeze > requirements.txt
 ```
 
-**Verify tag:**
+**Verify:**
 ```bash
-docker images | grep churn-risk
+wc -l requirements.txt
+# Should show ~80-90 lines
 ```
 
-**Should show both:**
-```
-churn-risk-backend    test  abc123...
-gcr.io/PROJECT/churn-risk-backend  v1  abc123...
-```
+### 1.2 Create Procfile
 
-### 1.2 Configure Docker for GCR
+Create a `Procfile` to tell Cloud Run how to start your application:
 
 ```bash
-gcloud auth configure-docker
+cat > Procfile << 'EOF'
+web: cd /workspace && PYTHONPATH=/workspace uvicorn src.main:app --host 0.0.0.0 --port $PORT
+EOF
 ```
 
-**Expected output:**
-```
-Adding credentials for all GCR repositories.
-```
+**What this does:**
+- `cd /workspace` - Changes to Cloud Run's default directory
+- `PYTHONPATH=/workspace` - Ensures Python can find your `src` module
+- `uvicorn src.main:app` - Starts your FastAPI application
+- `--port $PORT` - Uses Cloud Run's dynamically assigned port
 
-**This is a one-time setup.**
+### 1.3 Rename Dockerfiles (If Present)
 
-### 1.3 Push Image to GCR
-
-```bash
-docker push gcr.io/${PROJECT_ID}/churn-risk-backend:v1
-```
-
-**Expected output:**
-```
-The push refers to repository [gcr.io/PROJECT_ID/churn-risk-backend]
-v1: digest: sha256:abc123... size: 1234
-```
-
-**Time:** 2-5 minutes (first time, faster with cache)
-
-### 1.4 Verify Image in GCR
+If you have Dockerfiles, rename them so Cloud Run uses buildpacks instead:
 
 ```bash
-gcloud container images list
-```
-
-**Should show:**
-```
-NAME
-gcr.io/PROJECT_ID/churn-risk-backend
-```
-
-**List versions:**
-```bash
-gcloud container images list-tags gcr.io/${PROJECT_ID}/churn-risk-backend
-```
-
-**Should show:**
-```
-DIGEST      TAGS  TIMESTAMP
-sha256:...  v1    2025-11-09T...
+# Only run if Dockerfiles exist
+[ -f Dockerfile ] && mv Dockerfile Dockerfile.backup
+[ -f Dockerfile.simple ] && mv Dockerfile.simple Dockerfile.simple.backup
 ```
 
 ---
 
-## Step 2: Create Cloud Run Service
+## Step 2: Deploy to Cloud Run
 
-### 2.1 Get Required Values
+### 2.1 Initial Deployment (No Configuration)
 
-**You'll need these values:**
-
-```bash
-# 1. Project ID
-PROJECT_ID=$(gcloud config get-value project)
-echo "Project ID: $PROJECT_ID"
-
-# 2. Cloud SQL Connection Name
-INSTANCE_CONN=$(gcloud sql instances describe churn-risk-db --format="value(connectionName)")
-echo "Instance Connection: $INSTANCE_CONN"
-
-# 3. Region
-REGION=$(gcloud config get-value compute/region)
-echo "Region: $REGION"
-```
-
-**Save these - you'll use them in the deployment command.**
-
-### 2.2 Deploy to Cloud Run (Initial Deployment)
-
-**Run this command (replace placeholders):**
+First, deploy without secrets/env vars to create the service:
 
 ```bash
 gcloud run deploy churn-risk-api \
-  --image=gcr.io/${PROJECT_ID}/churn-risk-backend:v1 \
-  --platform=managed \
-  --region=${REGION} \
+  --source . \
+  --region=us-east1 \
   --allow-unauthenticated \
-  --port=8080 \
   --cpu=1 \
   --memory=512Mi \
   --timeout=300 \
   --min-instances=0 \
-  --max-instances=10 \
-  --add-cloudsql-instances=${INSTANCE_CONN} \
-  --set-env-vars="ENVIRONMENT=production,API_V1_PREFIX=/api/v1,CORS_ORIGINS=https://churn-risk-api-xyz.run.app,PORT=8080" \
-  --set-secrets="FIREBASE_CREDENTIALS=firebase-credentials:latest,HUBSPOT_CLIENT_SECRET=hubspot-client-secret:latest,OPENROUTER_API_KEY=openrouter-api-key:latest,DATABASE_PASSWORD=database-password:latest,SECRET_KEY=app-secret-key:latest"
+  --max-instances=10
 ```
 
-**Wait for deployment:** 2-5 minutes
+**What happens:**
+1. Cloud Run creates an Artifact Registry repository (first time only)
+2. Uploads your source code
+3. Builds container using Python buildpack
+4. Deploys the service
+
+**Time:** 5-10 minutes (first deployment)
 
 **Expected output:**
 ```
-Deploying container to Cloud Run service [churn-risk-api] in project [PROJECT_ID] region [REGION]
-✓ Deploying new service... Done.
-  ✓ Creating Revision...
-  ✓ Routing traffic...
-  ✓ Setting IAM Policy...
-Done.
-Service [churn-risk-api] revision [churn-risk-api-00001-xyz] has been deployed and is serving 100 percent of traffic.
-Service URL: https://churn-risk-api-xyz123.run.app
+Building using Buildpacks and deploying container to Cloud Run service [churn-risk-api]
+Building Container...done
+Creating Revision...done
+Service [churn-risk-api] revision [churn-risk-api-00001-xxx] has been deployed
+Service URL: https://churn-risk-api-XXX.us-east1.run.app
 ```
 
 **Save the Service URL!**
 
+### 2.2 Test Initial Deployment
+
+```bash
+SERVICE_URL=$(gcloud run services describe churn-risk-api --region=us-east1 --format="value(status.url)")
+
+curl ${SERVICE_URL}/health
+```
+
+**Expected response:**
+```json
+{"status":"healthy","environment":"production"}
+```
+
 ---
 
-## Step 3: Configure Environment Variables Properly
+## Step 3: Configure Environment Variables and Secrets
 
-### 3.1 Update with All Required Variables
+### 3.1 Get Required Values
 
-The initial deployment set basic variables. Now add the rest:
+```bash
+# Project ID
+PROJECT_ID=$(gcloud config get-value project)
+echo "Project ID: $PROJECT_ID"
+
+# Cloud SQL Connection Name
+INSTANCE_CONN=$(gcloud sql instances describe churn-risk-db --format="value(connectionName)")
+echo "Instance Connection: $INSTANCE_CONN"
+
+# Region
+REGION=$(gcloud config get-value compute/region)
+echo "Region: $REGION"
+
+# Service URL (from previous step)
+SERVICE_URL=$(gcloud run services describe churn-risk-api --region=us-east1 --format="value(status.url)")
+echo "Service URL: $SERVICE_URL"
+```
+
+**Save these values - you'll use them in the next command.**
+
+### 3.2 Update Service with Full Configuration
 
 ```bash
 gcloud run services update churn-risk-api \
-  --region=${REGION} \
-  --update-env-vars="ENVIRONMENT=production,\
+  --region=us-east1 \
+  --add-cloudsql-instances=${INSTANCE_CONN} \
+  --set-env-vars="ENVIRONMENT=production,\
 API_V1_PREFIX=/api/v1,\
-PORT=8080,\
 FIREBASE_PROJECT_ID=your-firebase-project-id,\
+FIREBASE_CREDENTIALS_PATH=/app/firebase-credentials.json,\
 HUBSPOT_CLIENT_ID=your-hubspot-client-id,\
-HUBSPOT_REDIRECT_URI=https://YOUR-SERVICE-URL.run.app/api/v1/integrations/hubspot/callback,\
-OPENROUTER_MODEL=google/gemini-2.5-flash"
+HUBSPOT_REDIRECT_URI=${SERVICE_URL}/api/v1/integrations/hubspot/callback,\
+OPENROUTER_MODEL=google/gemini-2.5-flash,\
+GOOGLE_CLOUD_PROJECT=${PROJECT_ID},\
+DATABASE_URL=postgresql://churn_risk_app:PLACEHOLDER@/churn_risk_prod?host=/cloudsql/${INSTANCE_CONN}" \
+  --update-secrets="/app/firebase-credentials.json=firebase-credentials:latest,\
+HUBSPOT_CLIENT_SECRET=hubspot-client-secret:latest,\
+OPENROUTER_API_KEY=openrouter-api-key:latest,\
+DATABASE_PASSWORD=database-password:latest,\
+SECRET_KEY=app-secret-key:latest"
 ```
 
 **Replace:**
 - `your-firebase-project-id` with your actual Firebase project ID
 - `your-hubspot-client-id` with your HubSpot OAuth client ID
-- `YOUR-SERVICE-URL` with your actual Cloud Run URL
 
-### 3.2 Configure Database Connection
+**Note:** The `DATABASE_PASSWORD` secret will be used instead of `PLACEHOLDER` at runtime.
 
-Update to add database URL environment variable:
-
-```bash
-# Construct database URL using secret
-gcloud run services update churn-risk-api \
-  --region=${REGION} \
-  --update-env-vars="DATABASE_URL=postgresql://churn_risk_app:\$(DATABASE_PASSWORD)@/churn_risk_prod?host=/cloudsql/${INSTANCE_CONN}"
-```
-
-**Note:** Cloud Run connects to Cloud SQL via Unix socket at `/cloudsql/INSTANCE_CONNECTION_NAME`
+**Time:** 2-3 minutes
 
 ---
 
-## Step 4: Update Secret References for Firebase
+## Step 4: Verify Production Deployment
 
-### 4.1 Modify Startup to Use Secret Manager for Firebase
-
-Since Firebase credentials are JSON (not just a simple string), we need to handle them specially.
-
-**Option A: Mount as Volume (Recommended)**
+### 4.1 Test Health Endpoint
 
 ```bash
-gcloud run services update churn-risk-api \
-  --region=${REGION} \
-  --update-secrets="/app/firebase-credentials.json=firebase-credentials:latest"
+SERVICE_URL=$(gcloud run services describe churn-risk-api --region=us-east1 --format="value(status.url)")
+
+curl ${SERVICE_URL}/health
 ```
 
-This mounts the secret as a file at `/app/firebase-credentials.json`.
+**Expected:**
+```json
+{"status":"healthy","environment":"production"}
+```
 
-**Then update environment variable:**
+### 4.2 Test API Root
 
 ```bash
-gcloud run services update churn-risk-api \
-  --region=${REGION} \
-  --update-env-vars="FIREBASE_CREDENTIALS_PATH=/app/firebase-credentials.json"
+curl ${SERVICE_URL}/api/v1/
+```
+
+**Expected:**
+```json
+{"message":"Churn Risk API","version":"0.1.0"}
+```
+
+### 4.3 Test API Documentation
+
+Open in browser:
+```
+https://YOUR-SERVICE-URL.run.app/api/v1/docs
+```
+
+**Should show:** Interactive Swagger UI documentation
+
+### 4.4 View Logs
+
+```bash
+gcloud run services logs read churn-risk-api \
+  --region=us-east1 \
+  --limit=50
 ```
 
 ---
 
 ## Step 5: Configure Service Account Permissions
 
-### 5.1 Verify Default Service Account
+### 5.1 Grant Cloud SQL Client Role
 
 ```bash
 PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
-echo "Service Account: ${PROJECT_NUMBER}-compute@developer.gserviceaccount.com"
-```
 
-### 5.2 Grant Cloud SQL Client Role
-
-```bash
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member="serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com" \
   --role="roles/cloudsql.client"
 ```
 
-### 5.3 Verify Secret Access (Already Done in Guide 05)
+### 5.2 Verify Secret Access
 
 The service account should already have `secretmanager.secretAccessor` role from Guide 05.
 
@@ -251,58 +244,11 @@ gcloud secrets get-iam-policy firebase-credentials
 
 ---
 
-## Step 6: Test Production Deployment
+## Step 6: Update HubSpot OAuth Redirect URI
 
-### 6.1 Get Service URL
+### 6.1 Update HubSpot App Configuration
 
-```bash
-gcloud run services describe churn-risk-api \
-  --region=${REGION} \
-  --format="value(status.url)"
-```
-
-**Save this URL.**
-
-### 6.2 Test Health Endpoint
-
-```bash
-SERVICE_URL=$(gcloud run services describe churn-risk-api --region=${REGION} --format="value(status.url)")
-
-curl ${SERVICE_URL}/health
-```
-
-**Expected response:**
-```json
-{"status":"healthy","environment":"production"}
-```
-
-### 6.3 Test API Root
-
-```bash
-curl ${SERVICE_URL}/api/v1/
-```
-
-**Expected response:**
-```json
-{"message":"Churn Risk API","version":"1.0.0"}
-```
-
-### 6.4 Test API Docs
-
-Open in browser:
-```
-https://YOUR-SERVICE-URL.run.app/api/v1/docs
-```
-
-**Should show:** Interactive API documentation
-
----
-
-## Step 7: Update HubSpot OAuth Redirect URI
-
-### 7.1 Update HubSpot App Configuration
-
-Your HubSpot OAuth app needs to know about the new production URL.
+Your HubSpot OAuth app needs to know about the production URL.
 
 **Edit `hs-churn-risk/public-app.json`:**
 
@@ -324,7 +270,7 @@ cd hs-churn-risk
 hs project upload
 ```
 
-### 7.2 Test OAuth Flow
+### 6.2 Test OAuth Flow
 
 1. Get authorization URL from production API
 2. Follow OAuth flow
@@ -332,43 +278,19 @@ hs project upload
 
 ---
 
-## Step 8: Configure CORS for Production
+## Step 7: Run Database Migrations (If Needed)
 
-### 8.1 Update CORS Origins
-
-If you have a frontend deployed (or will deploy later):
+If this is a fresh deployment, run migrations:
 
 ```bash
-gcloud run services update churn-risk-api \
-  --region=${REGION} \
-  --update-env-vars="CORS_ORIGINS=https://YOUR-SERVICE-URL.run.app,https://your-frontend-domain.com"
+# Connect to Cloud SQL via proxy (in separate terminal)
+cloud-sql-proxy ${INSTANCE_CONN}
+
+# Run migrations
+cd backend
+DATABASE_URL="postgresql://churn_risk_app:YOUR_PASSWORD@localhost:5432/churn_risk_prod" \
+  poetry run alembic upgrade head
 ```
-
-**For now (backend only):**
-```bash
-gcloud run services update churn-risk-api \
-  --region=${REGION} \
-  --update-env-vars="CORS_ORIGINS=https://YOUR-SERVICE-URL.run.app,http://localhost:3000"
-```
-
-This allows your local frontend to call the production API.
-
----
-
-## Step 9: Configure Logging and Monitoring
-
-### 9.1 View Logs
-
-```bash
-gcloud run services logs read churn-risk-api \
-  --region=${REGION} \
-  --limit=50
-```
-
-### 9.2 Enable Request Logging
-
-Cloud Run automatically logs all HTTP requests. View them in Cloud Console:
-- **GCP Console → Cloud Run → churn-risk-api → Logs**
 
 ---
 
@@ -376,8 +298,7 @@ Cloud Run automatically logs all HTTP requests. View them in Cloud Console:
 
 Before proceeding:
 
-- [ ] Docker image pushed to GCR successfully
-- [ ] Cloud Run service deployed
+- [ ] Service deployed successfully
 - [ ] Service URL accessible via HTTPS
 - [ ] Health endpoint returns 200
 - [ ] API docs accessible
@@ -386,6 +307,7 @@ Before proceeding:
 - [ ] Cloud SQL connection working
 - [ ] Service account has correct permissions
 - [ ] HubSpot OAuth redirect URI updated
+- [ ] Database migrations run (if needed)
 
 ---
 
@@ -396,8 +318,8 @@ Before proceeding:
 ```
 Service Name:     churn-risk-api
 Service URL:      _________________________________
-Region:           us-central1 (or your region)
-Image:            gcr.io/PROJECT_ID/churn-risk-backend:v1
+Region:           us-east1
+Deployment Type:  Source-based (Python buildpack)
 CPU:              1
 Memory:           512Mi
 Min Instances:    0 (scales to zero)
@@ -433,34 +355,46 @@ Cloud SQL:        Connected via Unix socket
 
 ### Deploy New Version
 
+When you update your code:
+
 ```bash
-# Build new image
-docker build -t churn-risk-backend:v2 .
+cd backend
 
-# Tag for GCR
-docker tag churn-risk-backend:v2 gcr.io/${PROJECT_ID}/churn-risk-backend:v2
+# Regenerate requirements.txt if dependencies changed
+poetry run pip freeze > requirements.txt
 
-# Push to GCR
-docker push gcr.io/${PROJECT_ID}/churn-risk-backend:v2
-
-# Deploy to Cloud Run
-gcloud run services update churn-risk-api \
-  --region=${REGION} \
-  --image=gcr.io/${PROJECT_ID}/churn-risk-backend:v2
+# Deploy updated code
+gcloud run deploy churn-risk-api \
+  --source . \
+  --region=us-east1
 ```
 
 **Traffic automatically shifts to new version** (blue-green deployment).
+
+**Time:** 3-5 minutes (faster than initial deployment)
+
+### Roll Back to Previous Version
+
+```bash
+# List revisions
+gcloud run revisions list --service=churn-risk-api --region=us-east1
+
+# Route traffic to previous revision
+gcloud run services update-traffic churn-risk-api \
+  --region=us-east1 \
+  --to-revisions=churn-risk-api-00001-xxx=100
+```
 
 ---
 
 ## Troubleshooting
 
-### Problem: Deployment fails with "Cloud SQL connection error"
+### Problem: Build fails with "Module not found"
 
-**Solutions:**
-- Verify `--add-cloudsql-instances` matches exactly: `PROJECT:REGION:INSTANCE`
-- Check service account has Cloud SQL Client role
-- Ensure Cloud SQL instance is running
+**Solution:** Ensure `requirements.txt` is up to date:
+```bash
+poetry run pip freeze > requirements.txt
+```
 
 ### Problem: "Secret not found" error
 
@@ -471,37 +405,43 @@ gcloud run services update churn-risk-api \
 
 ### Problem: "Memory limit exceeded" / container crashes
 
-**Solutions:**
+**Solution:** Increase memory:
 ```bash
-# Increase memory
 gcloud run services update churn-risk-api \
-  --region=${REGION} \
+  --region=us-east1 \
   --memory=1Gi
 ```
 
 ### Problem: Requests timeout
 
-**Solutions:**
+**Solution:** Increase timeout:
 ```bash
-# Increase timeout
 gcloud run services update churn-risk-api \
-  --region=${REGION} \
+  --region=us-east1 \
   --timeout=600
 ```
 
 ### Problem: Database connection fails
 
 **Solutions:**
-- Check DATABASE_URL format for Unix socket
-- Verify Cloud SQL instance connection name
-- Test connection from Cloud Shell: `gcloud sql connect churn-risk-db`
+- Check Cloud SQL instance is running: `gcloud sql instances list`
+- Verify connection name: `gcloud sql instances describe churn-risk-db`
+- Check service account has Cloud SQL Client role
+- Review logs: `gcloud run services logs read churn-risk-api --region=us-east1`
+
+### Problem: Environment variables not set
+
+**Solution:** Update service configuration:
+```bash
+gcloud run services describe churn-risk-api --region=us-east1
+# Review current configuration, then update with correct values
+```
 
 ---
 
 ## What You've Accomplished
 
-✅ Deployed Docker image to Google Container Registry
-✅ Created Cloud Run service with auto-scaling
+✅ Deployed FastAPI backend to Cloud Run using buildpacks
 ✅ Connected to Cloud SQL via private connection
 ✅ Configured all environment variables
 ✅ Mounted secrets from Secret Manager
@@ -521,6 +461,26 @@ With your backend deployed, verify everything works end-to-end.
 ## Additional Resources
 
 - [Cloud Run Documentation](https://cloud.google.com/run/docs)
-- [Container Registry](https://cloud.google.com/container-registry/docs)
+- [Cloud Run Buildpacks](https://cloud.google.com/docs/buildpacks/overview)
+- [Python Buildpack](https://github.com/GoogleCloudPlatform/buildpacks/tree/main/cmd/python)
 - [Cloud Run Environment Variables](https://cloud.google.com/run/docs/configuring/environment-variables)
 - [Cloud Run Secrets](https://cloud.google.com/run/docs/configuring/secrets)
+
+---
+
+## Why We Use Buildpacks (Not Dockerfiles)
+
+**Advantages:**
+- No Docker expertise required
+- Automatic security updates from Google
+- Optimized for Cloud Run environment
+- Simpler deployment workflow
+- Less maintenance overhead
+
+**When to Use Dockerfile:**
+- Custom base image requirements
+- Special system dependencies not available in buildpack
+- Multi-stage builds for optimization
+- Full control over container environment
+
+For most Python applications, buildpacks are recommended.

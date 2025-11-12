@@ -126,7 +126,7 @@ async def test_import_and_analyze_tickets_success(
     # Mock HubSpot client
     with patch("src.services.ticket_import.HubSpotClient") as MockClient:
         mock_client = MockClient.return_value
-        mock_client.get_tickets = AsyncMock(return_value={
+        mock_client.search_tickets = AsyncMock(return_value={
             "results": sample_hubspot_tickets
         })
 
@@ -176,7 +176,7 @@ async def test_import_and_analyze_tickets_skip_existing(
     # Mock HubSpot client to return only the first ticket
     with patch("src.services.ticket_import.HubSpotClient") as MockClient:
         mock_client = MockClient.return_value
-        mock_client.get_tickets = AsyncMock(return_value={
+        mock_client.search_tickets = AsyncMock(return_value={
             "results": [sample_hubspot_tickets[0]]
         })
 
@@ -222,7 +222,7 @@ async def test_import_and_analyze_tickets_update_existing_without_sentiment(
     # Mock HubSpot client
     with patch("src.services.ticket_import.HubSpotClient") as MockClient:
         mock_client = MockClient.return_value
-        mock_client.get_tickets = AsyncMock(return_value={
+        mock_client.search_tickets = AsyncMock(return_value={
             "results": [sample_hubspot_tickets[0]]
         })
 
@@ -296,7 +296,7 @@ async def test_import_and_analyze_tickets_hubspot_api_error(
 
     with patch("src.services.ticket_import.HubSpotClient") as MockClient:
         mock_client = MockClient.return_value
-        mock_client.get_tickets = AsyncMock(side_effect=Exception("HubSpot API error"))
+        mock_client.search_tickets = AsyncMock(side_effect=Exception("HubSpot API error"))
 
         with pytest.raises(Exception, match="HubSpot API error"):
             await service.import_and_analyze_tickets(test_tenant.id)
@@ -319,7 +319,7 @@ async def test_import_and_analyze_tickets_analysis_failure(
     with patch("src.services.ticket_import.HubSpotClient") as MockClient:
         mock_client = MockClient.return_value
         # Return only first 2 tickets (recent ones)
-        mock_client.get_tickets = AsyncMock(return_value={
+        mock_client.search_tickets = AsyncMock(return_value={
             "results": sample_hubspot_tickets[:2]
         })
 
@@ -359,7 +359,7 @@ async def test_import_and_analyze_tickets_empty_content(
 
     with patch("src.services.ticket_import.HubSpotClient") as MockClient:
         mock_client = MockClient.return_value
-        mock_client.get_tickets = AsyncMock(return_value={
+        mock_client.search_tickets = AsyncMock(return_value={
             "results": tickets_with_empty_content
         })
 
@@ -385,7 +385,7 @@ async def test_import_and_analyze_tickets_date_filtering(
 
     with patch("src.services.ticket_import.HubSpotClient") as MockClient:
         mock_client = MockClient.return_value
-        mock_client.get_tickets = AsyncMock(return_value={
+        mock_client.search_tickets = AsyncMock(return_value={
             "results": sample_hubspot_tickets
         })
 
@@ -436,7 +436,7 @@ async def test_ticket_status_mapping(db_session, test_tenant, hubspot_integratio
 
         with patch("src.services.ticket_import.HubSpotClient") as MockClient:
             mock_client = MockClient.return_value
-            mock_client.get_tickets = AsyncMock(return_value={
+            mock_client.search_tickets = AsyncMock(return_value={
                 "results": [ticket_data]
             })
 
@@ -462,7 +462,7 @@ async def test_convenience_function(
     """Test the convenience function import_and_analyze_tickets."""
     with patch("src.services.ticket_import.HubSpotClient") as MockClient:
         mock_client = MockClient.return_value
-        mock_client.get_tickets = AsyncMock(return_value={
+        mock_client.search_tickets = AsyncMock(return_value={
             "results": sample_hubspot_tickets[:2]
         })
 
@@ -490,7 +490,7 @@ async def test_idempotency(
 
     with patch("src.services.ticket_import.HubSpotClient") as MockClient:
         mock_client = MockClient.return_value
-        mock_client.get_tickets = AsyncMock(return_value={
+        mock_client.search_tickets = AsyncMock(return_value={
             "results": sample_hubspot_tickets[:1]
         })
 

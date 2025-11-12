@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, ForeignKey, Numeric, Index
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.types import JSON
 from sqlalchemy.orm import relationship
 from src.models.base import Base, UUIDMixin, TimestampMixin
 
@@ -15,7 +16,7 @@ class Company(Base, UUIDMixin, TimestampMixin):
     external_id = Column(String(255), nullable=False)  # HubSpot company ID
     name = Column(String(255), nullable=False)
     mrr = Column(Numeric(10, 2), nullable=True)  # Monthly recurring revenue
-    crm_metadata = Column(JSONB, default=dict)  # Custom fields from CRM
+    crm_metadata = Column(JSON, default=dict)  # Custom fields from CRM, uses JSONB on PostgreSQL, TEXT on SQLite
 
     # Relationships
     tenant = relationship("Tenant", back_populates="companies")

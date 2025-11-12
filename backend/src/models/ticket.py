@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, ForeignKey, Text, Enum as SQLEnum, Float, DateTime, Index
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.types import JSON
 from sqlalchemy.orm import relationship
 import enum
 from src.models.base import Base, UUIDMixin, TimestampMixin
@@ -50,7 +51,7 @@ class Ticket(Base, UUIDMixin, TimestampMixin):
     sentiment_analyzed_at = Column(DateTime, nullable=True)
 
     external_url = Column(String(500), nullable=True)  # Deep link to HubSpot
-    source_metadata = Column(JSONB, default=dict)  # Raw data from source
+    source_metadata = Column(JSON, default=dict)  # Raw data from source, uses JSONB on PostgreSQL, TEXT on SQLite
 
     # Relationships
     tenant = relationship("Tenant", back_populates="tickets")

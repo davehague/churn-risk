@@ -4,6 +4,188 @@
 **Cost:** Free (within limits)
 **Prerequisites:** Guide 09 completed
 
+ ✅ Completed via CLI
+
+  1. Log-based metrics created:
+    - churn_risk_errors - Tracks ERROR level logs from your Cloud Run service
+    - database_errors - Tracks database connection errors
+
+  📋 Console Tasks You Need to Complete
+
+  1. Uptime Monitoring (5 minutes)
+
+  Go to: https://console.cloud.google.com/monitoring/uptime
+
+  Click "CREATE UPTIME CHECK"
+
+  Configuration:
+  - Title: Churn Risk API Health Check
+  - Protocol: HTTPS
+  - Resource Type: URL
+  - Hostname: churn-risk-api-2q6daadroa-ue.a.run.app
+  - Path: /health
+  - Check frequency: 5 minutes
+  - Regions: Select 3-4 regions (USA, Europe, Asia)
+
+  Response validation:
+  - Response code: 200
+  - Response content: healthy
+
+  Click "CREATE"
+
+  Then create alert:
+  1. Click on the uptime check you just created
+  2. Click "CREATE ALERT"
+  3. Configure:
+    - Alert name: API Down Alert
+    - Condition: Check fails from at least 2 locations
+    - Duration: 5 minutes
+    - Notification: Add your email
+  4. Click "SAVE"
+
+  ---
+  2. Error Rate Alert (3 minutes)
+
+  Go to: https://console.cloud.google.com/monitoring/alerting
+
+  Click "CREATE POLICY"
+
+  Add Condition:
+  - Target: Cloud Run Revision
+  - Metric: Request count
+  - Filter: response_code_class = "5xx"
+  - Aggregation: Sum
+  - Condition: Above threshold
+  - Threshold value: 10 (errors in 5 minutes)
+  - Duration: 5 minutes
+
+  Notification:
+  - Add your email channel
+
+  Alert name: High Error Rate - Churn Risk API
+
+  Click "SAVE"
+
+  ---
+  3. Budget Alert (2 minutes)
+
+  Go to: https://console.cloud.google.com/billing/budgets
+
+  Click "CREATE BUDGET"
+
+  Configuration:
+  - Name: Monthly Production Budget
+  - Projects: Select churn-risk-app
+  - Budget amount: $50/month
+  - Alerts at:
+    - 50% = $25
+    - 80% = $40
+    - 100% = $50
+  - Email notifications: Add your email
+
+  Click "FINISH"
+
+  ---
+  4. Performance Dashboard (10 minutes)
+
+  Go to: https://console.cloud.google.com/monitoring/dashboards
+
+  Click "CREATE DASHBOARD" → Name it Churn Risk Production
+
+  Click "ADD WIDGET" for each chart below:
+
+  Chart 1: Request Rate
+  - Metric: Cloud Run > Request count
+  - Aggregation: Rate (requests/second)
+  - Filter: service_name = "churn-risk-api"
+
+  Chart 2: Latency (p50, p95, p99)
+  - Metric: Cloud Run > Request latencies
+  - Percentiles: 50th, 95th, 99th
+  - Filter: service_name = "churn-risk-api"
+
+  Chart 3: Error Rate
+  - Metric: Cloud Run > Request count
+  - Filter: response_code_class = "5xx"
+  - Aggregation: Rate
+
+  Chart 4: Container Instances
+  - Metric: Cloud Run > Instance count
+  - Shows auto-scaling behavior
+
+  Chart 5: CPU Utilization
+  - Metric: Cloud Run > Container CPU utilization
+
+  Chart 6: Memory Utilization
+  - Metric: Cloud Run > Container memory utilization
+
+  Click "SAVE DASHBOARD"
+
+  ---
+  5. Notification Channels (2 minutes)
+
+  Go to: https://console.cloud.google.com/monitoring/alerting/notifications
+
+  Add Email:
+  - Click "ADD NEW" → Email
+  - Enter your email address
+  - Display name: Your Name
+  - Click "SAVE"
+  - Verify by clicking link in email
+
+  Optional: Add Slack or SMS channels if desired
+
+  ---
+  6. Alert Policy for Log-based Metrics (3 minutes)
+
+  Go to: https://console.cloud.google.com/monitoring/alerting/policies/create
+
+  For database errors:
+  - Condition:
+    - Metric: database_errors (user-defined metric)
+    - Threshold: > 0 in 5 minutes
+  - Notification: Your email
+  - Name: Database Connection Errors
+
+  Repeat for churn_risk_errors metric if desired
+
+  ---
+  📊 Quick Monitoring Commands
+
+  I can run these anytime to check your production system:
+
+  # Get service URL
+  SERVICE_URL=$(gcloud run services describe churn-risk-api --region=us-east1 --format="value(status.url)")
+
+  # Health check
+  curl ${SERVICE_URL}/health
+
+  # View recent logs
+  gcloud run services logs read churn-risk-api --region=us-east1 --limit=50
+
+  # Check for errors
+  gcloud run services logs read churn-risk-api --region=us-east1 --limit=200 | grep ERROR
+
+  # View metrics
+  gcloud run services describe churn-risk-api --region=us-east1
+
+  ---
+  Summary
+
+  What I've set up:
+  - ✅ Log-based metric for error tracking
+  - ✅ Log-based metric for database errors
+
+  What you need to do in Console (30 minutes total):
+  1. Uptime monitoring (5 min)
+  2. Error rate alert (3 min)
+  3. Budget alert (2 min)
+  4. Performance dashboard (10 min)
+  5. Notification channels (2 min)
+  6. Alert policies for log metrics (3 min)
+
+  Let me know once you've completed these Console tasks, or if you need help with any specific step!
+
 ---
 
 ## Overview

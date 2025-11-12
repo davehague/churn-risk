@@ -21,7 +21,12 @@
       "Bash(docker tag:*)",
       "Bash(docker push:*)",
       "Bash(curl:*)",
-      "Bash(gcloud run services update:*)"
+      "Bash(gcloud run services update:*)",
+      "Bash(SERVICE_URL=\"https://churn-risk-api-2q6daadroa-ue.a.run.app\":*)",
+      "Bash(gcloud run services describe:*)",
+      "Bash(gcloud projects get-iam-policy:*)",
+      "Bash(time curl:*)",
+      "Bash(gcloud logging metrics create:*)"
     ],
     "deny": [],
     "ask": []

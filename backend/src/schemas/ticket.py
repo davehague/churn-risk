@@ -29,7 +29,7 @@ class TicketResponse(BaseModel):
     id: str
     external_id: str
     subject: str
-    content: str
+    content: str | None  # Some tickets may not have content
     sentiment_score: SentimentScore | None
     sentiment_confidence: float | None
     sentiment_analyzed_at: datetime | None

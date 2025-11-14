@@ -37,7 +37,7 @@ class Ticket(Base, UUIDMixin, TimestampMixin):
     contact_id = Column(UUID(as_uuid=True), ForeignKey("contacts.id", ondelete="SET NULL"), nullable=True, index=True)
 
     subject = Column(String(500), nullable=False)
-    content = Column(Text, nullable=False)
+    content = Column(Text, nullable=True)  # Some tickets may not have content
     status = Column(SQLEnum(TicketStatus), default=TicketStatus.NEW, nullable=False)
 
     # HubSpot metadata

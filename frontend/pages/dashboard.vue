@@ -403,7 +403,8 @@ function getSentimentLabel(sentiment: string | null): string {
 }
 
 // Truncate content to 150 characters
-function truncateContent(content: string): string {
+function truncateContent(content: string | null): string {
+  if (!content) return '(No content)'
   if (content.length <= 150) return content
   return content.substring(0, 150) + '...'
 }

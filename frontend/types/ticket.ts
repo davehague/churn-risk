@@ -28,7 +28,7 @@ export interface Ticket {
   id: string
   external_id: string
   subject: string
-  content: string
+  content: string | null
   sentiment_score: SentimentScore | null
   sentiment_confidence: number | null
   sentiment_analyzed_at: string | null

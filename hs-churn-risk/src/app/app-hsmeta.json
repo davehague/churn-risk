@@ -9,7 +9,8 @@
       "type": "oauth",
       "redirectUrls": [
         "http://localhost:3000",
-        "http://localhost:8000/api/v1/integrations/hubspot/callback"
+        "http://localhost:8000/api/v1/integrations/hubspot/callback",
+        "https://churn-risk-api-461448724047.us-east1.run.app/api/v1/integrations/hubspot/callback"
       ],
       "requiredScopes": [
         "oauth",

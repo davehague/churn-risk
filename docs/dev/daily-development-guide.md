@@ -226,7 +226,29 @@ poetry run alembic history
 
 # Connect to database via psql
 docker exec -it churn_risk_dev psql -U postgres -d churn_risk_dev
+
+# Connect via DBeaver (GUI)
+# See connection details below
 ```
+
+**DBeaver Connection**:
+
+If you prefer a GUI, use these connection settings in DBeaver:
+
+1. **Create New Connection** → PostgreSQL
+2. **Connection Settings**:
+   - Host: `localhost`
+   - Port: `5432`
+   - Database: `churn_risk_dev`
+   - Username: `postgres`
+   - Password: `password`
+   - Show all databases: ✓ (checked)
+3. **Test Connection** → Should succeed
+4. **Save**
+
+**Quick Access**:
+- Tables are in: `churn_risk_dev` → `Schemas` → `public` → `Tables`
+- View all 11 tables: tenants, users, integrations, companies, contacts, tickets, ticket_topics, ticket_topic_assignments, churn_risk_cards, churn_risk_comments, alembic_version
 
 ### Code Quality
 

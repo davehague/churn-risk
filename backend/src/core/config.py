@@ -1,5 +1,12 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List, Optional
+from dotenv import load_dotenv
+import os
+
+# Explicitly load .env file before Settings class is instantiated
+# Use override=True to ensure .env values take precedence over shell environment variables
+env_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
+load_dotenv(env_path, override=True)
 
 
 class Settings(BaseSettings):

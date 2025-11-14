@@ -355,9 +355,35 @@ cd frontend && npm run dev
 
 ### Database GUI
 
-**Recommended**: Postico (macOS) or pgAdmin
+**Recommended**: DBeaver (cross-platform), Postico (macOS), or pgAdmin
 
-**Connection details**:
+**DBeaver Setup** (Most popular, works on all platforms):
+
+1. **Download**: https://dbeaver.io/download/
+2. **Install**: Follow installer for your OS
+3. **Create Connection**:
+   - Click "New Database Connection" (plug icon)
+   - Select **PostgreSQL**
+   - Click **Next**
+4. **Connection Settings**:
+   - Host: `localhost`
+   - Port: `5432`
+   - Database: `churn_risk_dev`
+   - Username: `postgres`
+   - Password: `password`
+   - Show all databases: ✓ (check this)
+5. **Test Connection** → Should succeed
+6. **Click Finish**
+
+**Access Tables**:
+- Navigate: `churn_risk_dev` → `Schemas` → `public` → `Tables`
+- You'll see all 11 tables: tenants, users, integrations, companies, contacts, tickets, etc.
+
+**Alternative Tools**:
+- **Postico** (macOS only): https://eggerapps.at/postico/
+- **pgAdmin** (cross-platform): https://www.pgadmin.org/
+
+All use the same connection details:
 - Host: `localhost`
 - Port: `5432`
 - Database: `churn_risk_dev`

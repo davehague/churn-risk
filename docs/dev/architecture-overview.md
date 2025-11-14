@@ -1,6 +1,6 @@
 # Architecture Overview - Churn Risk App
 
-**Last Updated:** 2025-11-12
+**Last Updated:** 2025-11-14
 
 A simple, high-level view of the Churn Risk App architecture and how components connect.
 
@@ -128,8 +128,8 @@ Frontend:    npm run dev
 ```
 Backend:     Cloud Run (containerized FastAPI)
 Database:    Cloud SQL for PostgreSQL (managed service)
-Redis:       Memorystore for Redis (managed service)
-Frontend:    Cloud Run or Cloud Storage + Cloud CDN
+Redis:       Memorystore for Redis (planned)
+Frontend:    Cloud Storage + Cloud CDN (static site)
 ```
 
 **Key Characteristics:**
@@ -169,7 +169,7 @@ Frontend:    Cloud Run or Cloud Storage + Cloud CDN
 ## Component Descriptions
 
 ### Frontend (Nuxt 3 + Vue 3)
-**Status:** 🟡 Auth complete, features in progress
+**Status:** 🟢 Deployed to production with auth and basic features
 
 **Purpose:** User interface for viewing churn risks, managing topics, and configuring integrations.
 
@@ -181,6 +181,9 @@ Frontend:    Cloud Run or Cloud Storage + Cloud CDN
 - Landing page and dashboard
 - User state management with Pinia
 - CORS-enabled API calls to backend
+- **Production deployment**: Cloud Storage + CDN at http://136.110.172.10/
+- HubSpot OAuth integration working
+- Ticket import and display functionality
 
 **What's Missing:**
 - Dashboard with charts and analytics
@@ -352,7 +355,7 @@ Backend → Exchange code for tokens
 
 | Component | Technology | Status |
 |-----------|-----------|--------|
-| **Frontend** | Vue 3, Nuxt 3, Tailwind CSS | 🟡 Auth complete, features pending |
+| **Frontend** | Vue 3, Nuxt 3, Tailwind CSS | 🟢 Deployed with auth and tickets |
 | **Backend** | FastAPI (Python 3.11) | 🟢 Core done |
 | **Database** | PostgreSQL 15, SQLAlchemy | 🟢 Complete |
 | **Auth** | Firebase Admin SDK + Client SDK | 🟢 Fully implemented |
@@ -362,8 +365,8 @@ Backend → Exchange code for tokens
 | **WebSockets** | FastAPI WebSocket | 🔴 Not implemented |
 | **Migrations** | Alembic | 🟢 Complete |
 | **Testing** | pytest, AsyncMock | 🟢 57/57 passing |
-| **Hosting** | GCP Cloud Run, Cloud SQL | 🟢 Deployed with CI/CD |
-| **CI/CD** | Cloud Build, GitHub triggers | 🟢 Automated deployments |
+| **Hosting** | GCP Cloud Run, Cloud SQL, Cloud Storage + CDN | 🟢 Deployed with CI/CD |
+| **CI/CD** | Cloud Build, GitHub triggers | 🟢 Backend automated, frontend manual |
 
 ---
 
@@ -425,10 +428,12 @@ See detailed plan in: `docs/plans/2025-11-06-phase-1-mvp-implementation.md`
 
 - **All Tests:** 57/57 passing (unit + integration)
   - Unit tests: Auth, models, AI service, HubSpot client, ticket import
-  - Integration tests: Auth registration, HubSpot OAuth flow
-- **CI/CD:** Automated test runs on every push (SQLite)
+  - Integration tests: Auth registration, HubSpot OAuth flow, ticket import with nullable content
+- **CI/CD:** Automated test runs on every push to main (SQLite)
 - **Smoke Tests:** `backend/scripts/smoke_test.py`
-- **Manual Testing:** Frontend test page at http://localhost:3000
+- **Production Testing:**
+  - Frontend: http://136.110.172.10/
+  - Backend: https://churn-risk-api-461448724047.us-east1.run.app
 - **Full Guide:** `docs/dev/testing-guide.md`
 
 ---

@@ -5,14 +5,16 @@ A multi-tenant SaaS application that analyzes HubSpot support tickets for sentim
 ## Architecture
 
 - **Backend**: FastAPI on GCP Cloud Run ✅ **Deployed**
-- **Frontend**: Vue 3/Nuxt (local development)
+- **Frontend**: Vue 3/Nuxt on Cloud Storage + CDN ✅ **Deployed**
 - **Database**: Cloud SQL PostgreSQL ✅ **Production**
 - **Authentication**: Firebase Auth ✅ **Implemented**
 - **AI**: OpenRouter for LLM analysis ✅ **Working**
 - **Integration**: HubSpot OAuth ✅ **Connected**
 - **CI/CD**: Cloud Build with automated deployments ✅ **Active**
 
-**Production URL**: https://churn-risk-api-461448724047.us-east1.run.app
+**Production URLs**:
+- Frontend: http://136.110.172.10/
+- Backend API: https://churn-risk-api-461448724047.us-east1.run.app
 
 ## Tech Stack
 
@@ -136,9 +138,20 @@ churn-risk-app/
 
 ## Current Status
 
-**Deployment**: ✅ Production backend deployed to GCP Cloud Run with CI/CD
+**Deployment**: ✅ Full-stack production deployment on GCP
+- Backend: Cloud Run with automated CI/CD
+- Frontend: Cloud Storage + CDN (manual deployment)
+- Database: Cloud SQL PostgreSQL with nullable content support
+
 **Testing**: ✅ 57/57 tests passing (automated on every push)
-**Next**: Feature development (ticket import, churn risk cards, dashboard UI)
+
+**Working Features**:
+- User registration and authentication
+- HubSpot OAuth integration
+- Ticket import with AI sentiment analysis
+- Dashboard with ticket display
+
+**Next**: Feature development (churn risk cards, analytics dashboard, kanban board)
 
 **See**: `CLAUDE.md` for detailed status and next steps
 

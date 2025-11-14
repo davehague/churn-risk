@@ -1,6 +1,6 @@
 # GCP Daily Operations Guide - Churn Risk App
 
-**Last Updated:** 2025-11-12
+**Last Updated:** 2025-11-14
 **Project:** churn-risk-app
 **Project ID:** churn-risk-app (actual ID: 461448724047)
 
@@ -12,6 +12,43 @@ This guide helps you quickly locate and access all GCP resources after returning
 
 **Main Dashboard**: https://console.cloud.google.com/
 **Project**: Select "churn-risk-app" from dropdown at top
+
+---
+
+## 🌐 Frontend (Static Site)
+
+**Location**: GCP Console → Cloud Storage → churn-risk-frontend-prod
+
+**Quick Access**: https://console.cloud.google.com/storage/browser
+
+**Deployment Details:**
+- **Bucket**: `churn-risk-frontend-prod`
+- **Region**: `us-east1`
+- **URL**: http://136.110.172.10/
+- **CDN**: Cloud CDN enabled via Load Balancer
+
+**What to Check:**
+1. **Site loads**: Visit http://136.110.172.10/ - should show landing page
+2. **Login works**: Can register/login and access dashboard
+3. **API calls work**: HubSpot OAuth and ticket import functional
+4. **Storage usage**: Check bucket size in Cloud Storage console
+
+**Common Tasks:**
+- **Deploy new version**:
+  ```bash
+  cd frontend
+  npm run generate
+  gsutil -m rsync -R -d .output/public/ gs://churn-risk-frontend-prod/
+  gcloud compute url-maps invalidate-cdn-cache churn-risk-frontend-lb --path="/*"
+  ```
+- **View bucket contents**: Cloud Storage → churn-risk-frontend-prod
+- **Check CDN cache**: Load Balancer → Cloud CDN → Cache hits/misses
+
+**Infrastructure:**
+- Load Balancer: `churn-risk-frontend-lb`
+- Backend Bucket: `churn-risk-frontend-backend`
+- Static IP: `136.110.172.10` (churn-risk-frontend-ip)
+- URL Map: `churn-risk-frontend-lb`
 
 ---
 
@@ -217,9 +254,10 @@ severity>=DEFAULT
 ## 🔄 Common Day-to-Day Tasks
 
 ### Check if Production is Healthy
-1. Visit: https://churn-risk-api-461448724047.us-east1.run.app/health
-2. Should return: `{"status":"healthy"}`
-3. Check Cloud Run metrics for error rate
+1. **Frontend**: Visit http://136.110.172.10/ - should load landing page
+2. **Backend**: Visit https://churn-risk-api-461448724047.us-east1.run.app/health - should return `{"status":"healthy"}`
+3. **End-to-end**: Login at http://136.110.172.10/login, connect to HubSpot, import tickets
+4. Check Cloud Run metrics for error rate
 
 ### View Recent Deployments
 1. Go to Cloud Build → History
@@ -292,8 +330,11 @@ gcloud run deploy churn-risk-api \
 
 | Resource | Direct Link |
 |----------|------------|
-| Production Service | https://churn-risk-api-461448724047.us-east1.run.app |
+| **Frontend (User UI)** | http://136.110.172.10/ |
+| **Backend API** | https://churn-risk-api-461448724047.us-east1.run.app |
 | Cloud Run Console | https://console.cloud.google.com/run |
+| Cloud Storage | https://console.cloud.google.com/storage/browser |
+| Load Balancer | https://console.cloud.google.com/net-services/loadbalancing/list |
 | Cloud SQL Console | https://console.cloud.google.com/sql/instances |
 | Secret Manager | https://console.cloud.google.com/security/secret-manager |
 | Build History | https://console.cloud.google.com/cloud-build/builds |

@@ -357,6 +357,40 @@ When making changes that affect authentication or API calls:
 4. Test API calls handle 401 errors correctly
 5. Test OAuth flows complete successfully
 
+## Production Deployment
+
+**Current Status**: ✅ **Deployed to GCP**
+
+**Production URL**: http://136.110.172.10/
+
+**Infrastructure**:
+- **Hosting**: Cloud Storage bucket (`churn-risk-frontend-prod`)
+- **CDN**: Cloud CDN via Load Balancer
+- **IP Address**: 136.110.172.10 (static)
+- **Region**: us-east1
+
+**Deployment Process**:
+```bash
+# 1. Build production static site
+cd frontend
+npm run generate
+
+# 2. Deploy to Cloud Storage
+gsutil -m rsync -R -d .output/public/ gs://churn-risk-frontend-prod/
+
+# 3. Invalidate CDN cache
+gcloud compute url-maps invalidate-cdn-cache churn-risk-frontend-lb --path="/*"
+```
+
+**Environment Configuration**:
+- Production environment variables in `.env.production`
+- API base URL: `https://churn-risk-api-461448724047.us-east1.run.app`
+- Firebase config uses production Firebase project
+
+**CI/CD**: Manual deployment (cloudbuild.yaml exists but trigger not yet created)
+
+**Documentation**: See `docs/plans/frontend-deployment/` for complete deployment guide
+
 ## References
 
 - **Nuxt 3 Docs**: https://nuxt.com

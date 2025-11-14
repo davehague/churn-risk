@@ -1,6 +1,6 @@
 # Testing Guide - Sanity Tests
 
-**Last Updated:** 2025-11-08
+**Last Updated:** 2025-11-14
 
 This guide provides step-by-step instructions for validating the Churn Risk App is working correctly before continuing development.
 
@@ -217,7 +217,7 @@ cd backend
 poetry run pytest
 ```
 
-**Expected:** 33/33 tests passing (10 auth tests + 23 other tests)
+**Expected:** 57/57 tests passing (includes auth, models, integrations, and ticket import tests)
 
 ### Run Specific Test Files
 
@@ -329,8 +329,13 @@ Before moving to cloud deployment, verify:
 - ✅ Frontend auth UI complete (landing, register, login, dashboard)
 - ✅ Protected routes with auth middleware working
 - ✅ Frontend can call backend APIs (CORS working)
-- ✅ 33/33 tests passing (10 auth + 23 other)
+- ✅ 57/57 tests passing (all unit + integration tests)
 - ✅ No TypeScript errors in frontend
+- ✅ **Production Deployed:**
+  - Frontend: http://136.110.172.10/ (Cloud Storage + CDN)
+  - Backend: https://churn-risk-api-461448724047.us-east1.run.app
+- ✅ Ticket import with nullable content working
+- ✅ AI sentiment analysis operational
 
 ---
 
@@ -346,5 +351,6 @@ See: `docs/plans/2025-11-06-phase-1-mvp-implementation.md`
 
 ---
 
-**Last Tested:** 2025-11-08
-**Test Environment:** macOS, Docker Desktop, Python 3.12, Node.js 18+
+**Last Tested:** 2025-11-14
+**Test Environment:** macOS, Docker Desktop, Python 3.11, Node.js 18+
+**Production:** GCP Cloud Run (backend), Cloud Storage + CDN (frontend)

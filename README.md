@@ -25,6 +25,10 @@ A multi-tenant SaaS application that analyzes HubSpot support tickets for sentim
 
 ## Getting Started
 
+**📖 Setup Guides** (choose based on your situation):
+- 🔄 **Returning developer?** → [Daily Development Guide](docs/dev/daily-development-guide.md) - 5 min quick start
+- 🆕 **First time setup?** → [First-Time Setup Guide](docs/dev/first-time-setup.md) - Complete 30-60 min guide
+
 ### Prerequisites
 
 - Python 3.11+
@@ -94,9 +98,12 @@ ENVIRONMENT=development
 CORS_ORIGINS=http://localhost:3000,http://localhost:8000
 ```
 
-**See detailed setup guides:**
-- [HubSpot OAuth Setup](docs/dev/hubspot-oauth-setup.md)
-- [Full Development Guide](CLAUDE.md)
+**See detailed guides:**
+- [Daily Development Guide](docs/dev/daily-development-guide.md) - Quick start for returning developers
+- [First-Time Setup Guide](docs/dev/first-time-setup.md) - Complete setup for new developers
+- [HubSpot OAuth Setup](docs/dev/hubspot-oauth-setup.md) - HubSpot integration details
+- [Testing Guide](docs/dev/testing-guide.md) - Running and writing tests
+- [Full Development Guide](CLAUDE.md) - Complete project overview
 
 ### Access
 

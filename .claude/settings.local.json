@@ -69,7 +69,9 @@
       "Bash(npx tsc:*)",
       "Bash(npx eslint .)",
       "Bash(npx eslint:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tailwindcss:*)"
     ],
     "deny": [],
     "ask": []

@@ -34,8 +34,9 @@ export const useAuth = () => {
       const credential = await signInWithEmailAndPassword($auth, email, password)
       idToken.value = await credential.user.getIdToken()
       return credential.user
-    } catch (error: any) {
-      throw new Error(error.message)
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Sign in failed'
+      throw new Error(message)
     }
   }
 
@@ -45,8 +46,9 @@ export const useAuth = () => {
       user.value = null
       idToken.value = null
       router.push('/login')
-    } catch (error: any) {
-      throw new Error(error.message)
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Sign out failed'
+      throw new Error(message)
     }
   }
 

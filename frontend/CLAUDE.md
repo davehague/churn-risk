@@ -173,19 +173,44 @@ const apiUrl = config.public.apiBase
 
 ### Error Handling
 
-Always handle 401 errors (expired/invalid tokens):
+**ALWAYS use `unknown` with type assertions in catch blocks** for type safety:
 
 ```typescript
+// ✅ CORRECT - Type-safe error handling
 try {
-  const data = await $fetch(/* ... */)
-} catch (error: any) {
-  if (error?.statusCode === 401) {
+  const data = await $fetch<User>('/api/v1/me')
+} catch (error: unknown) {
+  const apiError = error as { statusCode?: number; data?: { detail?: string } }
+
+  if (apiError.statusCode === 401) {
     const { signOut } = useAuth()
     await signOut()
     navigateTo('/login')
   }
+
+  console.error('API error:', apiError.data?.detail)
+}
+
+// ✅ CORRECT - Firebase auth errors
+try {
+  await signIn(email, password)
+} catch (error: unknown) {
+  const authError = error as { code?: string; message?: string }
+
+  if (authError.code === 'auth/invalid-credential') {
+    // Handle specific error
+  }
+}
+
+// ❌ WRONG - Don't use 'any'
+} catch (error: any) {
+  if (error?.statusCode === 401) { ... }
 }
 ```
+
+**Common error shapes**:
+- Firebase: `{ code?: string; message?: string }`
+- API errors: `{ statusCode?: number; data?: { detail?: string } }`
 
 ## Firebase Authentication
 
@@ -250,6 +275,19 @@ Use Tailwind utility classes for all styling:
   <h1 class="text-3xl font-bold text-gray-900">Title</h1>
 </div>
 ```
+
+**DO NOT** write custom CSS for utilities Tailwind already provides:
+```vue
+<!-- ❌ WRONG - Custom CSS duplicating Tailwind -->
+<style scoped>
+.line-clamp-2 { -webkit-line-clamp: 2; }
+</style>
+
+<!-- ✅ CORRECT - Use Tailwind's built-in utility -->
+<h3 class="line-clamp-2">{{ title }}</h3>
+```
+
+Common utilities to use instead of custom CSS: `line-clamp-{n}`, `truncate`, `flex`, `grid`, `space-{x|y}-{n}`, `divide-{x|y}`.
 
 ### Icons
 

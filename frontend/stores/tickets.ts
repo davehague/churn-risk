@@ -110,12 +110,13 @@ export const useTicketsStore = defineStore('tickets', {
 
         this.tickets = data.tickets
         this.lastSync = new Date()
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Failed to fetch tickets:', error)
-        this.error = error.message || 'Failed to fetch tickets'
+        const errorMessage = error instanceof Error ? error.message : 'Failed to fetch tickets'
+        this.error = errorMessage
 
         // Handle 401 - token expired or invalid
-        if (error?.statusCode === 401) {
+        if (typeof error === 'object' && error !== null && 'statusCode' in error && error.statusCode === 401) {
           const { signOut } = useAuth()
           await signOut()
         }
@@ -155,17 +156,19 @@ export const useTicketsStore = defineStore('tickets', {
         await this.fetchTickets()
 
         return data
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Failed to import tickets:', error)
-        this.error = error.message || 'Failed to import tickets'
+        const errorMessage = error instanceof Error ? error.message : 'Failed to import tickets'
+        this.error = errorMessage
 
         // Handle specific error cases
-        if (error?.statusCode === 401) {
+        const statusCode = typeof error === 'object' && error !== null && 'statusCode' in error ? error.statusCode : null
+        if (statusCode === 401) {
           const { signOut } = useAuth()
           await signOut()
-        } else if (error?.statusCode === 404) {
+        } else if (statusCode === 404) {
           this.error = 'HubSpot integration not connected. Please connect HubSpot first.'
-        } else if (error?.statusCode === 429) {
+        } else if (statusCode === 429) {
           this.error = 'Rate limit reached. Please try again later.'
         }
 

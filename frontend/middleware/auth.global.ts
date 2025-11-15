@@ -2,7 +2,7 @@ export default defineNuxtRouteMiddleware((to) => {
   const { user, loading, initAuth } = useAuth()
 
   // Initialize auth listener on first run
-  if (process.client && loading.value) {
+  if (import.meta.client && loading.value) {
     initAuth()
   }
 

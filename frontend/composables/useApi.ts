@@ -8,9 +8,14 @@ export const useApi = <T>(url: string, options: UseFetchOptions<T> = {}) => {
     baseURL: config.public.apiBase,
     onRequest({ options }) {
       if (idToken.value) {
-        const headers = options.headers || {}
-        ;(options.headers as any) = {
-          ...headers,
+        // Merge headers - ofetch accepts plain objects despite Headers typing
+        const currentHeaders = options.headers instanceof Headers
+          ? Object.fromEntries(options.headers.entries())
+          : (options.headers || {});
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (options.headers as any) = {
+          ...currentHeaders,
           Authorization: `Bearer ${idToken.value}`
         }
       }

@@ -36,7 +36,7 @@ export const useUserStore = defineStore('user', {
         console.error('Failed to fetch user:', error)
 
         // Handle 401 - token expired or invalid
-        if ((error as any)?.statusCode === 401) {
+        if (typeof error === 'object' && error !== null && 'statusCode' in error && error.statusCode === 401) {
           const { signOut } = useAuth()
           await signOut()
         }

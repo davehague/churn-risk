@@ -23,7 +23,7 @@
                 <p class="text-sm text-green-800">{{ successMessage }}</p>
               </div>
               <div class="ml-auto pl-3">
-                <button @click="successMessage = ''" class="inline-flex text-green-500 hover:text-green-700">
+                <button class="inline-flex text-green-500 hover:text-green-700" @click="successMessage = ''">
                   <X class="h-5 w-5" />
                 </button>
               </div>
@@ -39,7 +39,7 @@
                 <p class="text-sm text-red-800">{{ errorMessage }}</p>
               </div>
               <div class="ml-auto pl-3">
-                <button @click="errorMessage = ''" class="inline-flex text-red-500 hover:text-red-700">
+                <button class="inline-flex text-red-500 hover:text-red-700" @click="errorMessage = ''">
                   <X class="h-5 w-5" />
                 </button>
               </div>
@@ -74,18 +74,18 @@
                     <div class="flex space-x-3">
                       <button
                         v-if="!hubspotIntegration"
-                        @click="connectHubSpot"
                         :disabled="loading"
                         class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        @click="connectHubSpot"
                       >
                         <Loader2 v-if="loading" class="animate-spin -ml-1 mr-2 h-4 w-4" />
                         Connect
                       </button>
                       <button
                         v-else
-                        @click="disconnectHubSpot"
                         :disabled="loading"
                         class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        @click="disconnectHubSpot"
                       >
                         Disconnect
                       </button>
@@ -111,6 +111,7 @@
 
 <script setup lang="ts">
 import { CheckCircle2, AlertCircle, X, Loader2 } from 'lucide-vue-next'
+import type { Integration } from '~/types/integration'
 
 // Note: Auth protection handled by auth.global.ts middleware
 
@@ -120,7 +121,7 @@ const route = useRoute()
 
 // State
 const loading = ref(false)
-const hubspotIntegration = ref<any>(null)
+const hubspotIntegration = ref<Integration | null>(null)
 const successMessage = ref('')
 const errorMessage = ref('')
 
@@ -144,16 +145,17 @@ async function fetchIntegrations() {
   }
 
   try {
-    const integrations = await $fetch<any[]>(`${config.public.apiBase}/api/v1/integrations`, {
+    const integrations = await $fetch<Integration[]>(`${config.public.apiBase}/api/v1/integrations`, {
       headers: {
         Authorization: `Bearer ${idToken.value}`
       }
     })
 
-    hubspotIntegration.value = integrations.find((i: any) => i.type === 'hubspot')
-  } catch (error: any) {
+    hubspotIntegration.value = integrations.find(i => i.type === 'hubspot') || null
+  } catch (error: unknown) {
+    const apiError = error as { statusCode?: number }
     console.error('Failed to fetch integrations:', error)
-    if (error?.statusCode === 401) {
+    if (apiError.statusCode === 401) {
       await signOut()
       navigateTo('/login')
     }
@@ -178,9 +180,10 @@ async function connectHubSpot() {
 
     // Redirect to HubSpot OAuth
     window.location.href = data.authorization_url
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const apiError = error as { data?: { detail?: string } }
     console.error('Failed to get HubSpot auth URL:', error)
-    errorMessage.value = error?.data?.detail || 'Failed to connect to HubSpot'
+    errorMessage.value = apiError.data?.detail || 'Failed to connect to HubSpot'
     loading.value = false
   }
 }
@@ -207,9 +210,10 @@ async function disconnectHubSpot() {
 
     successMessage.value = 'HubSpot disconnected successfully'
     hubspotIntegration.value = null
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const apiError = error as { data?: { detail?: string } }
     console.error('Failed to disconnect HubSpot:', error)
-    errorMessage.value = error?.data?.detail || 'Failed to disconnect HubSpot'
+    errorMessage.value = apiError.data?.detail || 'Failed to disconnect HubSpot'
   } finally {
     loading.value = false
   }

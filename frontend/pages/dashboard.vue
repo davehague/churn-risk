@@ -10,9 +10,9 @@
             </div>
             <div class="mt-4 flex md:mt-0 md:ml-4">
               <button
-                @click="handleRefresh"
                 :disabled="ticketsStore.importing || !hasHubSpotIntegration"
                 class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                @click="handleRefresh"
               >
                 <RefreshCw v-if="!ticketsStore.importing" class="mr-2 -ml-1 h-5 w-5 text-gray-500" />
                 <Loader2 v-else class="animate-spin mr-2 -ml-1 h-5 w-5 text-gray-500" />
@@ -38,7 +38,7 @@
               <p class="text-sm text-green-800">HubSpot connected successfully!</p>
             </div>
             <div class="ml-auto pl-3">
-              <button @click="oauthSuccess = false" class="inline-flex text-green-500 hover:text-green-700">
+              <button class="inline-flex text-green-500 hover:text-green-700" @click="oauthSuccess = false">
                 <X class="h-5 w-5" />
               </button>
             </div>
@@ -54,7 +54,7 @@
               <p class="text-sm text-red-800">{{ oauthErrorMessage || 'Failed to connect to HubSpot' }}</p>
             </div>
             <div class="ml-auto pl-3">
-              <button @click="oauthError = false" class="inline-flex text-red-500 hover:text-red-700">
+              <button class="inline-flex text-red-500 hover:text-red-700" @click="oauthError = false">
                 <X class="h-5 w-5" />
               </button>
             </div>
@@ -76,9 +76,9 @@
               </div>
               <div class="mt-4">
                 <button
-                  @click="connectHubSpot"
                   :disabled="connecting"
                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  @click="connectHubSpot"
                 >
                   {{ connecting ? 'Connecting...' : 'Connect HubSpot' }}
                 </button>
@@ -92,13 +92,13 @@
             <button
               v-for="tab in tabs"
               :key="tab.id"
-              @click="activeTab = tab.id"
               :class="[
                 activeTab === tab.id
                   ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
                 'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
               ]"
+              @click="activeTab = tab.id"
             >
               {{ tab.label }}
               <span
@@ -133,10 +133,10 @@
         <div v-if="ticketsStore.loading && !ticketsStore.tickets.length" class="mt-6">
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div v-for="i in 6" :key="i" class="bg-white rounded-lg shadow p-6 animate-pulse">
-              <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-              <div class="h-3 bg-gray-200 rounded w-full mb-2"></div>
-              <div class="h-3 bg-gray-200 rounded w-5/6 mb-2"></div>
-              <div class="h-3 bg-gray-200 rounded w-4/6"></div>
+              <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"/>
+              <div class="h-3 bg-gray-200 rounded w-full mb-2"/>
+              <div class="h-3 bg-gray-200 rounded w-5/6 mb-2"/>
+              <div class="h-3 bg-gray-200 rounded w-4/6"/>
             </div>
           </div>
         </div>
@@ -153,9 +153,9 @@
             </p>
             <div class="mt-6">
               <button
-                @click="handleRefresh"
                 :disabled="ticketsStore.importing"
                 class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                @click="handleRefresh"
               >
                 {{ ticketsStore.importing ? 'Importing...' : 'Import Tickets' }}
               </button>
@@ -168,8 +168,8 @@
           <div
             v-for="ticket in filteredTickets"
             :key="ticket.id"
-            @click="handleTicketClick(ticket)"
             class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer p-6"
+            @click="handleTicketClick(ticket)"
           >
             <!-- Sentiment Badge -->
             <div class="mb-3">
@@ -466,19 +466,3 @@ onMounted(async () => {
   }
 })
 </script>
-
-<style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>

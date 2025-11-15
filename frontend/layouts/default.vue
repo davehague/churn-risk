@@ -36,8 +36,8 @@
           <div class="flex items-center">
             <span class="text-sm text-gray-700 mr-4">{{ currentUser?.name }}</span>
             <button
-              @click="handleLogout"
               class="text-sm text-gray-700 hover:text-gray-900"
+              @click="handleLogout"
             >
               Logout
             </button>

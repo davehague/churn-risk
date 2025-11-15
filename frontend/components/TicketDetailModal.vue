@@ -4,20 +4,20 @@
       <div
         v-if="ticketsStore.selectedTicket"
         class="fixed inset-0 z-50 overflow-y-auto"
-        @click.self="closeModal"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
+        @click.self="closeModal"
       >
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
 
         <!-- Modal Container -->
         <div class="flex min-h-full items-center justify-center p-4">
           <div
+            ref="modalRef"
             class="relative bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] flex flex-col"
             @click.stop
-            ref="modalRef"
           >
             <!-- Header -->
             <div class="px-6 py-4 border-b border-gray-200">
@@ -49,9 +49,9 @@
 
                 <!-- Close Button -->
                 <button
-                  @click="closeModal"
                   class="ml-4 bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   aria-label="Close modal"
+                  @click="closeModal"
                 >
                   <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -183,7 +183,7 @@
                         class="h-2.5 rounded-full transition-all"
                         :class="getConfidenceBarColor(ticketsStore.selectedTicket.sentiment_confidence)"
                         :style="{ width: `${ticketsStore.selectedTicket.sentiment_confidence * 100}%` }"
-                      ></div>
+                      />
                     </div>
                   </div>
 
@@ -199,8 +199,8 @@
             <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
               <button
-                @click="closeModal"
                 class="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                @click="closeModal"
               >
                 Close
               </button>

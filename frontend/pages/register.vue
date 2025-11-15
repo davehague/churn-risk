@@ -14,7 +14,7 @@
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <form @submit.prevent="handleSubmit" class="space-y-6">
+        <form class="space-y-6" @submit.prevent="handleSubmit">
           <!-- Email -->
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">
@@ -26,7 +26,7 @@
               type="email"
               required
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
+            >
           </div>
 
           <!-- Name -->
@@ -40,7 +40,7 @@
               type="text"
               required
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
+            >
           </div>
 
           <!-- Company Name -->
@@ -53,9 +53,9 @@
               v-model="form.companyName"
               type="text"
               required
-              @input="onCompanyNameChange"
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
+              @input="onCompanyNameChange"
+            >
           </div>
 
           <!-- Subdomain -->
@@ -70,9 +70,9 @@
                 type="text"
                 required
                 pattern="[a-z0-9][a-z0-9-]*[a-z0-9]"
-                @input="onSubdomainChange"
                 class="flex-1 block w-full border border-gray-300 rounded-l-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
+                @input="onSubdomainChange"
+              >
               <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                 .yourapp.com
               </span>
@@ -103,7 +103,7 @@
               required
               minlength="8"
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
+            >
             <p v-if="form.password && !isPasswordStrong" class="mt-1 text-sm text-red-600">
               Password must be at least 8 characters with uppercase, lowercase, and number
             </p>
@@ -123,7 +123,7 @@
               type="password"
               required
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
+            >
             <p v-if="form.confirmPassword && form.password !== form.confirmPassword" class="mt-1 text-sm text-red-600">
               Passwords do not match
             </p>
@@ -267,9 +267,10 @@ const handleSubmit = async () => {
       path: '/login',
       query: { registered: 'true', email: form.email }
     })
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const apiError = err as { data?: { detail?: string } }
     console.error('Registration failed:', err)
-    error.value = err.data?.detail || 'Registration failed. Please try again.'
+    error.value = apiError.data?.detail || 'Registration failed. Please try again.'
   } finally {
     submitting.value = false
   }

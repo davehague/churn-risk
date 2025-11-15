@@ -93,7 +93,7 @@ class TicketImportService:
         for i, ticket_data in enumerate(tickets_data, 1):
             try:
                 logger.info(f"[Ticket Import] Processing ticket {i}/{len(tickets_data)}: {ticket_data.get('id')}")
-                await self._process_ticket(tenant_id, ticket_data, result, integration)
+                await self._process_ticket(tenant_id, ticket_data, result, integration, client)
             except Exception as e:
                 logger.error(f"[Ticket Import] Failed to process ticket {ticket_data.get('id')}: {e}", exc_info=True)
                 result.failed += 1
@@ -194,7 +194,8 @@ class TicketImportService:
         tenant_id: UUID,
         ticket_data: Dict[str, Any],
         result: ImportResult,
-        integration: Integration
+        integration: Integration,
+        client: HubSpotClient
     ) -> None:
         """
         Process a single ticket: upsert to DB and analyze if needed.
@@ -204,6 +205,7 @@ class TicketImportService:
             ticket_data: Raw ticket data from HubSpot
             result: ImportResult to update with counts
             integration: HubSpot integration with credentials
+            client: HubSpot API client for fetching email threads
         """
         properties = ticket_data.get("properties", {})
         external_id = ticket_data.get("id")
@@ -215,9 +217,15 @@ class TicketImportService:
 
         # Extract ticket fields
         subject = properties.get("subject", "No Subject")
-        content = properties.get("content", "")
+        initial_content = properties.get("content", "")
         status_str = properties.get("hs_pipeline_stage", "new")
         priority = properties.get("hs_ticket_priority")  # Can be None, HIGH, MEDIUM, LOW, etc.
+
+        # Fetch email thread for full context
+        email_thread_data = await self._fetch_email_thread(client, external_id)
+
+        # Build full content: initial ticket description + email thread
+        content = self._build_ticket_content(subject, initial_content, email_thread_data)
 
         # Map HubSpot status to our enum
         status = self._map_ticket_status(status_str)
@@ -247,6 +255,11 @@ class TicketImportService:
         # Check if ticket already exists
         existing_ticket = self._get_ticket_by_external_id(tenant_id, external_id)
 
+        # Build source_metadata with email thread
+        source_metadata = dict(properties)
+        if email_thread_data:
+            source_metadata['email_thread'] = email_thread_data
+
         if existing_ticket:
             # Update existing ticket
             existing_ticket.subject = subject
@@ -256,7 +269,7 @@ class TicketImportService:
             existing_ticket.hubspot_updated_at = hubspot_updated_at
             existing_ticket.priority = priority
             existing_ticket.external_url = external_url
-            existing_ticket.source_metadata = properties
+            existing_ticket.source_metadata = source_metadata
 
             ticket = existing_ticket
         else:
@@ -271,7 +284,7 @@ class TicketImportService:
                 hubspot_updated_at=hubspot_updated_at,
                 priority=priority,
                 external_url=external_url,
-                source_metadata=properties
+                source_metadata=source_metadata
             )
             self.db.add(ticket)
             result.imported += 1
@@ -304,6 +317,91 @@ class TicketImportService:
             if ticket.sentiment_score is not None:
                 result.skipped += 1
                 logger.debug(f"Skipping analysis for ticket {external_id} (already analyzed)")
+
+    async def _fetch_email_thread(
+        self,
+        client: HubSpotClient,
+        ticket_id: str
+    ) -> list[Dict[str, Any]]:
+        """
+        Fetch email thread for a ticket from HubSpot.
+
+        Args:
+            client: HubSpot API client
+            ticket_id: HubSpot ticket ID
+
+        Returns:
+            List of email data dictionaries, or empty list if none found
+        """
+        try:
+            emails = await client.get_ticket_email_thread(ticket_id)
+            logger.info(f"[Email Thread] Fetched {len(emails)} emails for ticket {ticket_id}")
+            return emails
+        except Exception as e:
+            logger.warning(f"[Email Thread] Failed to fetch email thread for ticket {ticket_id}: {e}")
+            return []
+
+    def _build_ticket_content(
+        self,
+        subject: str,
+        initial_content: str,
+        email_thread: list[Dict[str, Any]]
+    ) -> str:
+        """
+        Build full ticket content from initial description and email thread.
+
+        This concatenates the initial ticket content with all associated emails
+        to provide complete context for AI sentiment analysis.
+
+        Args:
+            subject: Ticket subject
+            initial_content: Initial ticket description from HubSpot
+            email_thread: List of email data from HubSpot
+
+        Returns:
+            Concatenated content string with subject, initial content, and email thread
+        """
+        # Start with initial content if available
+        content_parts = []
+
+        if initial_content:
+            content_parts.append(f"Initial Description:\n{initial_content}")
+
+        # Add email thread if available
+        if email_thread:
+            content_parts.append("\n\n--- Email Thread ---\n")
+
+            for i, email in enumerate(email_thread, 1):
+                props = email.get("properties", {})
+
+                # Extract email metadata
+                timestamp = props.get("hs_timestamp", "")
+                direction = props.get("hs_email_direction", "UNKNOWN")
+                from_email = props.get("hs_email_from", "")
+                to_email = props.get("hs_email_to", "")
+                email_subject = props.get("hs_email_subject", "")
+
+                # Get email body (prefer text over HTML)
+                email_text = props.get("hs_email_text", "")
+                if not email_text:
+                    # Fallback to HTML if text not available
+                    email_text = props.get("hs_email_html", "")
+
+                # Format email entry
+                email_header = f"\n[Email {i}] {direction}"
+                if timestamp:
+                    email_header += f" at {timestamp}"
+                email_header += f"\nFrom: {from_email}\nTo: {to_email}"
+                if email_subject:
+                    email_header += f"\nSubject: {email_subject}"
+
+                content_parts.append(email_header)
+                if email_text:
+                    content_parts.append(f"\n{email_text}")
+
+        # Join all parts, or return placeholder if completely empty
+        full_content = "\n".join(content_parts).strip()
+        return full_content if full_content else ""
 
     def _get_ticket_by_external_id(
         self,

@@ -16,7 +16,8 @@
         "oauth",
         "crm.objects.contacts.read",
         "crm.objects.companies.read",
-        "tickets"
+        "tickets",
+        "sales-email-read"
       ],
       "optionalScopes": [],
       "conditionallyRequiredScopes": []

@@ -201,13 +201,30 @@ The `useAuth()` composable provides:
 
 ### Protected Routes
 
-Use middleware to protect routes:
+**Global Auth Middleware** (`middleware/auth.global.ts`) automatically protects ALL routes except:
+- `/` (landing page)
+- `/login` (login page)
+- `/register` (registration page)
+
+**No need to add middleware to protected routes** - they're protected by default!
 
 ```typescript
+// ✅ CORRECT - Auth handled globally
 definePageMeta({
-  middleware: 'auth' // Requires authentication
+  layout: 'default'
+  // Note: Auth protection handled by auth.global.ts middleware
+})
+
+// ❌ WRONG - Don't add auth middleware (redundant)
+definePageMeta({
+  middleware: 'auth' // Don't do this!
 })
 ```
+
+The global middleware also:
+- ✅ Redirects unauthenticated users to `/login`
+- ✅ Redirects authenticated users away from `/login` and `/register` to `/dashboard`
+- ✅ Waits for Firebase auth to initialize before making decisions
 
 ## Common Components
 
@@ -232,6 +249,51 @@ Use Tailwind utility classes for all styling:
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <h1 class="text-3xl font-bold text-gray-900">Title</h1>
 </div>
+```
+
+### Icons
+
+**ALWAYS use Lucide icons** (https://lucide.dev/guide/packages/lucide-vue-next) instead of custom SVG:
+
+```vue
+<script setup lang="ts">
+import { CheckCircle2, AlertCircle, X, Loader2 } from 'lucide-vue-next'
+</script>
+
+<template>
+  <!-- Success icon -->
+  <CheckCircle2 class="h-5 w-5 text-green-400" />
+
+  <!-- Error icon -->
+  <AlertCircle class="h-5 w-5 text-red-400" />
+
+  <!-- Loading spinner -->
+  <Loader2 class="animate-spin h-4 w-4" />
+
+  <!-- Close button -->
+  <X class="h-5 w-5" />
+</template>
+```
+
+**DO NOT** create custom SVG icons:
+```vue
+<!-- ❌ WRONG -->
+<svg class="h-5 w-5" viewBox="0 0 20 20">...</svg>
+
+<!-- ✅ CORRECT -->
+<CheckCircle2 class="h-5 w-5" />
+```
+
+### Images and Logos
+
+Use local assets from `public/` directory:
+
+```vue
+<!-- ✅ CORRECT - Local asset -->
+<img src="/HubSpot/HubSpot_Symbol_0.svg" alt="HubSpot" />
+
+<!-- ❌ WRONG - External URL -->
+<img src="https://example.com/logo.svg" alt="Logo" />
 ```
 
 ### Responsive Design

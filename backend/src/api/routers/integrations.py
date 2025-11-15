@@ -50,13 +50,16 @@ async def hubspot_authorize_url(
     }
     state = jwt.encode(state_payload, settings.SECRET_KEY, algorithm="HS256")
 
-    auth_url = (
-        f"https://app.hubspot.com/oauth/authorize"
-        f"?client_id={settings.HUBSPOT_CLIENT_ID}"
-        f"&redirect_uri={settings.HUBSPOT_REDIRECT_URI}"
-        f"&scope=crm.objects.contacts.read crm.objects.companies.read tickets"
-        f"&state={state}"
-    )
+    from urllib.parse import urlencode
+
+    # URL-encode parameters properly
+    params = {
+        "client_id": settings.HUBSPOT_CLIENT_ID,
+        "redirect_uri": settings.HUBSPOT_REDIRECT_URI,
+        "scope": "crm.objects.contacts.read crm.objects.companies.read tickets sales-email-read",
+        "state": state
+    }
+    auth_url = f"https://app.hubspot.com/oauth/authorize?{urlencode(params)}"
 
     return {"authorization_url": auth_url}
 

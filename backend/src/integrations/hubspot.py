@@ -204,6 +204,110 @@ class HubSpotClient:
             response.raise_for_status()
             return response.json()
 
+    async def get_ticket_associations(
+        self,
+        ticket_id: str,
+        association_type: str = "emails"
+    ) -> Dict[str, Any]:
+        """
+        Get associations for a ticket (emails, calls, notes, etc.).
+
+        Args:
+            ticket_id: HubSpot ticket ID
+            association_type: Type of association (default: "emails")
+
+        Returns:
+            Dict with 'results' containing association IDs
+        """
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"{self.BASE_URL}/crm/v4/objects/tickets/{ticket_id}/associations/{association_type}",
+                headers=self.headers,
+                timeout=30.0
+            )
+            response.raise_for_status()
+            return response.json()
+
+    async def get_email(self, email_id: str) -> Dict[str, Any]:
+        """
+        Fetch a single email engagement by ID.
+
+        Args:
+            email_id: HubSpot email engagement ID
+
+        Returns:
+            Dict with email properties including subject, text, html, etc.
+        """
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"{self.BASE_URL}/crm/v3/objects/emails/{email_id}",
+                headers=self.headers,
+                params={
+                    "properties": [
+                        "hs_email_subject",
+                        "hs_email_text",
+                        "hs_email_html",
+                        "hs_timestamp",
+                        "hs_email_direction",
+                        "hs_email_from",
+                        "hs_email_to"
+                    ]
+                },
+                timeout=30.0
+            )
+            response.raise_for_status()
+            return response.json()
+
+    async def get_ticket_email_thread(self, ticket_id: str) -> List[Dict[str, Any]]:
+        """
+        Fetch all emails associated with a ticket, sorted by timestamp.
+
+        This retrieves the complete email conversation thread for a ticket,
+        which provides full context for sentiment analysis.
+
+        Args:
+            ticket_id: HubSpot ticket ID
+
+        Returns:
+            List of email dicts sorted by timestamp (oldest first)
+        """
+        # Get associated email IDs
+        try:
+            associations_response = await self.get_ticket_associations(ticket_id, "emails")
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 404:
+                # No associations found
+                return []
+            raise
+
+        email_ids = [
+            result["toObjectId"]
+            for result in associations_response.get("results", [])
+        ]
+
+        if not email_ids:
+            return []
+
+        # Fetch each email's details
+        emails = []
+        for email_id in email_ids:
+            try:
+                email_data = await self.get_email(email_id)
+                emails.append(email_data)
+            except httpx.HTTPStatusError as e:
+                # Log but continue if individual email fetch fails
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.warning(f"Failed to fetch email {email_id}: {e}")
+                continue
+
+        # Sort by timestamp (oldest first for chronological thread)
+        emails.sort(
+            key=lambda e: e.get("properties", {}).get("hs_timestamp", "0")
+        )
+
+        return emails
+
     async def create_webhook_subscription(
         self,
         webhook_url: str,

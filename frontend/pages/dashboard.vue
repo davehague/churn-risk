@@ -229,6 +229,8 @@
 <script setup lang="ts">
 import { RefreshCw, Loader2, CheckCircle2, AlertCircle, X } from 'lucide-vue-next'
 import type { Ticket } from '~/types/ticket'
+import type { Integration } from '~/types/integration'
+import { IntegrationType, IntegrationStatus } from '~/types/integration'
 
 definePageMeta({
   layout: 'default'
@@ -279,7 +281,7 @@ async function checkHubSpotIntegration() {
   checkingIntegration.value = true
   try {
     console.log('[HubSpot Check] Fetching integrations from API...')
-    const data = await $fetch<any[]>(`${config.public.apiBase}/api/v1/integrations`, {
+    const data = await $fetch<Integration[]>(`${config.public.apiBase}/api/v1/integrations`, {
       headers: {
         Authorization: `Bearer ${idToken.value}`
       }
@@ -289,7 +291,7 @@ async function checkHubSpotIntegration() {
 
     if (data && Array.isArray(data)) {
       // Log what each integration looks like
-      data.forEach((int: any, i: number) => {
+      data.forEach((int: Integration, i: number) => {
         console.log(`[HubSpot Check] Integration ${i}:`, {
           type: int.type,
           status: int.status,
@@ -297,13 +299,15 @@ async function checkHubSpotIntegration() {
         })
       })
 
-      const hubspotIntegration = data.find((int: any) => {
-        console.log('[HubSpot Check] Checking integration type:', int.type, 'against hubspot')
-        return int.type === 'hubspot'
+      const hubspotIntegration = data.find((int: Integration) => {
+        console.log('[HubSpot Check] Checking integration type:', int.type, 'against', IntegrationType.HUBSPOT)
+        return int.type === IntegrationType.HUBSPOT
       })
       console.log('[HubSpot Check] HubSpot integration found:', hubspotIntegration)
 
-      hasHubSpotIntegration.value = data.some((int: any) => int.type === 'hubspot' && int.status === 'active')
+      hasHubSpotIntegration.value = data.some((int: Integration) =>
+        int.type === IntegrationType.HUBSPOT && int.status === IntegrationStatus.ACTIVE
+      )
       console.log('[HubSpot Check] Has active HubSpot integration:', hasHubSpotIntegration.value)
     }
   } catch (error) {

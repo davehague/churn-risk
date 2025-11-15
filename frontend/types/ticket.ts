@@ -33,6 +33,9 @@ export interface Ticket {
   sentiment_confidence: number | null
   sentiment_analyzed_at: string | null
   created_at: string
+  hubspot_created_at: string | null
+  hubspot_updated_at: string | null
+  priority: string | null
   status: TicketStatus
   company: Company | null
   contact: Contact | null

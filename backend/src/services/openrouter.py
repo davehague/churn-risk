@@ -59,6 +59,15 @@ class OpenRouterAnalyzer(TicketAnalyzer):
         # Get system prompt content
         system_prompt = system_prompt_data['content']
 
+        # Determine which model to use (priority: instance model -> prompt metadata -> env var)
+        # The instance's self.model already has the fallback to settings.OPENROUTER_MODEL
+        model_to_use = self.model
+
+        # If no explicit model was passed to __init__, check prompt metadata
+        if model_to_use == settings.OPENROUTER_MODEL:
+            # Use prompt's model if specified, otherwise keep the env var default
+            model_to_use = user_prompt_data['metadata'].get('model', settings.OPENROUTER_MODEL)
+
         async with httpx.AsyncClient() as client:
             response = await client.post(
                 self.base_url,
@@ -67,7 +76,7 @@ class OpenRouterAnalyzer(TicketAnalyzer):
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": self.model,
+                    "model": model_to_use,
                     "messages": [
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": user_prompt}

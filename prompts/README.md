@@ -55,10 +55,15 @@ Your prompt content here. Use {{variable_name}} for substitution.
 | `name` | Yes | Unique identifier for this prompt |
 | `version` | Yes | Semantic version (MAJOR.MINOR.PATCH) |
 | `description` | Yes | What this prompt does |
-| `model` | No | Default model (can be overridden at runtime) |
+| `model` | No | Model to use (defaults to `OPENROUTER_MODEL` from `.env` if not specified) |
 | `temperature` | No | Default temperature (0.0-2.0) |
 | `max_tokens` | No | Default max tokens |
 | `variables` | Yes | List of variable definitions |
+
+**Model Selection Priority:**
+1. Explicit model passed to analyzer constructor (e.g., `OpenRouterAnalyzer(model="gpt-4")`)
+2. Model specified in prompt's frontmatter
+3. `OPENROUTER_MODEL` environment variable (default fallback)
 
 ### Variable Definition
 

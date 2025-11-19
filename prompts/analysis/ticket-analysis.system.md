@@ -2,7 +2,7 @@
 name: "ticket-analysis-system"
 version: "1.0.0"
 description: "System message for ticket sentiment and topic analysis"
-model: "google/gemini-2.5-flash"
+# model: Optional - defaults to OPENROUTER_MODEL from .env
 temperature: 0.7
 max_tokens: 2000
 

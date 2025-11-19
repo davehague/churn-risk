@@ -2,7 +2,7 @@
 name: "ticket-analysis-user"
 version: "1.0.0"
 description: "User prompt for analyzing ticket sentiment and topics"
-model: "google/gemini-2.5-flash"
+# model: Optional - defaults to OPENROUTER_MODEL from .env (currently google/gemini-2.5-flash)
 temperature: 0.7
 max_tokens: 2000
 

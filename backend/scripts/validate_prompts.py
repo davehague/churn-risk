@@ -87,8 +87,12 @@ def main():
     all_errors = []
     total_prompts = 0
 
-    # Find all .md files in prompts directory
+    # Find all .md files in prompts directory (skip README files)
     for prompt_file in prompts_dir.rglob('*.md'):
+        # Skip README files (they're documentation, not prompts)
+        if prompt_file.name.upper() == 'README.MD':
+            continue
+
         total_prompts += 1
         errors = validate_prompt(prompt_file, loader)
 

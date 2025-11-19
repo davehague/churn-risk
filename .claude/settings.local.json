@@ -71,7 +71,8 @@
       "Bash(npx eslint:*)",
       "Bash(git add:*)",
       "Bash(npm install:*)",
-      "Bash(npx tailwindcss:*)"
+      "Bash(npx tailwindcss:*)",
+      "Bash(poetry run pytest:*)"
     ],
     "deny": [],
     "ask": []

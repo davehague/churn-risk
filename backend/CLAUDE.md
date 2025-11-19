@@ -343,6 +343,12 @@ async def test_verify_token():
 - `OpenRouterAnalyzer` - Implements all three ABC interfaces
 - Uses `tenacity` for retry logic with exponential backoff
 - Structured output via Pydantic schemas
+- **Prompts as Code**: LLM prompts loaded from `prompts/` directory (see `prompts/README.md`)
+
+**Prompt Engine** (`src/prompt_engine/`):
+- `PromptLoader` - Loads prompts from Markdown files with YAML frontmatter
+- `PromptCompiler` - Compiles prompts with variable substitution
+- All prompts stored in `/prompts/` directory at project root
 
 **Usage:**
 ```python

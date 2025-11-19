@@ -1,11 +1,13 @@
 import httpx
 import json
+from pathlib import Path
 from typing import List
 from tenacity import retry, stop_after_attempt, wait_exponential
 from src.services.ai_base import TicketAnalyzer
 from src.schemas.ai import SentimentAnalysisResult, TopicClassification, TicketAnalysisResult
 from src.models.ticket import SentimentScore
 from src.core.config import settings
+from src.prompt_engine import PromptLoader, PromptCompiler
 
 
 class OpenRouterAnalyzer(TicketAnalyzer):
@@ -19,6 +21,13 @@ class OpenRouterAnalyzer(TicketAnalyzer):
         self.api_key = api_key
         self.model = model or settings.OPENROUTER_MODEL
         self.base_url = "https://openrouter.ai/api/v1/chat/completions"
+
+        # Initialize prompt engine
+        # Use absolute path to prompts directory (project root / prompts)
+        project_root = Path(__file__).parent.parent.parent.parent
+        prompts_dir = project_root / 'prompts'
+        self.prompt_loader = PromptLoader(str(prompts_dir))
+        self.prompt_compiler = PromptCompiler()
 
     @retry(
         stop=stop_after_attempt(3),
@@ -35,7 +44,20 @@ class OpenRouterAnalyzer(TicketAnalyzer):
 
         Performs both sentiment analysis and topic classification in a single call.
         """
-        prompt = self._build_analysis_prompt(ticket_content, available_topics, training_rules)
+        # Load prompts from files
+        system_prompt_data = self.prompt_loader.load('analysis/ticket-analysis.system')
+        user_prompt_data = self.prompt_loader.load('analysis/ticket-analysis.user')
+
+        # Build the user prompt with variable substitution
+        user_prompt = self._build_analysis_prompt_from_template(
+            user_prompt_data,
+            ticket_content,
+            available_topics,
+            training_rules
+        )
+
+        # Get system prompt content
+        system_prompt = system_prompt_data['content']
 
         async with httpx.AsyncClient() as client:
             response = await client.post(
@@ -47,8 +69,8 @@ class OpenRouterAnalyzer(TicketAnalyzer):
                 json={
                     "model": self.model,
                     "messages": [
-                        {"role": "system", "content": "You are an expert at analyzing customer support tickets."},
-                        {"role": "user", "content": prompt}
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt}
                     ],
                     "response_format": {"type": "json_object"}
                 },
@@ -87,45 +109,39 @@ class OpenRouterAnalyzer(TicketAnalyzer):
 
             return self._parse_analysis_result(parsed)
 
-    def _build_analysis_prompt(
+    def _build_analysis_prompt_from_template(
         self,
+        prompt_data: dict,
         ticket_content: str,
         available_topics: List[str] | None,
         training_rules: List[str] | None
     ) -> str:
-        """Build the prompt for ticket analysis."""
-        prompt = f"""Analyze this customer support ticket for sentiment and topics.
+        """
+        Build the analysis prompt from template with variable substitution.
 
-Ticket Content:
-{ticket_content}
-
-Tasks:
-1. Determine the sentiment (very_negative, negative, neutral, positive, very_positive)
-2. Provide a confidence score (0.0 to 1.0) for the sentiment
-3. Briefly explain your sentiment reasoning
-"""
-
+        This handles the conditional logic for topics and training rules in code,
+        then uses the template engine for variable substitution.
+        """
+        # Build conditional sections in code (logic stays in code, not templates)
         if available_topics:
-            prompt += f"""
+            topics_section = f"""
 4. Classify the ticket into one or more of these topics:
 {', '.join(available_topics)}
-5. For each topic, provide a confidence score (0.0 to 1.0)
-"""
-
-            if training_rules:
-                prompt += f"""
-User Training Rules (apply these when classifying):
-{chr(10).join(f'- {rule}' for rule in training_rules)}
-"""
+5. For each topic, provide a confidence score (0.0 to 1.0)"""
         else:
-            prompt += """
+            topics_section = """
 4. Suggest 2-3 topic categories for this ticket
-5. For each suggested topic, provide a confidence score (0.0 to 1.0)
-"""
+5. For each suggested topic, provide a confidence score (0.0 to 1.0)"""
 
-        prompt += """
-Return your analysis as JSON with this structure:
-{
+        training_rules_section = ""
+        if training_rules:
+            training_rules_section = f"""
+
+User Training Rules (apply these when classifying):
+{chr(10).join(f'- {rule}' for rule in training_rules)}"""
+
+        # Define JSON schema
+        json_schema = """{
   "sentiment": {
     "score": "negative",
     "confidence": 0.85,
@@ -135,9 +151,22 @@ Return your analysis as JSON with this structure:
     {"name": "Performance Issues", "confidence": 0.9},
     {"name": "API Errors", "confidence": 0.7}
   ]
-}
-"""
-        return prompt
+}"""
+
+        # Compile the prompt with all variables
+        variables = {
+            'ticket_content': ticket_content,
+            'has_topics': available_topics is not None,
+            'topics_section': topics_section,
+            'training_rules_section': training_rules_section,
+            'json_schema': json_schema
+        }
+
+        return self.prompt_compiler.compile(
+            template=prompt_data['content'],
+            variables=variables,
+            definitions=prompt_data['variables']
+        )
 
     def _parse_analysis_result(self, parsed: dict) -> TicketAnalysisResult:
         """Parse the LLM response into structured result."""
